@@ -70,7 +70,7 @@
       end
       | [] -> None
       in aux !stack
-
+      
     let make_struct name_opt dl =
       let name = ref "" in
       let (id,def_opt) =
@@ -224,6 +224,7 @@
       def_stack_in_params := def::!def_stack_in_params
     
     let add_def def =
+      push_def def;
       if !in_params then
         add_def2 def
       else
@@ -685,12 +686,17 @@ external_decl:
 | decl
   { get_stack () }
 
-
-
-function_def:
-| decl_specs declarator compound_stmt
+function_decl:
+| decl_specs declarator
   {
     let decl = make_decl $1 $2 in
-    get_stack ()@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some $3))]
+    (decl,get_stack ())
+  }
+
+function_def:
+| function_decl compound_stmt
+  {
+    let (decl,def_list) = $1 in
+    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some $2))]
   }
 %%
