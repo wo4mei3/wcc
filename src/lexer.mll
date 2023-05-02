@@ -227,7 +227,6 @@ rule token = parse
   { STR (string_elements lexbuf) }
 | ident  as n
   {
-    Printf.printf "avc";
     let is_type_id name =
       try 
         ignore (get_typedef name);
