@@ -5,10 +5,6 @@ open Env
 
 exception LexerError of string
 
-let init _filename channel : Lexing.lexbuf =
-  Lexing.from_channel channel
-
-
 let cast_char_to_int s =
   let table = [
     ('a', 7); ('b', 8); ('t', 9); ('n', 10);
@@ -32,15 +28,6 @@ let stoi s =
   else
     int_of_string s
 
-let char_buf = ref ""
-
-let update_char_buf c =
-  char_buf := !char_buf ^ c
-
-let flush_char_buf =
-  let result = !char_buf in
-  char_buf := "";
-  cast_char_to_int result
 }
 
 let digit = ['0'-'9']
