@@ -3,8 +3,6 @@
     open Env 
     open Ctype
     
-    
-
     type declarator =
     | DeclPtr of declarator
     | DeclIdent of string
@@ -14,6 +12,10 @@
     exception ParserError of string
     exception NotImpl of string
 
+    let raise exn=
+    match exn with
+    | ParserError msg -> Printf.printf "%s" msg;raise exn
+    | _ -> raise exn
 
     let make_decl ty d = 
       let name = ref "" in
@@ -43,6 +45,11 @@
       in
       List.fold_left2 pred (TDeclSpec []) a b
 
+    type is_incomplete =
+    | Complete
+    | Incomplete 
+    | DontCare 
+
     let struct_pred name =function
     | (_,Struct(n,_)) when n = name ->
       true
@@ -50,11 +57,14 @@
 
     let lookup_struct_in_scope name =
       try 
-        let (id,_) = List.find (struct_pred name) !curr_scope 
+        let (id,item) = List.find (struct_pred name) !curr_scope 
       in
-        Some id
+      match item with
+      | Struct(_,Some _) -> (Some id,Complete)
+      | Struct(_,None) -> (Some id,Incomplete)
+      | _ -> (None,DontCare)
       with Not_found ->
-        None
+        (None,DontCare)
 
     let lookup_struct_in_stack name =
       let rec aux stack =
@@ -70,7 +80,7 @@
       end
       | [] -> None
       in aux !stack
-      
+
     let make_struct name_opt dl =
       let name = ref "" in
       let (id,def_opt) =
@@ -79,13 +89,19 @@
         begin
           name := n;
           match lookup_struct_in_scope n with
-          | Some id -> 
+          | (Some id,Complete) -> 
             begin
               match dl with
               | Some _ -> raise (ParserError "redifinition")
               | None -> (id,None)
             end
-          | None -> 
+          | (Some id,Incomplete) ->
+            begin
+              match dl with
+              | Some _ -> (id,Some (id,Struct(!name,dl)))
+              | None -> (id,None)
+            end
+          | _ -> 
             begin
               match lookup_struct_in_stack n with
               | Some id -> (id,None)
@@ -105,11 +121,14 @@
 
     let lookup_union_in_scope name =
       try 
-        let (id,_) = List.find (union_pred name) !curr_scope 
+        let (id,item) = List.find (union_pred name) !curr_scope 
       in
-        Some id
+      match item with
+      | Union(_,Some _) -> (Some id,Complete)
+      | Union(_,None) -> (Some id,Incomplete)
+      | _ -> (None,DontCare)
       with Not_found ->
-        None
+        (None,DontCare)
 
     let lookup_union_in_stack name =
       let rec aux stack =
@@ -134,13 +153,19 @@
         begin
           name := n;
           match lookup_union_in_scope n with
-          | Some id -> 
+          | (Some id,Complete) -> 
             begin
               match dl with
               | Some _ -> raise (ParserError "redifinition")
               | None -> (id,None)
             end
-          | None -> 
+          | (Some id,Incomplete) ->
+            begin
+              match dl with
+              | Some _ -> (id,Some (id,Union(!name,dl)))
+              | None -> (id,None)
+            end
+          | _ -> 
             begin
               match lookup_union_in_stack n with
               | Some id -> (id,None)
@@ -224,11 +249,13 @@
       def_stack_in_params := def::!def_stack_in_params
     
     let add_def def =
-      push_def def;
       if !in_params then
         add_def2 def
       else
-        def_stack := def::!def_stack
+        begin
+          push_def def;
+          def_stack := def::!def_stack
+        end
 
 
     let flush_stack2 () = 
@@ -697,6 +724,11 @@ function_def:
 | function_decl compound_stmt
   {
     let (decl,def_list) = $1 in
-    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some $2))]
+    let def2_list = get_stack2 () in
+    let get_stmts = function 
+    | SStmts l -> l 
+    | _ -> raise (ParserError "function_def") in
+    let def2_list = SStmts ((List.map (fun def -> SDef def) def2_list)@(get_stmts $2)) in
+    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))]
   }
 %%
