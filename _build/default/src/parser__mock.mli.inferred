@@ -1,0 +1,224 @@
+type token =
+    XOR_EQ
+  | WHILE
+  | VOLATILE
+  | UNION
+  | ULINT of int
+  | UINT of int
+  | TYPE_ID of string
+  | TYPEDEF
+  | TVOID
+  | TUNSIGNED
+  | TSIGNED
+  | TSHORT
+  | TLONG
+  | TINT
+  | TFLOAT
+  | TDOUBLE
+  | TCHAR
+  | SWITCH
+  | SUB_EQ
+  | STRUCT
+  | STR of int list
+  | STATIC_ASSERT
+  | STATIC
+  | STAR
+  | SIZEOF
+  | SEMI
+  | RSHIFT_EQ
+  | RSHIFT
+  | RPAREN
+  | RETURN
+  | REGISTER
+  | RBRACKET
+  | RBRACE
+  | QUESTION
+  | PLUS
+  | OR_EQ
+  | OROR
+  | OR
+  | NOT
+  | NORETURN
+  | NE
+  | MUL_EQ
+  | MOD_EQ
+  | MOD
+  | MINUS
+  | LT
+  | LSHIFT_EQ
+  | LSHIFT
+  | LPAREN
+  | LINT of int
+  | LE
+  | LBRACKET
+  | LBRACE
+  | INT of int
+  | INLINE
+  | INC
+  | IF
+  | ID of string
+  | HAT
+  | GT
+  | GOTO
+  | GE
+  | FOR
+  | FLOAT of float
+  | EXTERN
+  | EQEQ
+  | EQ
+  | EOF
+  | ENUM
+  | ELSE
+  | ELLIPSIS
+  | DOUBLE of float
+  | DOT
+  | DO
+  | DIV_EQ
+  | DIV
+  | DEFAULT
+  | DEC
+  | CONTINUE
+  | CONST
+  | COMMA
+  | COLON
+  | CASE
+  | BREAK
+  | BANG
+  | AUTO
+  | ARROW
+  | AND_EQ
+  | ANDAND
+  | AND
+  | ALIGNAS
+  | ADD_EQ
+type declarator =
+    DeclPtr of declarator
+  | DeclIdent of string
+  | DeclArr of declarator * int
+  | DeclFun of declarator * Ctype.decl list
+exception ParserError of string
+exception NotImpl of string
+val make_decl : Ctype.ty -> declarator -> string * Ctype.ty
+val make_decls : Ctype.ty -> declarator list -> (string * Ctype.ty) list
+val make_decls_with_init_opts :
+  Ctype.ty -> (declarator * 'a) list -> ((string * Ctype.ty) * 'a) list
+val item_id : int ref
+val gen_id : unit -> int
+val append_ds_list : Ctype.ty list -> Ctype.ty list -> Ctype.ty
+val struct_pred : string -> 'a * Ast.item -> bool
+val lookup_struct_in_scope : string -> int option
+val lookup_struct_in_stack : string -> int option
+val make_struct :
+  string option ->
+  Ctype.decl list option -> (int * Ast.item) option * Ctype.ts
+val union_pred : string -> 'a * Ast.item -> bool
+val lookup_union_in_scope : string -> int option
+val lookup_union_in_stack : string -> int option
+val make_union :
+  string option ->
+  Ctype.decl list option -> (int * Ast.item) option * Ctype.ts
+val lookup_var_in_scope : string -> bool
+val lookup_typedef_in_scope : string -> bool
+val is_typedef_definition : Ctype.ty -> bool
+val make_typedef : string * Ctype.ty -> int * Ast.item
+val make_var : string * Ctype.ty -> Ast.init option -> int * Ast.item
+val make_var_or_typedef :
+  (string * Ctype.ty) * Ast.init option -> int * Ast.item
+val get_params : Ctype.ty -> (int * Ast.item) list
+val def_stack : Ast.def list ref
+val def_stack_in_params : Ast.def list ref
+val flush_stack : unit -> unit
+val get_stack : unit -> Ast.def list
+val in_params : bool ref
+val enter_params : unit -> unit
+val leave_params : unit -> unit
+val add_def2 : Ast.def -> unit
+val add_def : Ast.def -> unit
+val flush_stack2 : unit -> unit
+val get_stack2 : unit -> Ast.def list
+val expr_conv : Ast.expr option -> Ast.stmt
+val menhir_begin_marker : int
+val xv_unary_expr : Ast.expr
+val xv_type_spec : Ctype.ts
+val xv_type_qual : Ctype.tq
+val xv_type_name : Ctype.ty
+val xv_translation_unit : Ast.program
+val xv_struct_or_union_spec : Ast.def option * Ctype.ts
+val xv_struct_declarator_list : declarator list
+val xv_struct_declarator : declarator
+val xv_struct_decl_list : Ctype.decl list
+val xv_struct_decl : Ctype.decl list
+val xv_storage_class_spec : Ctype.scs
+val xv_stmt : Ast.stmt
+val xv_static_assert_decl : 'tv_static_assert_decl
+val xv_spec_qual_list : Ctype.ds list
+val xv_shift_expr : Ast.expr
+val xv_selection_stmt : Ast.stmt
+val xv_rp : unit
+val xv_relational_expr : Ast.expr
+val xv_primary_expr : Ast.expr
+val xv_postfix_expr : Ast.expr
+val xv_pointer : unit
+val xv_parameter_type_list : Ctype.decl list
+val xv_parameter_list : Ctype.decl list
+val xv_parameter_decl : Ctype.decl list
+val xv_option_struct_declarator_list_ : declarator list option
+val xv_option_ident_ : string option
+val xv_option_desig_ : Ast.desig option
+val xv_option_declarator_ : declarator option
+val xv_option_argument_expr_list_ : Ast.expr list option
+val xv_option_abstract_declarator_ : declarator option
+val xv_option___anonymous_0_ : unit option
+val xv_option_COMMA_ : unit option
+val xv_multiplicative_expr : Ast.expr
+val xv_lp : unit
+val xv_logical_or_expr : Ast.expr
+val xv_logical_and_expr : Ast.expr
+val xv_list_type_qual_ : Ctype.tq list
+val xv_list_item_ : Ast.stmt list list
+val xv_list_external_decl_ : Ast.def list list
+val xv_leave_scope : unit
+val xv_leave_declarator : unit
+val xv_labeled_stmt : Ast.stmt
+val xv_jump_stmt : Ast.stmt
+val xv_iteration_stmt : Ast.stmt
+val xv_item : Ast.stmt list
+val xv_init_list : (Ast.desig option * Ast.init) list
+val xv_init_declarator_list : (declarator * Ast.init option) list
+val xv_init_declarator : declarator * Ast.init option
+val xv_init : Ast.init
+val xv_inclusive_or_expr : Ast.expr
+val xv_ident : string
+val xv_function_spec : Ctype.fs
+val xv_function_def : Ast.def list
+val xv_external_decl : Ast.def list
+val xv_expr_stmt : Ast.expr option
+val xv_expr : Ast.expr
+val xv_exclusive_or_expr : Ast.expr
+val xv_equality_expr : Ast.expr
+val xv_enum_spec : Ctype.ts
+val xv_enum_list : unit
+val xv_enum_const : unit
+val xv_enum : unit
+val xv_enter_scope : unit
+val xv_enter_declarator : unit
+val xv_direct_declarator : declarator
+val xv_direct_abstract_declarator : declarator
+val xv_designator_list : Ast.desig
+val xv_desig : Ast.desig
+val xv_declarator : declarator
+val xv_decl_specs : Ctype.ty
+val xv_decl_spec : Ctype.ty
+val xv_decl : unit
+val xv_constant_expr : int
+val xv_conditional_expr : Ast.expr
+val xv_compound_stmt : Ast.stmt
+val xv_cast_expr : Ast.expr
+val xv_assignment_expr : Ast.expr
+val xv_argument_expr_list : Ast.expr list
+val xv_and_expr : Ast.expr
+val xv_alignment_spec : 'tv_alignment_spec
+val xv_additive_expr : Ast.expr
+val xv_abstract_declarator : declarator
+val xv___anonymous_0 : unit
+val menhir_end_marker : int
