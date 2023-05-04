@@ -25,7 +25,6 @@ type unary =
 type item =
 | Var of decl * init option
 | Param of decl
-| Label of string
 | Struct of string * decl list option
 | Union of string * decl list option
 | Enum of string * (string * int) list option
@@ -71,7 +70,7 @@ and stmt =
 | SStmts of stmt list
 | SWhile of expr * stmt
 | SDoWhile of stmt * expr
-| SFor of stmt * (expr option) * (expr option) * stmt
+| SFor of (def option) * (expr option) * (expr option) * (expr option) * stmt
 | SIfElse of expr * stmt * stmt
 | SReturn of expr option
 | SContinue

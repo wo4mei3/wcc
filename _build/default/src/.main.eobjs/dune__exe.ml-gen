@@ -17,3 +17,9 @@ module Main = Dune__exe__Main
 
 (** @canonical Dune__exe.Parser *)
 module Parser = Dune__exe__Parser
+
+(** @canonical Dune__exe.Typed_ast *)
+module Typed_ast = Dune__exe__Typed_ast
+
+(** @canonical Dune__exe.Typing *)
+module Typing = Dune__exe__Typing

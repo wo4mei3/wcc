@@ -98,6 +98,7 @@ type declarator =
   | DeclFun of declarator * Ctype.decl list
 exception ParserError of string
 exception NotImpl of string
+val raise : exn -> 'a
 val make_decl : Ctype.ty -> declarator -> string * Ctype.ty
 val make_decls : Ctype.ty -> declarator list -> (string * Ctype.ty) list
 val make_decls_with_init_opts :
@@ -105,14 +106,15 @@ val make_decls_with_init_opts :
 val item_id : int ref
 val gen_id : unit -> int
 val append_ds_list : Ctype.ty list -> Ctype.ty list -> Ctype.ty
+type is_incomplete = Complete | Incomplete | DontCare
 val struct_pred : string -> 'a * Ast.item -> bool
-val lookup_struct_in_scope : string -> int option
+val lookup_struct_in_scope : string -> int option * is_incomplete
 val lookup_struct_in_stack : string -> int option
 val make_struct :
   string option ->
   Ctype.decl list option -> (int * Ast.item) option * Ctype.ts
 val union_pred : string -> 'a * Ast.item -> bool
-val lookup_union_in_scope : string -> int option
+val lookup_union_in_scope : string -> int option * is_incomplete
 val lookup_union_in_stack : string -> int option
 val make_union :
   string option ->
@@ -137,12 +139,18 @@ val add_def : Ast.def -> unit
 val flush_stack2 : unit -> unit
 val get_stack2 : unit -> Ast.def list
 val expr_conv : Ast.expr option -> Ast.stmt
+val label_list : string list ref
+val goto_list : string list ref
+val push_label : string -> unit
+val push_goto : string -> unit
+val all_labels_exist : unit -> unit
 val menhir_begin_marker : int
 val xv_unary_expr : Ast.expr
 val xv_type_spec : Ctype.ts
 val xv_type_qual : Ctype.tq
 val xv_type_name : Ctype.ty
 val xv_translation_unit : Ast.program
+val xv_top_compound_stmt : Ast.stmt
 val xv_struct_or_union_spec : Ast.def option * Ctype.ts
 val xv_struct_declarator_list : declarator list
 val xv_struct_declarator : declarator
@@ -164,6 +172,7 @@ val xv_parameter_list : Ctype.decl list
 val xv_parameter_decl : Ctype.decl list
 val xv_option_struct_declarator_list_ : declarator list option
 val xv_option_ident_ : string option
+val xv_option_expr_ : Ast.expr option
 val xv_option_desig_ : Ast.desig option
 val xv_option_declarator_ : declarator option
 val xv_option_argument_expr_list_ : Ast.expr list option
@@ -191,6 +200,7 @@ val xv_inclusive_or_expr : Ast.expr
 val xv_ident : string
 val xv_function_spec : Ctype.fs
 val xv_function_def : Ast.def list
+val xv_function_decl : Ctype.decl * Ast.def list
 val xv_external_decl : Ast.def list
 val xv_expr_stmt : Ast.expr option
 val xv_expr : Ast.expr
@@ -209,6 +219,7 @@ val xv_desig : Ast.desig
 val xv_declarator : declarator
 val xv_decl_specs : Ctype.ty
 val xv_decl_spec : Ctype.ty
+val xv_decl_for_for_stmt : Ast.def
 val xv_decl : unit
 val xv_constant_expr : int
 val xv_conditional_expr : Ast.expr

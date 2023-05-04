@@ -12,9 +12,9 @@
     exception ParserError of string
     exception NotImpl of string
 
-    let raise exn=
+    let raise exn =
     match exn with
-    | ParserError msg -> Printf.printf "%s" msg;raise exn
+    | ParserError msg -> Printf.printf "%s\n" msg;raise exn
     | _ -> raise exn
 
     let make_decl ty d = 
@@ -270,8 +270,37 @@
     | Some e -> SExpr e 
     | None -> SStmts []
 
+    let label_list = ref []
+    
+    let goto_list = ref []
+
+    let push_label l =
+      label_list := l::!label_list
+
+    let push_goto g =
+      goto_list := g::!goto_list
+
+    let all_labels_exist () =
+      let missing_label = ref "" in
+      let pred goto =
+        if List.mem goto !label_list then
+          true
+        else
+          begin
+            missing_label := goto;
+            false
+          end
+      in
+      if List.for_all (fun goto -> pred goto) !goto_list then
+        begin
+          label_list := [];
+          goto_list := []
+        end
+      else
+        raise (ParserError (Printf.sprintf "label %s is missing" !missing_label))
 
 %}
+
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE DOT COMMA
 %token AND STAR PLUS MINUS NOT BANG DIV MOD LT GT HAT OR 
 %token COLON QUESTION SEMI EQ INLINE NORETURN ALIGNAS
@@ -592,7 +621,7 @@ rp:
 parameter_type_list:
 | 
   { [] }
-| parameter_list option(COLON ELLIPSIS {})
+| parameter_list option(COMMA ELLIPSIS {})
   { $1 }
 
 parameter_list:
@@ -673,7 +702,12 @@ stmt:
 | jump_stmt { $1 }
 
 labeled_stmt:
-| ident COLON stmt { SLabel($1,$3) }
+| ident COLON item
+  { 
+    push_label $1;
+    SLabel($1,SStmts $3)
+  }
+
 | CASE conditional_expr COLON { SCase $2 }
 | DEFAULT COLON { SDefault }
 
@@ -692,18 +726,26 @@ selection_stmt:
 | IF LPAREN expr RPAREN stmt ELSE stmt { SIfElse($3,$5,$7) }
 | SWITCH LPAREN expr RPAREN stmt { SSwitch($3,$5) }
 
+decl_for_for_stmt:
+| decl
+  { peek_curr_scope () }
 iteration_stmt:
 | WHILE LPAREN expr RPAREN stmt { SWhile($3,$5) }
 | DO stmt WHILE LPAREN expr RPAREN {  SDoWhile($2,$5) }
-| FOR LPAREN expr_stmt expr_stmt expr_stmt RPAREN stmt { SFor(expr_conv $3,$4,$5,$7) }
-| FOR LPAREN decl expr_stmt expr_stmt RPAREN stmt 
+| FOR LPAREN expr_stmt expr_stmt expr? RPAREN stmt { SFor(None,$3,$4,$5,$7) }
+| FOR LPAREN decl_for_for_stmt expr_stmt expr? RPAREN stmt 
   { 
-    let stmt = SStmts(List.map (fun def -> SDef def) (get_stack ())) in
-    SFor(stmt,$4,$5,$7)
+    let ret = SFor(Some $3, None,$4,$5,$7) in
+    pop_curr_scope ();
+    ret
   }
 
 jump_stmt:
-| GOTO ident SEMI { SGoto $2}
+| GOTO ident SEMI
+  { 
+    push_goto $2;
+    SGoto $2
+  }
 | CONTINUE SEMI { SContinue }
 | BREAK SEMI { SBreak }
 | RETURN expr_stmt { SReturn $2 }
@@ -720,8 +762,15 @@ function_decl:
     (decl,get_stack ())
   }
 
+top_compound_stmt:
+| enter_scope LBRACE list(item) RBRACE leave_scope
+	{
+    all_labels_exist ();
+    SStmts(List.flatten $3)
+  }
+
 function_def:
-| function_decl compound_stmt
+| function_decl top_compound_stmt
   {
     let (decl,def_list) = $1 in
     let def2_list = get_stack2 () in

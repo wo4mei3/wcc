@@ -5,10 +5,6 @@ open Env
 
 exception LexerError of string
 
-let init _filename channel : Lexing.lexbuf =
-  Lexing.from_channel channel
-
-
 let cast_char_to_int s =
   let table = [
     ('a', 7); ('b', 8); ('t', 9); ('n', 10);
@@ -32,17 +28,8 @@ let stoi s =
   else
     int_of_string s
 
-let char_buf = ref ""
 
-let update_char_buf c =
-  char_buf := !char_buf ^ c
-
-let flush_char_buf =
-  let result = !char_buf in
-  char_buf := "";
-  cast_char_to_int result
-
-# 46 "src/lexer.ml"
+# 33 "src/lexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base =
    "\000\000\164\255\165\255\079\000\167\255\004\000\156\000\229\000\
@@ -3113,494 +3100,493 @@ let rec token lexbuf =
 and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
   match Lexing.new_engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 64 "src/lexer.mll"
+# 51 "src/lexer.mll"
   ( token lexbuf )
-# 3119 "src/lexer.ml"
+# 3106 "src/lexer.ml"
 
   | 1 ->
-# 66 "src/lexer.mll"
+# 53 "src/lexer.mll"
   ( Lexing.new_line lexbuf; token lexbuf )
-# 3124 "src/lexer.ml"
+# 3111 "src/lexer.ml"
 
   | 2 ->
-# 68 "src/lexer.mll"
+# 55 "src/lexer.mll"
   ( SEMI )
-# 3129 "src/lexer.ml"
+# 3116 "src/lexer.ml"
 
   | 3 ->
-# 70 "src/lexer.mll"
+# 57 "src/lexer.mll"
   ( COMMA )
-# 3134 "src/lexer.ml"
+# 3121 "src/lexer.ml"
 
   | 4 ->
-# 72 "src/lexer.mll"
+# 59 "src/lexer.mll"
   ( TINT )
-# 3139 "src/lexer.ml"
+# 3126 "src/lexer.ml"
 
   | 5 ->
-# 74 "src/lexer.mll"
+# 61 "src/lexer.mll"
   ( TLONG )
-# 3144 "src/lexer.ml"
+# 3131 "src/lexer.ml"
 
   | 6 ->
-# 76 "src/lexer.mll"
+# 63 "src/lexer.mll"
   ( TSHORT )
-# 3149 "src/lexer.ml"
+# 3136 "src/lexer.ml"
 
   | 7 ->
-# 78 "src/lexer.mll"
+# 65 "src/lexer.mll"
   ( TSIGNED )
-# 3154 "src/lexer.ml"
+# 3141 "src/lexer.ml"
 
   | 8 ->
-# 80 "src/lexer.mll"
+# 67 "src/lexer.mll"
   ( TUNSIGNED )
-# 3159 "src/lexer.ml"
+# 3146 "src/lexer.ml"
 
   | 9 ->
-# 82 "src/lexer.mll"
+# 69 "src/lexer.mll"
   ( TCHAR )
-# 3164 "src/lexer.ml"
+# 3151 "src/lexer.ml"
 
   | 10 ->
-# 84 "src/lexer.mll"
+# 71 "src/lexer.mll"
   ( TFLOAT )
-# 3169 "src/lexer.ml"
+# 3156 "src/lexer.ml"
 
   | 11 ->
-# 86 "src/lexer.mll"
+# 73 "src/lexer.mll"
   ( TDOUBLE )
-# 3174 "src/lexer.ml"
+# 3161 "src/lexer.ml"
 
   | 12 ->
-# 88 "src/lexer.mll"
+# 75 "src/lexer.mll"
   ( TVOID )
-# 3179 "src/lexer.ml"
+# 3166 "src/lexer.ml"
 
   | 13 ->
-# 90 "src/lexer.mll"
+# 77 "src/lexer.mll"
   ( STRUCT )
-# 3184 "src/lexer.ml"
+# 3171 "src/lexer.ml"
 
   | 14 ->
-# 92 "src/lexer.mll"
+# 79 "src/lexer.mll"
   ( UNION )
-# 3189 "src/lexer.ml"
+# 3176 "src/lexer.ml"
 
   | 15 ->
-# 94 "src/lexer.mll"
+# 81 "src/lexer.mll"
   ( ENUM )
-# 3194 "src/lexer.ml"
+# 3181 "src/lexer.ml"
 
   | 16 ->
-# 96 "src/lexer.mll"
+# 83 "src/lexer.mll"
   ( TYPEDEF )
-# 3199 "src/lexer.ml"
+# 3186 "src/lexer.ml"
 
   | 17 ->
-# 98 "src/lexer.mll"
+# 85 "src/lexer.mll"
   ( STATIC )
-# 3204 "src/lexer.ml"
+# 3191 "src/lexer.ml"
 
   | 18 ->
-# 100 "src/lexer.mll"
+# 87 "src/lexer.mll"
   ( EXTERN )
-# 3209 "src/lexer.ml"
+# 3196 "src/lexer.ml"
 
   | 19 ->
-# 102 "src/lexer.mll"
+# 89 "src/lexer.mll"
   ( token lexbuf )
-# 3214 "src/lexer.ml"
+# 3201 "src/lexer.ml"
 
   | 20 ->
-# 104 "src/lexer.mll"
+# 91 "src/lexer.mll"
   ( token lexbuf )
-# 3219 "src/lexer.ml"
+# 3206 "src/lexer.ml"
 
   | 21 ->
-# 106 "src/lexer.mll"
+# 93 "src/lexer.mll"
   ( IF )
-# 3224 "src/lexer.ml"
+# 3211 "src/lexer.ml"
 
   | 22 ->
-# 108 "src/lexer.mll"
+# 95 "src/lexer.mll"
   ( ELSE )
-# 3229 "src/lexer.ml"
+# 3216 "src/lexer.ml"
 
   | 23 ->
-# 110 "src/lexer.mll"
+# 97 "src/lexer.mll"
   ( WHILE )
-# 3234 "src/lexer.ml"
+# 3221 "src/lexer.ml"
 
   | 24 ->
-# 112 "src/lexer.mll"
+# 99 "src/lexer.mll"
   ( DO )
-# 3239 "src/lexer.ml"
+# 3226 "src/lexer.ml"
 
   | 25 ->
-# 114 "src/lexer.mll"
+# 101 "src/lexer.mll"
   ( FOR )
-# 3244 "src/lexer.ml"
+# 3231 "src/lexer.ml"
 
   | 26 ->
-# 116 "src/lexer.mll"
+# 103 "src/lexer.mll"
   ( RETURN )
-# 3249 "src/lexer.ml"
+# 3236 "src/lexer.ml"
 
   | 27 ->
-# 118 "src/lexer.mll"
+# 105 "src/lexer.mll"
   ( CONTINUE )
-# 3254 "src/lexer.ml"
+# 3241 "src/lexer.ml"
 
   | 28 ->
-# 120 "src/lexer.mll"
+# 107 "src/lexer.mll"
   ( BREAK )
-# 3259 "src/lexer.ml"
+# 3246 "src/lexer.ml"
 
   | 29 ->
-# 122 "src/lexer.mll"
+# 109 "src/lexer.mll"
   ( GOTO )
-# 3264 "src/lexer.ml"
+# 3251 "src/lexer.ml"
 
   | 30 ->
-# 124 "src/lexer.mll"
+# 111 "src/lexer.mll"
   ( SWITCH )
-# 3269 "src/lexer.ml"
+# 3256 "src/lexer.ml"
 
   | 31 ->
-# 126 "src/lexer.mll"
+# 113 "src/lexer.mll"
   ( CASE )
-# 3274 "src/lexer.ml"
+# 3261 "src/lexer.ml"
 
   | 32 ->
-# 128 "src/lexer.mll"
+# 115 "src/lexer.mll"
   ( DEFAULT )
-# 3279 "src/lexer.ml"
+# 3266 "src/lexer.ml"
 
   | 33 ->
-# 130 "src/lexer.mll"
+# 117 "src/lexer.mll"
   ( PLUS )
-# 3284 "src/lexer.ml"
+# 3271 "src/lexer.ml"
 
   | 34 ->
-# 132 "src/lexer.mll"
+# 119 "src/lexer.mll"
   ( INC )
-# 3289 "src/lexer.ml"
+# 3276 "src/lexer.ml"
 
   | 35 ->
-# 134 "src/lexer.mll"
+# 121 "src/lexer.mll"
   ( MINUS )
-# 3294 "src/lexer.ml"
+# 3281 "src/lexer.ml"
 
   | 36 ->
-# 136 "src/lexer.mll"
+# 123 "src/lexer.mll"
   ( BANG )
-# 3299 "src/lexer.ml"
+# 3286 "src/lexer.ml"
 
   | 37 ->
-# 138 "src/lexer.mll"
+# 125 "src/lexer.mll"
   ( QUESTION )
-# 3304 "src/lexer.ml"
+# 3291 "src/lexer.ml"
 
   | 38 ->
-# 140 "src/lexer.mll"
+# 127 "src/lexer.mll"
   ( COLON )
-# 3309 "src/lexer.ml"
+# 3296 "src/lexer.ml"
 
   | 39 ->
-# 142 "src/lexer.mll"
+# 129 "src/lexer.mll"
   ( DEC )
-# 3314 "src/lexer.ml"
+# 3301 "src/lexer.ml"
 
   | 40 ->
-# 144 "src/lexer.mll"
+# 131 "src/lexer.mll"
   ( STAR )
-# 3319 "src/lexer.ml"
+# 3306 "src/lexer.ml"
 
   | 41 ->
-# 146 "src/lexer.mll"
+# 133 "src/lexer.mll"
   ( DIV )
-# 3324 "src/lexer.ml"
+# 3311 "src/lexer.ml"
 
   | 42 ->
-# 148 "src/lexer.mll"
+# 135 "src/lexer.mll"
   ( MOD )
-# 3329 "src/lexer.ml"
+# 3316 "src/lexer.ml"
 
   | 43 ->
-# 150 "src/lexer.mll"
+# 137 "src/lexer.mll"
   ( LSHIFT )
-# 3334 "src/lexer.ml"
+# 3321 "src/lexer.ml"
 
   | 44 ->
-# 152 "src/lexer.mll"
+# 139 "src/lexer.mll"
   ( RSHIFT )
-# 3339 "src/lexer.ml"
+# 3326 "src/lexer.ml"
 
   | 45 ->
-# 154 "src/lexer.mll"
+# 141 "src/lexer.mll"
   ( DOT )
-# 3344 "src/lexer.ml"
+# 3331 "src/lexer.ml"
 
   | 46 ->
-# 156 "src/lexer.mll"
+# 143 "src/lexer.mll"
   ( ARROW )
-# 3349 "src/lexer.ml"
+# 3336 "src/lexer.ml"
 
   | 47 ->
-# 158 "src/lexer.mll"
+# 145 "src/lexer.mll"
   ( AND )
-# 3354 "src/lexer.ml"
+# 3341 "src/lexer.ml"
 
   | 48 ->
-# 160 "src/lexer.mll"
+# 147 "src/lexer.mll"
   ( HAT )
-# 3359 "src/lexer.ml"
+# 3346 "src/lexer.ml"
 
   | 49 ->
-# 162 "src/lexer.mll"
+# 149 "src/lexer.mll"
   ( OR )
-# 3364 "src/lexer.ml"
+# 3351 "src/lexer.ml"
 
   | 50 ->
-# 164 "src/lexer.mll"
+# 151 "src/lexer.mll"
   ( ANDAND )
-# 3369 "src/lexer.ml"
+# 3356 "src/lexer.ml"
 
   | 51 ->
-# 166 "src/lexer.mll"
+# 153 "src/lexer.mll"
   ( OROR )
-# 3374 "src/lexer.ml"
+# 3361 "src/lexer.ml"
 
   | 52 ->
-# 168 "src/lexer.mll"
+# 155 "src/lexer.mll"
   ( NOT )
-# 3379 "src/lexer.ml"
+# 3366 "src/lexer.ml"
 
   | 53 ->
-# 170 "src/lexer.mll"
+# 157 "src/lexer.mll"
   ( EQEQ )
-# 3384 "src/lexer.ml"
+# 3371 "src/lexer.ml"
 
   | 54 ->
-# 172 "src/lexer.mll"
+# 159 "src/lexer.mll"
   ( NE )
-# 3389 "src/lexer.ml"
+# 3376 "src/lexer.ml"
 
   | 55 ->
-# 174 "src/lexer.mll"
+# 161 "src/lexer.mll"
   ( EQ )
-# 3394 "src/lexer.ml"
+# 3381 "src/lexer.ml"
 
   | 56 ->
-# 176 "src/lexer.mll"
+# 163 "src/lexer.mll"
   ( ADD_EQ )
-# 3399 "src/lexer.ml"
+# 3386 "src/lexer.ml"
 
   | 57 ->
-# 178 "src/lexer.mll"
+# 165 "src/lexer.mll"
   ( SUB_EQ )
-# 3404 "src/lexer.ml"
+# 3391 "src/lexer.ml"
 
   | 58 ->
-# 180 "src/lexer.mll"
+# 167 "src/lexer.mll"
   ( MUL_EQ )
-# 3409 "src/lexer.ml"
+# 3396 "src/lexer.ml"
 
   | 59 ->
-# 182 "src/lexer.mll"
+# 169 "src/lexer.mll"
   ( DIV_EQ )
-# 3414 "src/lexer.ml"
+# 3401 "src/lexer.ml"
 
   | 60 ->
-# 184 "src/lexer.mll"
+# 171 "src/lexer.mll"
   ( MOD_EQ )
-# 3419 "src/lexer.ml"
+# 3406 "src/lexer.ml"
 
   | 61 ->
-# 186 "src/lexer.mll"
+# 173 "src/lexer.mll"
   ( LSHIFT_EQ )
-# 3424 "src/lexer.ml"
+# 3411 "src/lexer.ml"
 
   | 62 ->
-# 188 "src/lexer.mll"
+# 175 "src/lexer.mll"
   ( RSHIFT_EQ )
-# 3429 "src/lexer.ml"
+# 3416 "src/lexer.ml"
 
   | 63 ->
-# 190 "src/lexer.mll"
+# 177 "src/lexer.mll"
   ( AND_EQ )
-# 3434 "src/lexer.ml"
+# 3421 "src/lexer.ml"
 
   | 64 ->
-# 192 "src/lexer.mll"
+# 179 "src/lexer.mll"
   ( XOR_EQ )
-# 3439 "src/lexer.ml"
+# 3426 "src/lexer.ml"
 
   | 65 ->
-# 194 "src/lexer.mll"
+# 181 "src/lexer.mll"
   ( OR_EQ )
-# 3444 "src/lexer.ml"
+# 3431 "src/lexer.ml"
 
   | 66 ->
-# 196 "src/lexer.mll"
+# 183 "src/lexer.mll"
   ( LT )
-# 3449 "src/lexer.ml"
+# 3436 "src/lexer.ml"
 
   | 67 ->
-# 198 "src/lexer.mll"
+# 185 "src/lexer.mll"
   ( GT )
-# 3454 "src/lexer.ml"
+# 3441 "src/lexer.ml"
 
   | 68 ->
-# 200 "src/lexer.mll"
+# 187 "src/lexer.mll"
   ( LE )
-# 3459 "src/lexer.ml"
+# 3446 "src/lexer.ml"
 
   | 69 ->
-# 202 "src/lexer.mll"
+# 189 "src/lexer.mll"
   ( GE )
-# 3464 "src/lexer.ml"
+# 3451 "src/lexer.ml"
 
   | 70 ->
-# 204 "src/lexer.mll"
+# 191 "src/lexer.mll"
   ( LPAREN )
-# 3469 "src/lexer.ml"
+# 3456 "src/lexer.ml"
 
   | 71 ->
-# 206 "src/lexer.mll"
+# 193 "src/lexer.mll"
   ( RPAREN )
-# 3474 "src/lexer.ml"
+# 3461 "src/lexer.ml"
 
   | 72 ->
-# 208 "src/lexer.mll"
+# 195 "src/lexer.mll"
   ( LBRACE )
-# 3479 "src/lexer.ml"
+# 3466 "src/lexer.ml"
 
   | 73 ->
-# 210 "src/lexer.mll"
+# 197 "src/lexer.mll"
   ( RBRACE )
-# 3484 "src/lexer.ml"
+# 3471 "src/lexer.ml"
 
   | 74 ->
-# 212 "src/lexer.mll"
+# 199 "src/lexer.mll"
   ( LBRACKET )
-# 3489 "src/lexer.ml"
+# 3476 "src/lexer.ml"
 
   | 75 ->
-# 214 "src/lexer.mll"
+# 201 "src/lexer.mll"
   ( RBRACKET )
-# 3494 "src/lexer.ml"
+# 3481 "src/lexer.ml"
 
   | 76 ->
-# 216 "src/lexer.mll"
+# 203 "src/lexer.mll"
   ( SIZEOF )
-# 3499 "src/lexer.ml"
+# 3486 "src/lexer.ml"
 
   | 77 ->
-# 218 "src/lexer.mll"
+# 205 "src/lexer.mll"
   ( ELLIPSIS )
-# 3504 "src/lexer.ml"
+# 3491 "src/lexer.ml"
 
   | 78 ->
-# 220 "src/lexer.mll"
+# 207 "src/lexer.mll"
   ( commentbis lexbuf )
-# 3509 "src/lexer.ml"
+# 3496 "src/lexer.ml"
 
   | 79 ->
-# 222 "src/lexer.mll"
+# 209 "src/lexer.mll"
   ( commentbis lexbuf )
-# 3514 "src/lexer.ml"
+# 3501 "src/lexer.ml"
 
   | 80 ->
-# 224 "src/lexer.mll"
+# 211 "src/lexer.mll"
   ( comment lexbuf )
-# 3519 "src/lexer.ml"
+# 3506 "src/lexer.ml"
 
   | 81 ->
 let
-# 225 "src/lexer.mll"
+# 212 "src/lexer.mll"
              i
-# 3525 "src/lexer.ml"
+# 3512 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 226 "src/lexer.mll"
+# 213 "src/lexer.mll"
   ( INT (stoi i) )
-# 3529 "src/lexer.ml"
+# 3516 "src/lexer.ml"
 
   | 82 ->
 let
-# 227 "src/lexer.mll"
+# 214 "src/lexer.mll"
               i
-# 3535 "src/lexer.ml"
+# 3522 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos (lexbuf.Lexing.lex_curr_pos + -1) in
-# 228 "src/lexer.mll"
+# 215 "src/lexer.mll"
   ( UINT (stoi i) )
-# 3539 "src/lexer.ml"
+# 3526 "src/lexer.ml"
 
   | 83 ->
 let
-# 229 "src/lexer.mll"
+# 216 "src/lexer.mll"
               i
-# 3545 "src/lexer.ml"
+# 3532 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos (lexbuf.Lexing.lex_curr_pos + -1) in
-# 230 "src/lexer.mll"
+# 217 "src/lexer.mll"
   ( LINT (stoi i) )
-# 3549 "src/lexer.ml"
+# 3536 "src/lexer.ml"
 
   | 84 ->
 let
-# 231 "src/lexer.mll"
+# 218 "src/lexer.mll"
               i
-# 3555 "src/lexer.ml"
+# 3542 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos (lexbuf.Lexing.lex_curr_pos + -2) in
-# 232 "src/lexer.mll"
+# 219 "src/lexer.mll"
   ( ULINT (stoi i) )
-# 3559 "src/lexer.ml"
+# 3546 "src/lexer.ml"
 
   | 85 ->
 let
-# 233 "src/lexer.mll"
+# 220 "src/lexer.mll"
                 c
-# 3565 "src/lexer.ml"
+# 3552 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf (lexbuf.Lexing.lex_start_pos + 1) (lexbuf.Lexing.lex_curr_pos + -1) in
-# 234 "src/lexer.mll"
+# 221 "src/lexer.mll"
   ( INT (cast_char_to_int c) )
-# 3569 "src/lexer.ml"
+# 3556 "src/lexer.ml"
 
   | 86 ->
 let
-# 235 "src/lexer.mll"
+# 222 "src/lexer.mll"
            f
-# 3575 "src/lexer.ml"
+# 3562 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_mem.(0) in
-# 236 "src/lexer.mll"
+# 223 "src/lexer.mll"
   ( FLOAT (float_of_string f) )
-# 3579 "src/lexer.ml"
+# 3566 "src/lexer.ml"
 
   | 87 ->
 let
-# 237 "src/lexer.mll"
+# 224 "src/lexer.mll"
            f
-# 3585 "src/lexer.ml"
+# 3572 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos (lexbuf.Lexing.lex_curr_pos + -1) in
-# 238 "src/lexer.mll"
+# 225 "src/lexer.mll"
   ( DOUBLE (float_of_string f) )
-# 3589 "src/lexer.ml"
+# 3576 "src/lexer.ml"
 
   | 88 ->
-# 240 "src/lexer.mll"
+# 227 "src/lexer.mll"
   ( STR (string_elements lexbuf) )
-# 3594 "src/lexer.ml"
+# 3581 "src/lexer.ml"
 
   | 89 ->
 let
-# 241 "src/lexer.mll"
+# 228 "src/lexer.mll"
             n
-# 3600 "src/lexer.ml"
+# 3587 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 242 "src/lexer.mll"
+# 229 "src/lexer.mll"
   (
-    Printf.printf "avc";
     let is_type_id name =
       try 
         ignore (get_typedef name);
@@ -3615,17 +3601,17 @@ let
     else
     ID n
   )
-# 3619 "src/lexer.ml"
+# 3605 "src/lexer.ml"
 
   | 90 ->
-# 259 "src/lexer.mll"
+# 245 "src/lexer.mll"
   ( EOF )
-# 3624 "src/lexer.ml"
+# 3610 "src/lexer.ml"
 
   | 91 ->
-# 261 "src/lexer.mll"
+# 247 "src/lexer.mll"
   ( raise (LexerError ("illegal token '%s'" ^ Lexing.lexeme lexbuf)) )
-# 3629 "src/lexer.ml"
+# 3615 "src/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_token_rec lexbuf __ocaml_lex_state
@@ -3635,19 +3621,19 @@ and string_elements lexbuf =
 and __ocaml_lex_string_elements_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 265 "src/lexer.mll"
+# 251 "src/lexer.mll"
   ( [] )
-# 3641 "src/lexer.ml"
+# 3627 "src/lexer.ml"
 
   | 1 ->
 let
-# 266 "src/lexer.mll"
+# 252 "src/lexer.mll"
           c
-# 3647 "src/lexer.ml"
+# 3633 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 267 "src/lexer.mll"
+# 253 "src/lexer.mll"
   ( (cast_char_to_int c)::(string_elements lexbuf) )
-# 3651 "src/lexer.ml"
+# 3637 "src/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_string_elements_rec lexbuf __ocaml_lex_state
@@ -3657,24 +3643,24 @@ and comment lexbuf =
 and __ocaml_lex_comment_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 271 "src/lexer.mll"
+# 257 "src/lexer.mll"
   ( token lexbuf )
-# 3663 "src/lexer.ml"
+# 3649 "src/lexer.ml"
 
   | 1 ->
-# 273 "src/lexer.mll"
+# 259 "src/lexer.mll"
   ( Lexing.new_line lexbuf; comment lexbuf )
-# 3668 "src/lexer.ml"
+# 3654 "src/lexer.ml"
 
   | 2 ->
-# 275 "src/lexer.mll"
+# 261 "src/lexer.mll"
   ( raise (LexerError "unterminated comment") )
-# 3673 "src/lexer.ml"
+# 3659 "src/lexer.ml"
 
   | 3 ->
-# 277 "src/lexer.mll"
+# 263 "src/lexer.mll"
   ( comment lexbuf )
-# 3678 "src/lexer.ml"
+# 3664 "src/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_comment_rec lexbuf __ocaml_lex_state
@@ -3684,19 +3670,19 @@ and commentbis lexbuf =
 and __ocaml_lex_commentbis_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 281 "src/lexer.mll"
+# 267 "src/lexer.mll"
   ( Lexing.new_line lexbuf; token lexbuf )
-# 3690 "src/lexer.ml"
+# 3676 "src/lexer.ml"
 
   | 1 ->
-# 283 "src/lexer.mll"
+# 269 "src/lexer.mll"
   ( EOF )
-# 3695 "src/lexer.ml"
+# 3681 "src/lexer.ml"
 
   | 2 ->
-# 285 "src/lexer.mll"
+# 271 "src/lexer.mll"
   ( commentbis lexbuf )
-# 3700 "src/lexer.ml"
+# 3686 "src/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_commentbis_rec lexbuf __ocaml_lex_state

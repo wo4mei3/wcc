@@ -7,11 +7,19 @@ let in_declarator = ref false
 let curr_scope: def list ref = ref []
 let stack:def list list ref = ref []
 
+let peek_curr_scope () =
+  List.hd !curr_scope
+
+let pop_curr_scope () =
+  curr_scope := List.tl !curr_scope
+
+
 let push_def def =
   curr_scope := def :: !curr_scope
 
 let enter_scope () =
-  stack := !curr_scope :: !stack
+  stack := !curr_scope :: !stack;
+  curr_scope := []
 
 let leave_scope () =
   stack := List.tl !stack
