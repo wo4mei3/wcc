@@ -33,6 +33,7 @@
       List.map (fun (d,init_opt) -> (make_decl ty d,init_opt)) d_with_init_opt_l
 
     let item_id = ref 0
+
     let gen_id () =
       item_id := !item_id + 1;
       !item_id
@@ -298,6 +299,23 @@
         end
       else
         raise (ParserError (Printf.sprintf "label %s is missing" !missing_label))
+
+    let label_id = ref 0
+
+    let gen_new_label () =
+      label_id := !label_id + 1;
+      let label = "label" ^ (string_of_int !label_id) in
+      push_label label;
+      label
+    
+    let brk = ref ""
+
+    let cont = ref ""
+
+    let curr_brk = ref ""
+
+    let curr_cont = ref ""
+
 
 %}
 
@@ -584,7 +602,7 @@ enum_const:
     {  }
 
 declarator:
-| pointer direct_declarator { DeclPtr $2 }
+| pointer declarator { DeclPtr $2 }
 | direct_declarator { $1 }
 
 
@@ -697,8 +715,9 @@ stmt:
 | labeled_stmt { $1 }
 | compound_stmt { $1 }
 | expr_stmt { expr_conv $1 }
-| selection_stmt { $1 }
-| iteration_stmt { $1 }
+| selection_stmt_1 { $1 }
+| selection_stmt_2 end_ { $1 }
+| iteration_stmt end_ { $1 }
 | jump_stmt { $1 }
 
 labeled_stmt:
@@ -708,8 +727,10 @@ labeled_stmt:
     SLabel($1,SStmts $3)
   }
 
-| CASE conditional_expr COLON { SCase $2 }
-| DEFAULT COLON { SDefault }
+case_or_default:
+| CASE conditional_expr COLON list(item) { SCase ($2,List.flatten $4) }
+| DEFAULT COLON list(item) { SDefault (List.flatten $3) }
+
 
 compound_stmt:
 | enter_scope LBRACE list(item) RBRACE leave_scope
@@ -721,23 +742,56 @@ expr_stmt:
 | SEMI { None }
 | expr SEMI { Some $1 }
 
-selection_stmt:
+selection_stmt_1:
 | IF LPAREN expr RPAREN stmt    %prec NO_ELSE { SIfElse($3,$5,SStmts []) }
 | IF LPAREN expr RPAREN stmt ELSE stmt { SIfElse($3,$5,$7) }
-| SWITCH LPAREN expr RPAREN stmt { SSwitch($3,$5) }
+
+selection_stmt_2:
+| SWITCH LPAREN expr RPAREN begin_ LBRACE list(case_or_default) RBRACE
+  { 
+    let ret = SSwitch($3,$7,!curr_brk) in
+    ret
+  }
 
 decl_for_for_stmt:
 | decl
   { peek_curr_scope () }
+
 iteration_stmt:
-| WHILE LPAREN expr RPAREN stmt { SWhile($3,$5) }
-| DO stmt WHILE LPAREN expr RPAREN {  SDoWhile($2,$5) }
-| FOR LPAREN expr_stmt expr_stmt expr? RPAREN stmt { SFor(None,$3,$4,$5,$7) }
-| FOR LPAREN decl_for_for_stmt expr_stmt expr? RPAREN stmt 
+| WHILE LPAREN expr RPAREN begin_ stmt
   { 
-    let ret = SFor(Some $3, None,$4,$5,$7) in
+    SWhile($3,$6,!curr_brk,!curr_cont)
+  }
+| DO begin_ stmt WHILE LPAREN expr RPAREN
+  { 
+    SDoWhile($3,$6,!curr_brk,!curr_cont)
+  }
+| FOR LPAREN expr_stmt expr_stmt expr? RPAREN begin_ stmt
+  { 
+    SFor(None,$3,$4,$5,$8,!curr_brk,!curr_cont)
+  }
+
+| FOR LPAREN decl_for_for_stmt expr_stmt expr? RPAREN begin_ stmt
+  { 
+    let ret = SFor(Some $3, None,$4,$5,$8,!curr_brk,!curr_cont) in
     pop_curr_scope ();
     ret
+  }
+
+begin_:
+|  
+  {
+    brk := !curr_brk;
+    cont := !curr_cont;
+    curr_brk := gen_new_label ();
+    curr_cont := gen_new_label ();
+  }
+
+end_:
+| 
+  {
+    curr_brk := !brk;
+    curr_cont := !cont;
   }
 
 jump_stmt:
@@ -746,8 +800,8 @@ jump_stmt:
     push_goto $2;
     SGoto $2
   }
-| CONTINUE SEMI { SContinue }
-| BREAK SEMI { SBreak }
+| CONTINUE SEMI { SGoto !curr_cont }
+| BREAK SEMI { SGoto !curr_brk }
 | RETURN expr_stmt { SReturn $2 }
 
 external_decl:

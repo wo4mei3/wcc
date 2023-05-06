@@ -11,7 +11,17 @@ int main () {
 label :
     for (int i=0;i<5;i++){
         printf("%d",i);
-        break;continue;
+        if (i==4)
+        break;
+        if (i<5)continue;
+    }
+    switch (0){
+        case 0:
+        case 1:
+        default:
+        int i =0;
+        break;
     }
 return 0;
 }
+int **var[5];

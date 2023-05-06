@@ -144,6 +144,12 @@ val goto_list : string list ref
 val push_label : string -> unit
 val push_goto : string -> unit
 val all_labels_exist : unit -> unit
+val label_id : int ref
+val gen_new_label : unit -> string
+val brk : string ref
+val cont : string ref
+val curr_brk : string ref
+val curr_cont : string ref
 val menhir_begin_marker : int
 val xv_unary_expr : Ast.expr
 val xv_type_spec : Ctype.ts
@@ -161,7 +167,8 @@ val xv_stmt : Ast.stmt
 val xv_static_assert_decl : 'tv_static_assert_decl
 val xv_spec_qual_list : Ctype.ds list
 val xv_shift_expr : Ast.expr
-val xv_selection_stmt : Ast.stmt
+val xv_selection_stmt_2 : Ast.stmt
+val xv_selection_stmt_1 : Ast.stmt
 val xv_rp : unit
 val xv_relational_expr : Ast.expr
 val xv_primary_expr : Ast.expr
@@ -186,6 +193,7 @@ val xv_logical_and_expr : Ast.expr
 val xv_list_type_qual_ : Ctype.tq list
 val xv_list_item_ : Ast.stmt list list
 val xv_list_external_decl_ : Ast.def list list
+val xv_list_case_or_default_ : Ast.stmt list
 val xv_leave_scope : unit
 val xv_leave_declarator : unit
 val xv_labeled_stmt : Ast.stmt
@@ -212,6 +220,7 @@ val xv_enum_const : unit
 val xv_enum : unit
 val xv_enter_scope : unit
 val xv_enter_declarator : unit
+val xv_end_ : unit
 val xv_direct_declarator : declarator
 val xv_direct_abstract_declarator : declarator
 val xv_designator_list : Ast.desig
@@ -225,6 +234,8 @@ val xv_constant_expr : int
 val xv_conditional_expr : Ast.expr
 val xv_compound_stmt : Ast.stmt
 val xv_cast_expr : Ast.expr
+val xv_case_or_default : Ast.stmt
+val xv_begin_ : unit
 val xv_assignment_expr : Ast.expr
 val xv_argument_expr_list : Ast.expr list
 val xv_and_expr : Ast.expr

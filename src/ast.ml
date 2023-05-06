@@ -68,20 +68,20 @@ and desig =
 and stmt =
 | SDef of def
 | SStmts of stmt list
-| SWhile of expr * stmt
-| SDoWhile of stmt * expr
-| SFor of (def option) * (expr option) * (expr option) * (expr option) * stmt
+| SWhile of expr * stmt * string * string
+| SDoWhile of stmt * expr * string * string
+| SFor of (def option) * (expr option) * (expr option) 
+* (expr option) * stmt * string * string
 | SIfElse of expr * stmt * stmt
 | SReturn of expr option
-| SContinue
-| SBreak
 | SLabel of string * stmt
 | SGoto of string
-| SSwitch of expr * stmt
-| SCase of expr
-| SDefault
+| SSwitch of expr * stmt list * string
+| SCase of expr * stmt list
+| SDefault of stmt list
 | SExpr of expr
 [@@deriving show]
+
 
 type program =
 | Program of def list

@@ -11,7 +11,7 @@ let () =
   let filebuf = Lexing.from_channel inchan in
   try
     let program = Parser.translation_unit Lexer.token filebuf in
-    Printf.printf "%s" (Ast.show_program program)
+    Printf.printf "%s\n" (Ast.show_program program)
   with
   | Lexer.LexerError msg -> Printf.printf "%s" msg
   | _ -> print_endline "something went wrong"
