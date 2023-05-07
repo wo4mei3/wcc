@@ -855,9 +855,9 @@ type ('s, 'r) _menhir_state =
         Stack shape : pointer.
         Start symbol: translation_unit. *)
 
-  | MenhirState196 : ((('s, _menhir_box_translation_unit) _menhir_cell1_pointer, _menhir_box_translation_unit) _menhir_cell1_direct_abstract_declarator, _menhir_box_translation_unit) _menhir_state
+  | MenhirState196 : (('s, _menhir_box_translation_unit) _menhir_cell1_direct_abstract_declarator, _menhir_box_translation_unit) _menhir_state
     (** State 196.
-        Stack shape : pointer direct_abstract_declarator.
+        Stack shape : direct_abstract_declarator.
         Start symbol: translation_unit. *)
 
   | MenhirState198 : ((('s, _menhir_box_translation_unit) _menhir_cell1_direct_abstract_declarator, _menhir_box_translation_unit) _menhir_cell1_LBRACKET, _menhir_box_translation_unit) _menhir_state
@@ -900,64 +900,59 @@ type ('s, 'r) _menhir_state =
         Stack shape : pointer.
         Start symbol: translation_unit. *)
 
-  | MenhirState229 : (('s, _menhir_box_translation_unit) _menhir_cell1_pointer, _menhir_box_translation_unit) _menhir_state
-    (** State 229.
-        Stack shape : pointer.
-        Start symbol: translation_unit. *)
-
-  | MenhirState230 : (('s, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_state
-    (** State 230.
-        Stack shape : LPAREN.
-        Start symbol: translation_unit. *)
-
-  | MenhirState234 : (('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_state
-    (** State 234.
+  | MenhirState232 : (('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_state
+    (** State 232.
         Stack shape : direct_declarator.
         Start symbol: translation_unit. *)
 
-  | MenhirState235 : ((('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_LBRACKET, _menhir_box_translation_unit) _menhir_state
-    (** State 235.
+  | MenhirState233 : ((('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_LBRACKET, _menhir_box_translation_unit) _menhir_state
+    (** State 233.
         Stack shape : direct_declarator LBRACKET.
         Start symbol: translation_unit. *)
 
-  | MenhirState238 : ((('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_state
-    (** State 238.
+  | MenhirState236 : ((('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_state
+    (** State 236.
         Stack shape : direct_declarator lp.
         Start symbol: translation_unit. *)
 
-  | MenhirState239 : (((('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_cell1_parameter_type_list, _menhir_box_translation_unit) _menhir_state
-    (** State 239.
+  | MenhirState237 : (((('s, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_cell1_parameter_type_list, _menhir_box_translation_unit) _menhir_state
+    (** State 237.
         Stack shape : direct_declarator lp parameter_type_list.
         Start symbol: translation_unit. *)
 
-  | MenhirState247 : (('s, _menhir_box_translation_unit) _menhir_cell1_direct_abstract_declarator, _menhir_box_translation_unit) _menhir_state
-    (** State 247.
-        Stack shape : direct_abstract_declarator.
-        Start symbol: translation_unit. *)
-
-  | MenhirState260 : ((('s, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_cell1_type_name, _menhir_box_translation_unit) _menhir_state
-    (** State 260.
+  | MenhirState258 : ((('s, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_cell1_type_name, _menhir_box_translation_unit) _menhir_state
+    (** State 258.
         Stack shape : LPAREN type_name.
         Start symbol: translation_unit. *)
 
-  | MenhirState265 : ((('s, _menhir_box_translation_unit) _menhir_cell1_SIZEOF, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_state
-    (** State 265.
+  | MenhirState263 : ((('s, _menhir_box_translation_unit) _menhir_cell1_SIZEOF, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_state
+    (** State 263.
         Stack shape : SIZEOF LPAREN.
         Start symbol: translation_unit. *)
 
-  | MenhirState267 : (((('s, _menhir_box_translation_unit) _menhir_cell1_SIZEOF, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_cell1_type_name, _menhir_box_translation_unit) _menhir_state
-    (** State 267.
+  | MenhirState265 : (((('s, _menhir_box_translation_unit) _menhir_cell1_SIZEOF, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_cell1_type_name, _menhir_box_translation_unit) _menhir_state
+    (** State 265.
         Stack shape : SIZEOF LPAREN type_name.
         Start symbol: translation_unit. *)
 
-  | MenhirState275 : (((('s, _menhir_box_translation_unit) _menhir_cell1_STRUCT, _menhir_box_translation_unit) _menhir_cell1_option_ident_, _menhir_box_translation_unit) _menhir_cell1_struct_decl_list, _menhir_box_translation_unit) _menhir_state
-    (** State 275.
+  | MenhirState273 : (((('s, _menhir_box_translation_unit) _menhir_cell1_STRUCT, _menhir_box_translation_unit) _menhir_cell1_option_ident_, _menhir_box_translation_unit) _menhir_cell1_struct_decl_list, _menhir_box_translation_unit) _menhir_state
+    (** State 273.
         Stack shape : STRUCT option(ident) struct_decl_list.
         Start symbol: translation_unit. *)
 
-  | MenhirState279 : (('s, _menhir_box_translation_unit) _menhir_cell1_spec_qual_list, _menhir_box_translation_unit) _menhir_state
-    (** State 279.
+  | MenhirState277 : (('s, _menhir_box_translation_unit) _menhir_cell1_spec_qual_list, _menhir_box_translation_unit) _menhir_state
+    (** State 277.
         Stack shape : spec_qual_list.
+        Start symbol: translation_unit. *)
+
+  | MenhirState278 : (('s, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_state
+    (** State 278.
+        Stack shape : LPAREN.
+        Start symbol: translation_unit. *)
+
+  | MenhirState279 : (('s, _menhir_box_translation_unit) _menhir_cell1_pointer, _menhir_box_translation_unit) _menhir_state
+    (** State 279.
+        Stack shape : pointer.
         Start symbol: translation_unit. *)
 
   | MenhirState281 : ((('s, _menhir_box_translation_unit) _menhir_cell1_spec_qual_list, _menhir_box_translation_unit) _menhir_cell1_struct_declarator_list, _menhir_box_translation_unit) _menhir_state
@@ -1377,7 +1372,7 @@ and 's _menhir_cell0_ID =
   | MenhirCell0_ID of 's * (
 # 338 "src/parser.mly"
       (string)
-# 1381 "src/parser.ml"
+# 1376 "src/parser.ml"
 )
 
 and ('s, 'r) _menhir_cell1_IF = 
@@ -1436,15 +1431,15 @@ let _menhir_action_001 =
     (
 # 664 "src/parser.mly"
           ( DeclPtr (DeclIdent "") )
-# 1440 "src/parser.ml"
+# 1435 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_002 =
   fun _2 ->
     (
 # 665 "src/parser.mly"
-                                     ( DeclPtr _2 )
-# 1448 "src/parser.ml"
+                              ( DeclPtr _2 )
+# 1443 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_003 =
@@ -1452,7 +1447,7 @@ let _menhir_action_003 =
     (
 # 666 "src/parser.mly"
                              ( _1 )
-# 1456 "src/parser.ml"
+# 1451 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_004 =
@@ -1460,7 +1455,7 @@ let _menhir_action_004 =
     (
 # 413 "src/parser.mly"
                       ( _1 )
-# 1464 "src/parser.ml"
+# 1459 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_005 =
@@ -1468,7 +1463,7 @@ let _menhir_action_005 =
     (
 # 414 "src/parser.mly"
                                          ( EBinary(Add,_1,_3) )
-# 1472 "src/parser.ml"
+# 1467 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_006 =
@@ -1476,7 +1471,7 @@ let _menhir_action_006 =
     (
 # 415 "src/parser.mly"
                                           ( EBinary(Sub,_1,_3) )
-# 1480 "src/parser.ml"
+# 1475 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_007 =
@@ -1484,7 +1479,7 @@ let _menhir_action_007 =
     (
 # 553 "src/parser.mly"
   ( raise (NotImpl "ALIGNAS") )
-# 1488 "src/parser.ml"
+# 1483 "src/parser.ml"
      : ('tv_alignment_spec))
 
 let _menhir_action_008 =
@@ -1492,7 +1487,7 @@ let _menhir_action_008 =
     (
 # 553 "src/parser.mly"
   ( raise (NotImpl "ALIGNAS") )
-# 1496 "src/parser.ml"
+# 1491 "src/parser.ml"
      : ('tv_alignment_spec))
 
 let _menhir_action_009 =
@@ -1500,7 +1495,7 @@ let _menhir_action_009 =
     (
 # 435 "src/parser.mly"
                 ( _1 )
-# 1504 "src/parser.ml"
+# 1499 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_010 =
@@ -1508,7 +1503,7 @@ let _menhir_action_010 =
     (
 # 436 "src/parser.mly"
                              ( EBinary(BitAnd,_1,_3) )
-# 1512 "src/parser.ml"
+# 1507 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_011 =
@@ -1516,7 +1511,7 @@ let _menhir_action_011 =
     (
 # 385 "src/parser.mly"
                   ( [_1] )
-# 1520 "src/parser.ml"
+# 1515 "src/parser.ml"
      : (Ast.expr list))
 
 let _menhir_action_012 =
@@ -1524,7 +1519,7 @@ let _menhir_action_012 =
     (
 # 386 "src/parser.mly"
                                            ( _1@[_3] )
-# 1528 "src/parser.ml"
+# 1523 "src/parser.ml"
      : (Ast.expr list))
 
 let _menhir_action_013 =
@@ -1532,7 +1527,7 @@ let _menhir_action_013 =
     (
 # 459 "src/parser.mly"
                    ( _1 )
-# 1536 "src/parser.ml"
+# 1531 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_014 =
@@ -1540,7 +1535,7 @@ let _menhir_action_014 =
     (
 # 460 "src/parser.mly"
                                 ( EAssign(None, _1,_3) )
-# 1544 "src/parser.ml"
+# 1539 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_015 =
@@ -1548,7 +1543,7 @@ let _menhir_action_015 =
     (
 # 461 "src/parser.mly"
                                     ( EAssign(Some Mul, _1,_3) )
-# 1552 "src/parser.ml"
+# 1547 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_016 =
@@ -1556,7 +1551,7 @@ let _menhir_action_016 =
     (
 # 462 "src/parser.mly"
                                     ( EAssign(Some Div, _1,_3) )
-# 1560 "src/parser.ml"
+# 1555 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_017 =
@@ -1564,7 +1559,7 @@ let _menhir_action_017 =
     (
 # 463 "src/parser.mly"
                                     ( EAssign(Some Mod, _1,_3) )
-# 1568 "src/parser.ml"
+# 1563 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_018 =
@@ -1572,7 +1567,7 @@ let _menhir_action_018 =
     (
 # 464 "src/parser.mly"
                                     ( EAssign(Some Add, _1,_3) )
-# 1576 "src/parser.ml"
+# 1571 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_019 =
@@ -1580,7 +1575,7 @@ let _menhir_action_019 =
     (
 # 465 "src/parser.mly"
                                     ( EAssign(Some Sub, _1,_3) )
-# 1584 "src/parser.ml"
+# 1579 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_020 =
@@ -1588,7 +1583,7 @@ let _menhir_action_020 =
     (
 # 466 "src/parser.mly"
                                        ( EAssign(Some LShift, _1,_3) )
-# 1592 "src/parser.ml"
+# 1587 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_021 =
@@ -1596,7 +1591,7 @@ let _menhir_action_021 =
     (
 # 467 "src/parser.mly"
                                        ( EAssign(Some RShift, _1,_3) )
-# 1600 "src/parser.ml"
+# 1595 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_022 =
@@ -1604,7 +1599,7 @@ let _menhir_action_022 =
     (
 # 468 "src/parser.mly"
                                     ( EAssign(Some BitAnd, _1,_3) )
-# 1608 "src/parser.ml"
+# 1603 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_023 =
@@ -1612,7 +1607,7 @@ let _menhir_action_023 =
     (
 # 469 "src/parser.mly"
                                     ( EAssign(Some BitXor, _1,_3) )
-# 1616 "src/parser.ml"
+# 1611 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_024 =
@@ -1620,7 +1615,7 @@ let _menhir_action_024 =
     (
 # 470 "src/parser.mly"
                                    ( EAssign(Some BitOr, _1,_3) )
-# 1624 "src/parser.ml"
+# 1619 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_025 =
@@ -1633,7 +1628,7 @@ let _menhir_action_025 =
     curr_brk := gen_new_label ();
     curr_cont := gen_new_label ();
   )
-# 1637 "src/parser.ml"
+# 1632 "src/parser.ml"
      : (unit))
 
 let _menhir_action_026 =
@@ -1641,7 +1636,7 @@ let _menhir_action_026 =
     (
 # 731 "src/parser.mly"
                                          ( SCase (_2,List.flatten _4) )
-# 1645 "src/parser.ml"
+# 1640 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_027 =
@@ -1649,7 +1644,7 @@ let _menhir_action_027 =
     (
 # 732 "src/parser.mly"
                            ( SDefault (List.flatten _3) )
-# 1653 "src/parser.ml"
+# 1648 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_028 =
@@ -1657,7 +1652,7 @@ let _menhir_action_028 =
     (
 # 403 "src/parser.mly"
              ( _1 )
-# 1661 "src/parser.ml"
+# 1656 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_029 =
@@ -1665,7 +1660,7 @@ let _menhir_action_029 =
     (
 # 404 "src/parser.mly"
                                     ( ECast(_2,_4) )
-# 1669 "src/parser.ml"
+# 1664 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_030 =
@@ -1675,7 +1670,7 @@ let _menhir_action_030 =
  (
     SStmts(List.flatten _3)
   )
-# 1679 "src/parser.ml"
+# 1674 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_031 =
@@ -1683,7 +1678,7 @@ let _menhir_action_031 =
     (
 # 455 "src/parser.mly"
                   ( _1 )
-# 1687 "src/parser.ml"
+# 1682 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_032 =
@@ -1691,7 +1686,7 @@ let _menhir_action_032 =
     (
 # 456 "src/parser.mly"
                                                        ( ECond(_1,_3,_5) )
-# 1695 "src/parser.ml"
+# 1690 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_033 =
@@ -1699,7 +1694,7 @@ let _menhir_action_033 =
     (
 # 478 "src/parser.mly"
   ( 0 )
-# 1703 "src/parser.ml"
+# 1698 "src/parser.ml"
      : (int))
 
 let _menhir_action_034 =
@@ -1707,7 +1702,7 @@ let _menhir_action_034 =
     (
 # 481 "src/parser.mly"
                   ( () )
-# 1711 "src/parser.ml"
+# 1706 "src/parser.ml"
      : (unit))
 
 let _menhir_action_035 =
@@ -1718,7 +1713,7 @@ let _menhir_action_035 =
     let defs = List.map make_var_or_typedef (make_decls_with_init_opts _1 _2) in
     List.iter add_def defs
   )
-# 1722 "src/parser.ml"
+# 1717 "src/parser.ml"
      : (unit))
 
 let _menhir_action_036 =
@@ -1726,7 +1721,7 @@ let _menhir_action_036 =
     (
 # 487 "src/parser.mly"
                       ( raise (NotImpl "Static_assert") )
-# 1730 "src/parser.ml"
+# 1725 "src/parser.ml"
      : (unit))
 
 let _menhir_action_037 =
@@ -1734,7 +1729,7 @@ let _menhir_action_037 =
     (
 # 758 "src/parser.mly"
   ( peek_curr_scope () )
-# 1738 "src/parser.ml"
+# 1733 "src/parser.ml"
      : (Ast.def))
 
 let _menhir_action_038 =
@@ -1742,7 +1737,7 @@ let _menhir_action_038 =
     (
 # 490 "src/parser.mly"
                      ( TDeclSpec [Scs _1] )
-# 1746 "src/parser.ml"
+# 1741 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_039 =
@@ -1750,7 +1745,7 @@ let _menhir_action_039 =
     (
 # 491 "src/parser.mly"
             ( TDeclSpec [Tq _1] )
-# 1754 "src/parser.ml"
+# 1749 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_040 =
@@ -1758,7 +1753,7 @@ let _menhir_action_040 =
     (
 # 492 "src/parser.mly"
                 ( TDeclSpec [Fs _1] )
-# 1762 "src/parser.ml"
+# 1757 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_041 =
@@ -1766,7 +1761,7 @@ let _menhir_action_041 =
     (
 # 493 "src/parser.mly"
                  ( raise (NotImpl "not implemented") )
-# 1770 "src/parser.ml"
+# 1765 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_042 =
@@ -1774,7 +1769,7 @@ let _menhir_action_042 =
     (
 # 494 "src/parser.mly"
             ( TDeclSpec [Ts _1] )
-# 1778 "src/parser.ml"
+# 1773 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_043 =
@@ -1782,7 +1777,7 @@ let _menhir_action_043 =
     (
 # 497 "src/parser.mly"
             ( _1 )
-# 1786 "src/parser.ml"
+# 1781 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_044 =
@@ -1790,7 +1785,7 @@ let _menhir_action_044 =
     (
 # 499 "src/parser.mly"
   ( append_ds_list [_1] [_2] )
-# 1794 "src/parser.ml"
+# 1789 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_045 =
@@ -1798,7 +1793,7 @@ let _menhir_action_045 =
     (
 # 605 "src/parser.mly"
                      ( DeclPtr _2 )
-# 1802 "src/parser.ml"
+# 1797 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_046 =
@@ -1806,7 +1801,7 @@ let _menhir_action_046 =
     (
 # 606 "src/parser.mly"
                     ( _1 )
-# 1810 "src/parser.ml"
+# 1805 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_047 =
@@ -1814,7 +1809,7 @@ let _menhir_action_047 =
     (
 # 688 "src/parser.mly"
   ( _1 )
-# 1818 "src/parser.ml"
+# 1813 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_048 =
@@ -1822,7 +1817,7 @@ let _menhir_action_048 =
     (
 # 691 "src/parser.mly"
                                   ( DIdx(_2,None) )
-# 1826 "src/parser.ml"
+# 1821 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_049 =
@@ -1830,7 +1825,7 @@ let _menhir_action_049 =
     (
 # 692 "src/parser.mly"
             ( DField(_2,None) )
-# 1834 "src/parser.ml"
+# 1829 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_050 =
@@ -1838,7 +1833,7 @@ let _menhir_action_050 =
     (
 # 693 "src/parser.mly"
                                                   (DIdx(_2,Some _4) )
-# 1842 "src/parser.ml"
+# 1837 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_051 =
@@ -1846,7 +1841,7 @@ let _menhir_action_051 =
     (
 # 694 "src/parser.mly"
                             ( DField(_2,Some _3) )
-# 1850 "src/parser.ml"
+# 1845 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_052 =
@@ -1854,7 +1849,7 @@ let _menhir_action_052 =
     (
 # 669 "src/parser.mly"
                                     ( _2 )
-# 1858 "src/parser.ml"
+# 1853 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_053 =
@@ -1862,7 +1857,7 @@ let _menhir_action_053 =
     (
 # 670 "src/parser.mly"
                                                              ( DeclArr(_1,_3) )
-# 1866 "src/parser.ml"
+# 1861 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_054 =
@@ -1870,7 +1865,7 @@ let _menhir_action_054 =
     (
 # 671 "src/parser.mly"
                                                        ( DeclFun(_1,_3) )
-# 1874 "src/parser.ml"
+# 1869 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_055 =
@@ -1878,7 +1873,7 @@ let _menhir_action_055 =
     (
 # 622 "src/parser.mly"
                                        ( DeclIdent _2 )
-# 1882 "src/parser.ml"
+# 1877 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_056 =
@@ -1886,7 +1881,7 @@ let _menhir_action_056 =
     (
 # 623 "src/parser.mly"
                            ( _2 )
-# 1890 "src/parser.ml"
+# 1885 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_057 =
@@ -1894,7 +1889,7 @@ let _menhir_action_057 =
     (
 # 624 "src/parser.mly"
                                                     ( DeclArr(_1, _3) )
-# 1898 "src/parser.ml"
+# 1893 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_058 =
@@ -1902,7 +1897,7 @@ let _menhir_action_058 =
     (
 # 625 "src/parser.mly"
                                               ( DeclFun(_1,_3) )
-# 1906 "src/parser.ml"
+# 1901 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_059 =
@@ -1913,7 +1908,7 @@ let _menhir_action_059 =
     curr_brk := !brk;
     curr_cont := !cont;
   )
-# 1917 "src/parser.ml"
+# 1912 "src/parser.ml"
      : (unit))
 
 let _menhir_action_060 =
@@ -1923,7 +1918,7 @@ let _menhir_action_060 =
   (
     in_declarator := true
   )
-# 1927 "src/parser.ml"
+# 1922 "src/parser.ml"
      : (unit))
 
 let _menhir_action_061 =
@@ -1933,7 +1928,7 @@ let _menhir_action_061 =
   (
     stack := !curr_scope::!stack
   )
-# 1937 "src/parser.ml"
+# 1932 "src/parser.ml"
      : (unit))
 
 let _menhir_action_062 =
@@ -1941,7 +1936,7 @@ let _menhir_action_062 =
     (
 # 598 "src/parser.mly"
     (  )
-# 1945 "src/parser.ml"
+# 1940 "src/parser.ml"
      : (unit))
 
 let _menhir_action_063 =
@@ -1949,7 +1944,7 @@ let _menhir_action_063 =
     (
 # 598 "src/parser.mly"
     (  )
-# 1953 "src/parser.ml"
+# 1948 "src/parser.ml"
      : (unit))
 
 let _menhir_action_064 =
@@ -1957,7 +1952,7 @@ let _menhir_action_064 =
     (
 # 602 "src/parser.mly"
     (  )
-# 1961 "src/parser.ml"
+# 1956 "src/parser.ml"
      : (unit))
 
 let _menhir_action_065 =
@@ -1965,7 +1960,7 @@ let _menhir_action_065 =
     (
 # 593 "src/parser.mly"
     ()
-# 1969 "src/parser.ml"
+# 1964 "src/parser.ml"
      : (unit))
 
 let _menhir_action_066 =
@@ -1973,7 +1968,7 @@ let _menhir_action_066 =
     (
 # 593 "src/parser.mly"
     ()
-# 1977 "src/parser.ml"
+# 1972 "src/parser.ml"
      : (unit))
 
 let _menhir_action_067 =
@@ -1981,7 +1976,7 @@ let _menhir_action_067 =
     (
 # 588 "src/parser.mly"
     ( raise (NotImpl "enum_spec") )
-# 1985 "src/parser.ml"
+# 1980 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_068 =
@@ -1989,7 +1984,7 @@ let _menhir_action_068 =
     (
 # 588 "src/parser.mly"
     ( raise (NotImpl "enum_spec") )
-# 1993 "src/parser.ml"
+# 1988 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_069 =
@@ -1997,7 +1992,7 @@ let _menhir_action_069 =
     (
 # 430 "src/parser.mly"
                   ( _1 )
-# 2001 "src/parser.ml"
+# 1996 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_070 =
@@ -2005,7 +2000,7 @@ let _menhir_action_070 =
     (
 # 431 "src/parser.mly"
                                      ( EBinary(Eq,_1,_3) )
-# 2009 "src/parser.ml"
+# 2004 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_071 =
@@ -2013,7 +2008,7 @@ let _menhir_action_071 =
     (
 # 432 "src/parser.mly"
                                    ( EBinary(Ne,_1,_3) )
-# 2017 "src/parser.ml"
+# 2012 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_072 =
@@ -2021,7 +2016,7 @@ let _menhir_action_072 =
     (
 # 439 "src/parser.mly"
            ( _1 )
-# 2025 "src/parser.ml"
+# 2020 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_073 =
@@ -2029,7 +2024,7 @@ let _menhir_action_073 =
     (
 # 440 "src/parser.mly"
                                  ( EBinary(BitXor,_1,_3) )
-# 2033 "src/parser.ml"
+# 2028 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_074 =
@@ -2037,7 +2032,7 @@ let _menhir_action_074 =
     (
 # 473 "src/parser.mly"
                   ( _1 )
-# 2041 "src/parser.ml"
+# 2036 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_075 =
@@ -2045,7 +2040,7 @@ let _menhir_action_075 =
     (
 # 474 "src/parser.mly"
                              ( EBinary(Comma,_1,_3) )
-# 2049 "src/parser.ml"
+# 2044 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_076 =
@@ -2053,7 +2048,7 @@ let _menhir_action_076 =
     (
 # 742 "src/parser.mly"
        ( None )
-# 2057 "src/parser.ml"
+# 2052 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_077 =
@@ -2061,7 +2056,7 @@ let _menhir_action_077 =
     (
 # 743 "src/parser.mly"
             ( Some _1 )
-# 2065 "src/parser.ml"
+# 2060 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_078 =
@@ -2069,7 +2064,7 @@ let _menhir_action_078 =
     (
 # 808 "src/parser.mly"
                ( _1 )
-# 2073 "src/parser.ml"
+# 2068 "src/parser.ml"
      : (Ast.def list))
 
 let _menhir_action_079 =
@@ -2077,7 +2072,7 @@ let _menhir_action_079 =
     (
 # 810 "src/parser.mly"
   ( get_stack () )
-# 2081 "src/parser.ml"
+# 2076 "src/parser.ml"
      : (Ast.def list))
 
 let _menhir_action_080 =
@@ -2088,7 +2083,7 @@ let _menhir_action_080 =
     let decl = make_decl _1 _2 in
     (decl,get_stack ())
   )
-# 2092 "src/parser.ml"
+# 2087 "src/parser.ml"
      : (Ctype.decl * Ast.def list))
 
 let _menhir_action_081 =
@@ -2104,7 +2099,7 @@ let _menhir_action_081 =
     let def2_list = SStmts ((List.map (fun def -> SDef def) def2_list)@(get_stmts _2)) in
     def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))]
   )
-# 2108 "src/parser.ml"
+# 2103 "src/parser.ml"
      : (Ast.def list))
 
 let _menhir_action_082 =
@@ -2112,7 +2107,7 @@ let _menhir_action_082 =
     (
 # 547 "src/parser.mly"
          ( FsInline )
-# 2116 "src/parser.ml"
+# 2111 "src/parser.ml"
      : (Ctype.fs))
 
 let _menhir_action_083 =
@@ -2120,7 +2115,7 @@ let _menhir_action_083 =
     (
 # 548 "src/parser.mly"
            ( FsNoreturn )
-# 2124 "src/parser.ml"
+# 2119 "src/parser.ml"
      : (Ctype.fs))
 
 let _menhir_action_084 =
@@ -2128,7 +2123,7 @@ let _menhir_action_084 =
     (
 # 354 "src/parser.mly"
      ( _1 )
-# 2132 "src/parser.ml"
+# 2127 "src/parser.ml"
      : (string))
 
 let _menhir_action_085 =
@@ -2136,7 +2131,7 @@ let _menhir_action_085 =
     (
 # 355 "src/parser.mly"
           ( _1 )
-# 2140 "src/parser.ml"
+# 2135 "src/parser.ml"
      : (string))
 
 let _menhir_action_086 =
@@ -2144,7 +2139,7 @@ let _menhir_action_086 =
     (
 # 443 "src/parser.mly"
                     ( _1 )
-# 2148 "src/parser.ml"
+# 2143 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_087 =
@@ -2152,7 +2147,7 @@ let _menhir_action_087 =
     (
 # 444 "src/parser.mly"
                                          ( EBinary(BitOr,_1,_3) )
-# 2156 "src/parser.ml"
+# 2151 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_088 =
@@ -2160,7 +2155,7 @@ let _menhir_action_088 =
     (
 # 679 "src/parser.mly"
                   ( IScal _1 )
-# 2164 "src/parser.ml"
+# 2159 "src/parser.ml"
      : (Ast.init))
 
 let _menhir_action_089 =
@@ -2168,7 +2163,7 @@ let _menhir_action_089 =
     (
 # 680 "src/parser.mly"
                                  ( IVect _2 )
-# 2172 "src/parser.ml"
+# 2167 "src/parser.ml"
      : (Ast.init))
 
 let _menhir_action_090 =
@@ -2176,7 +2171,7 @@ let _menhir_action_090 =
     (
 # 508 "src/parser.mly"
              ( (_1,None) )
-# 2180 "src/parser.ml"
+# 2175 "src/parser.ml"
      : (declarator * Ast.init option))
 
 let _menhir_action_091 =
@@ -2184,7 +2179,7 @@ let _menhir_action_091 =
     (
 # 510 "src/parser.mly"
   ( (_1,Some _3) )
-# 2188 "src/parser.ml"
+# 2183 "src/parser.ml"
      : (declarator * Ast.init option))
 
 let _menhir_action_092 =
@@ -2192,7 +2187,7 @@ let _menhir_action_092 =
     (
 # 503 "src/parser.mly"
   ( [_1] )
-# 2196 "src/parser.ml"
+# 2191 "src/parser.ml"
      : ((declarator * Ast.init option) list))
 
 let _menhir_action_093 =
@@ -2200,7 +2195,7 @@ let _menhir_action_093 =
     (
 # 505 "src/parser.mly"
   ( _1@[_3] )
-# 2204 "src/parser.ml"
+# 2199 "src/parser.ml"
      : ((declarator * Ast.init option) list))
 
 let _menhir_action_094 =
@@ -2208,7 +2203,7 @@ let _menhir_action_094 =
     (
 # 683 "src/parser.mly"
               ( [(_1,_2)] )
-# 2212 "src/parser.ml"
+# 2207 "src/parser.ml"
      : ((Ast.desig option * Ast.init) list))
 
 let _menhir_action_095 =
@@ -2216,7 +2211,7 @@ let _menhir_action_095 =
     (
 # 684 "src/parser.mly"
                               ( _1@[(_3,_4)] )
-# 2220 "src/parser.ml"
+# 2215 "src/parser.ml"
      : ((Ast.desig option * Ast.init) list))
 
 let _menhir_action_096 =
@@ -2224,7 +2219,7 @@ let _menhir_action_096 =
     (
 # 711 "src/parser.mly"
        ( List.map (fun def -> SDef def) (get_stack ()) )
-# 2228 "src/parser.ml"
+# 2223 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_097 =
@@ -2232,7 +2227,7 @@ let _menhir_action_097 =
     (
 # 712 "src/parser.mly"
        ( [_1] )
-# 2236 "src/parser.ml"
+# 2231 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_098 =
@@ -2242,7 +2237,7 @@ let _menhir_action_098 =
   ( 
     SWhile(_3,_6,!curr_brk,!curr_cont)
   )
-# 2246 "src/parser.ml"
+# 2241 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_099 =
@@ -2252,7 +2247,7 @@ let _menhir_action_099 =
   ( 
     SDoWhile(_3,_6,!curr_brk,!curr_cont)
   )
-# 2256 "src/parser.ml"
+# 2251 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_100 =
@@ -2262,7 +2257,7 @@ let _menhir_action_100 =
   ( 
     SFor(None,_3,_4,_5,_8,!curr_brk,!curr_cont)
   )
-# 2266 "src/parser.ml"
+# 2261 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_101 =
@@ -2274,7 +2269,7 @@ let _menhir_action_101 =
     pop_curr_scope ();
     ret
   )
-# 2278 "src/parser.ml"
+# 2273 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_102 =
@@ -2285,7 +2280,7 @@ let _menhir_action_102 =
     push_goto _2;
     SGoto _2
   )
-# 2289 "src/parser.ml"
+# 2284 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_103 =
@@ -2293,7 +2288,7 @@ let _menhir_action_103 =
     (
 # 803 "src/parser.mly"
                 ( SGoto !curr_cont )
-# 2297 "src/parser.ml"
+# 2292 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_104 =
@@ -2301,7 +2296,7 @@ let _menhir_action_104 =
     (
 # 804 "src/parser.mly"
              ( SGoto !curr_brk )
-# 2305 "src/parser.ml"
+# 2300 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_105 =
@@ -2309,7 +2304,7 @@ let _menhir_action_105 =
     (
 # 805 "src/parser.mly"
                    ( SReturn _2 )
-# 2313 "src/parser.ml"
+# 2308 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_106 =
@@ -2320,7 +2315,7 @@ let _menhir_action_106 =
     push_label _1;
     SLabel(_1,SStmts _3)
   )
-# 2324 "src/parser.ml"
+# 2319 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_107 =
@@ -2330,7 +2325,7 @@ let _menhir_action_107 =
   (
     in_declarator := false
   )
-# 2334 "src/parser.ml"
+# 2329 "src/parser.ml"
      : (unit))
 
 let _menhir_action_108 =
@@ -2340,7 +2335,7 @@ let _menhir_action_108 =
   (
     stack := List.tl !stack
   )
-# 2344 "src/parser.ml"
+# 2339 "src/parser.ml"
      : (unit))
 
 let _menhir_action_109 =
@@ -2348,7 +2343,7 @@ let _menhir_action_109 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2352 "src/parser.ml"
+# 2347 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_110 =
@@ -2356,7 +2351,7 @@ let _menhir_action_110 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2360 "src/parser.ml"
+# 2355 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_111 =
@@ -2364,7 +2359,7 @@ let _menhir_action_111 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2368 "src/parser.ml"
+# 2363 "src/parser.ml"
      : (Ast.def list list))
 
 let _menhir_action_112 =
@@ -2372,7 +2367,7 @@ let _menhir_action_112 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2376 "src/parser.ml"
+# 2371 "src/parser.ml"
      : (Ast.def list list))
 
 let _menhir_action_113 =
@@ -2380,7 +2375,7 @@ let _menhir_action_113 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2384 "src/parser.ml"
+# 2379 "src/parser.ml"
      : (Ast.stmt list list))
 
 let _menhir_action_114 =
@@ -2388,7 +2383,7 @@ let _menhir_action_114 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2392 "src/parser.ml"
+# 2387 "src/parser.ml"
      : (Ast.stmt list list))
 
 let _menhir_action_115 =
@@ -2396,7 +2391,7 @@ let _menhir_action_115 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2400 "src/parser.ml"
+# 2395 "src/parser.ml"
      : (Ctype.tq list))
 
 let _menhir_action_116 =
@@ -2404,7 +2399,7 @@ let _menhir_action_116 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2408 "src/parser.ml"
+# 2403 "src/parser.ml"
      : (Ctype.tq list))
 
 let _menhir_action_117 =
@@ -2412,7 +2407,7 @@ let _menhir_action_117 =
     (
 # 447 "src/parser.mly"
                     ( _1 )
-# 2416 "src/parser.ml"
+# 2411 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_118 =
@@ -2420,7 +2415,7 @@ let _menhir_action_118 =
     (
 # 448 "src/parser.mly"
                                             ( EBinary(LogAnd,_1,_3) )
-# 2424 "src/parser.ml"
+# 2419 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_119 =
@@ -2428,7 +2423,7 @@ let _menhir_action_119 =
     (
 # 451 "src/parser.mly"
                    ( _1 )
-# 2432 "src/parser.ml"
+# 2427 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_120 =
@@ -2436,7 +2431,7 @@ let _menhir_action_120 =
     (
 # 452 "src/parser.mly"
                                         ( EBinary(LogOr,_1,_3) )
-# 2440 "src/parser.ml"
+# 2435 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_121 =
@@ -2444,7 +2439,7 @@ let _menhir_action_121 =
     (
 # 633 "src/parser.mly"
   ( enter_params () )
-# 2448 "src/parser.ml"
+# 2443 "src/parser.ml"
      : (unit))
 
 let _menhir_action_122 =
@@ -2452,7 +2447,7 @@ let _menhir_action_122 =
     (
 # 407 "src/parser.mly"
             ( _1 )
-# 2456 "src/parser.ml"
+# 2451 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_123 =
@@ -2460,7 +2455,7 @@ let _menhir_action_123 =
     (
 # 408 "src/parser.mly"
                                      ( EBinary(Mul,_1,_3) )
-# 2464 "src/parser.ml"
+# 2459 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_124 =
@@ -2468,7 +2463,7 @@ let _menhir_action_124 =
     (
 # 409 "src/parser.mly"
                                     ( EBinary(Div,_1,_3) )
-# 2472 "src/parser.ml"
+# 2467 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_125 =
@@ -2476,7 +2471,7 @@ let _menhir_action_125 =
     (
 # 410 "src/parser.mly"
                                     ( EBinary(Mod,_1,_3) )
-# 2480 "src/parser.ml"
+# 2475 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_126 =
@@ -2484,7 +2479,7 @@ let _menhir_action_126 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2488 "src/parser.ml"
+# 2483 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_127 =
@@ -2492,7 +2487,7 @@ let _menhir_action_127 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2496 "src/parser.ml"
+# 2491 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_128 =
@@ -2500,7 +2495,7 @@ let _menhir_action_128 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2504 "src/parser.ml"
+# 2499 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_129 =
@@ -2508,12 +2503,12 @@ let _menhir_action_129 =
     let x = 
 # 642 "src/parser.mly"
                                        ()
-# 2512 "src/parser.ml"
+# 2507 "src/parser.ml"
      in
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2517 "src/parser.ml"
+# 2512 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_130 =
@@ -2521,7 +2516,7 @@ let _menhir_action_130 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2525 "src/parser.ml"
+# 2520 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_131 =
@@ -2529,7 +2524,7 @@ let _menhir_action_131 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2533 "src/parser.ml"
+# 2528 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_132 =
@@ -2537,7 +2532,7 @@ let _menhir_action_132 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2541 "src/parser.ml"
+# 2536 "src/parser.ml"
      : (Ast.expr list option))
 
 let _menhir_action_133 =
@@ -2545,7 +2540,7 @@ let _menhir_action_133 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2549 "src/parser.ml"
+# 2544 "src/parser.ml"
      : (Ast.expr list option))
 
 let _menhir_action_134 =
@@ -2553,7 +2548,7 @@ let _menhir_action_134 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2557 "src/parser.ml"
+# 2552 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_135 =
@@ -2561,7 +2556,7 @@ let _menhir_action_135 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2565 "src/parser.ml"
+# 2560 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_136 =
@@ -2569,7 +2564,7 @@ let _menhir_action_136 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2573 "src/parser.ml"
+# 2568 "src/parser.ml"
      : (Ast.desig option))
 
 let _menhir_action_137 =
@@ -2577,7 +2572,7 @@ let _menhir_action_137 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2581 "src/parser.ml"
+# 2576 "src/parser.ml"
      : (Ast.desig option))
 
 let _menhir_action_138 =
@@ -2585,7 +2580,7 @@ let _menhir_action_138 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2589 "src/parser.ml"
+# 2584 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_139 =
@@ -2593,7 +2588,7 @@ let _menhir_action_139 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2597 "src/parser.ml"
+# 2592 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_140 =
@@ -2601,7 +2596,7 @@ let _menhir_action_140 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2605 "src/parser.ml"
+# 2600 "src/parser.ml"
      : (string option))
 
 let _menhir_action_141 =
@@ -2609,7 +2604,7 @@ let _menhir_action_141 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2613 "src/parser.ml"
+# 2608 "src/parser.ml"
      : (string option))
 
 let _menhir_action_142 =
@@ -2617,7 +2612,7 @@ let _menhir_action_142 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2621 "src/parser.ml"
+# 2616 "src/parser.ml"
      : (declarator list option))
 
 let _menhir_action_143 =
@@ -2625,7 +2620,7 @@ let _menhir_action_143 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2629 "src/parser.ml"
+# 2624 "src/parser.ml"
      : (declarator list option))
 
 let _menhir_action_144 =
@@ -2635,7 +2630,7 @@ let _menhir_action_144 =
   ( 
     [make_decl _1 _2]
   )
-# 2639 "src/parser.ml"
+# 2634 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_145 =
@@ -2647,7 +2642,7 @@ let _menhir_action_145 =
     | Some d -> [make_decl _1 d]
     | None -> [make_decl _1 (DeclIdent "")]
   )
-# 2651 "src/parser.ml"
+# 2646 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_146 =
@@ -2655,7 +2650,7 @@ let _menhir_action_146 =
     (
 # 647 "src/parser.mly"
   ( _1 )
-# 2659 "src/parser.ml"
+# 2654 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_147 =
@@ -2663,7 +2658,7 @@ let _menhir_action_147 =
     (
 # 649 "src/parser.mly"
   ( _1@_3 )
-# 2667 "src/parser.ml"
+# 2662 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_148 =
@@ -2671,7 +2666,7 @@ let _menhir_action_148 =
     (
 # 641 "src/parser.mly"
   ( [] )
-# 2675 "src/parser.ml"
+# 2670 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_149 =
@@ -2679,7 +2674,7 @@ let _menhir_action_149 =
     (
 # 643 "src/parser.mly"
   ( _1 )
-# 2683 "src/parser.ml"
+# 2678 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_150 =
@@ -2687,7 +2682,7 @@ let _menhir_action_150 =
     (
 # 629 "src/parser.mly"
   (  )
-# 2691 "src/parser.ml"
+# 2686 "src/parser.ml"
      : (unit))
 
 let _menhir_action_151 =
@@ -2695,7 +2690,7 @@ let _menhir_action_151 =
     (
 # 370 "src/parser.mly"
                ( _1 )
-# 2699 "src/parser.ml"
+# 2694 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_152 =
@@ -2703,7 +2698,7 @@ let _menhir_action_152 =
     (
 # 371 "src/parser.mly"
                                       ( EPostfix(_1,Nth _3) )
-# 2707 "src/parser.ml"
+# 2702 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_153 =
@@ -2715,7 +2710,7 @@ let _menhir_action_153 =
     | Some l -> EPostfix(_1,Call l)
     | None -> EPostfix(_1,Call [])
   )
-# 2719 "src/parser.ml"
+# 2714 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_154 =
@@ -2723,7 +2718,7 @@ let _menhir_action_154 =
     (
 # 378 "src/parser.mly"
                          ( EPostfix(_1,Member _3) )
-# 2727 "src/parser.ml"
+# 2722 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_155 =
@@ -2731,7 +2726,7 @@ let _menhir_action_155 =
     (
 # 379 "src/parser.mly"
                            ( EPostfix(EUnary(Deref,_1),Member _3) )
-# 2735 "src/parser.ml"
+# 2730 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_156 =
@@ -2739,7 +2734,7 @@ let _menhir_action_156 =
     (
 # 380 "src/parser.mly"
                    ( EPostfix(_1,Inc) )
-# 2743 "src/parser.ml"
+# 2738 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_157 =
@@ -2747,7 +2742,7 @@ let _menhir_action_157 =
     (
 # 381 "src/parser.mly"
                    ( EPostfix(_1,Dec) )
-# 2751 "src/parser.ml"
+# 2746 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_158 =
@@ -2755,7 +2750,7 @@ let _menhir_action_158 =
     (
 # 382 "src/parser.mly"
                                                          ( ECompoundLit(_2,IVect _5) )
-# 2759 "src/parser.ml"
+# 2754 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_159 =
@@ -2763,7 +2758,7 @@ let _menhir_action_159 =
     (
 # 358 "src/parser.mly"
      ( EVar (get_var _1) )
-# 2767 "src/parser.ml"
+# 2762 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_160 =
@@ -2771,7 +2766,7 @@ let _menhir_action_160 =
     (
 # 359 "src/parser.mly"
       ( EConst (VInt _1) )
-# 2775 "src/parser.ml"
+# 2770 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_161 =
@@ -2779,7 +2774,7 @@ let _menhir_action_161 =
     (
 # 360 "src/parser.mly"
        ( ECast(TDeclSpec[(Ts TsUInt)],EConst(VInt _1)) )
-# 2783 "src/parser.ml"
+# 2778 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_162 =
@@ -2787,7 +2782,7 @@ let _menhir_action_162 =
     (
 # 361 "src/parser.mly"
        ( ECast(TDeclSpec[(Ts TsLong)],EConst(VInt _1)) )
-# 2791 "src/parser.ml"
+# 2786 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_163 =
@@ -2795,7 +2790,7 @@ let _menhir_action_163 =
     (
 # 362 "src/parser.mly"
         ( ECast(TDeclSpec[(Ts TsULong)],EConst(VInt _1)) )
-# 2799 "src/parser.ml"
+# 2794 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_164 =
@@ -2803,7 +2798,7 @@ let _menhir_action_164 =
     (
 # 363 "src/parser.mly"
         ( EConst (VFloat _1) )
-# 2807 "src/parser.ml"
+# 2802 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_165 =
@@ -2811,7 +2806,7 @@ let _menhir_action_165 =
     (
 # 364 "src/parser.mly"
          ( ECast(TDeclSpec[(Ts TsDouble)],EConst(VFloat _1)) )
-# 2815 "src/parser.ml"
+# 2810 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_166 =
@@ -2819,7 +2814,7 @@ let _menhir_action_166 =
     (
 # 365 "src/parser.mly"
       ( EConst (VStr _1) )
-# 2823 "src/parser.ml"
+# 2818 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_167 =
@@ -2827,7 +2822,7 @@ let _menhir_action_167 =
     (
 # 367 "src/parser.mly"
    ( _2 )
-# 2831 "src/parser.ml"
+# 2826 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_168 =
@@ -2835,7 +2830,7 @@ let _menhir_action_168 =
     (
 # 423 "src/parser.mly"
              ( _1 )
-# 2839 "src/parser.ml"
+# 2834 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_169 =
@@ -2843,7 +2838,7 @@ let _menhir_action_169 =
     (
 # 424 "src/parser.mly"
                                 ( EBinary(Lt,_1,_3) )
-# 2847 "src/parser.ml"
+# 2842 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_170 =
@@ -2851,7 +2846,7 @@ let _menhir_action_170 =
     (
 # 425 "src/parser.mly"
                                 ( EBinary(Gt,_1,_3) )
-# 2855 "src/parser.ml"
+# 2850 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_171 =
@@ -2859,7 +2854,7 @@ let _menhir_action_171 =
     (
 # 426 "src/parser.mly"
                                 ( EBinary(Le,_1,_3) )
-# 2863 "src/parser.ml"
+# 2858 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_172 =
@@ -2867,7 +2862,7 @@ let _menhir_action_172 =
     (
 # 427 "src/parser.mly"
                                 ( EBinary(Ge,_1,_3) )
-# 2871 "src/parser.ml"
+# 2866 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_173 =
@@ -2875,7 +2870,7 @@ let _menhir_action_173 =
     (
 # 637 "src/parser.mly"
   ( leave_params () )
-# 2879 "src/parser.ml"
+# 2874 "src/parser.ml"
      : (unit))
 
 let _menhir_action_174 =
@@ -2883,7 +2878,7 @@ let _menhir_action_174 =
     (
 # 746 "src/parser.mly"
                                               ( SIfElse(_3,_5,SStmts []) )
-# 2887 "src/parser.ml"
+# 2882 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_175 =
@@ -2891,7 +2886,7 @@ let _menhir_action_175 =
     (
 # 747 "src/parser.mly"
                                        ( SIfElse(_3,_5,_7) )
-# 2895 "src/parser.ml"
+# 2890 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_176 =
@@ -2902,7 +2897,7 @@ let _menhir_action_176 =
     let ret = SSwitch(_3,_7,!curr_brk) in
     ret
   )
-# 2906 "src/parser.ml"
+# 2901 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_177 =
@@ -2910,7 +2905,7 @@ let _menhir_action_177 =
     (
 # 418 "src/parser.mly"
                 ( _1 )
-# 2914 "src/parser.ml"
+# 2909 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_178 =
@@ -2918,7 +2913,7 @@ let _menhir_action_178 =
     (
 # 419 "src/parser.mly"
                                   ( EBinary(LShift,_1,_3) )
-# 2922 "src/parser.ml"
+# 2917 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_179 =
@@ -2926,7 +2921,7 @@ let _menhir_action_179 =
     (
 # 420 "src/parser.mly"
                                   ( EBinary(RShift,_1,_3) )
-# 2930 "src/parser.ml"
+# 2925 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_180 =
@@ -2934,7 +2929,7 @@ let _menhir_action_180 =
     (
 # 538 "src/parser.mly"
             ( [Ts _1] )
-# 2938 "src/parser.ml"
+# 2933 "src/parser.ml"
      : (Ctype.ds list))
 
 let _menhir_action_181 =
@@ -2942,7 +2937,7 @@ let _menhir_action_181 =
     (
 # 539 "src/parser.mly"
                            ( (Ts _1)::_2 )
-# 2946 "src/parser.ml"
+# 2941 "src/parser.ml"
      : (Ctype.ds list))
 
 let _menhir_action_182 =
@@ -2950,7 +2945,7 @@ let _menhir_action_182 =
     (
 # 540 "src/parser.mly"
                            ( (Tq _1)::_2 )
-# 2954 "src/parser.ml"
+# 2949 "src/parser.ml"
      : (Ctype.ds list))
 
 let _menhir_action_183 =
@@ -2958,7 +2953,7 @@ let _menhir_action_183 =
     (
 # 698 "src/parser.mly"
   ( raise (NotImpl "_Static_assert") )
-# 2962 "src/parser.ml"
+# 2957 "src/parser.ml"
      : ('tv_static_assert_decl))
 
 let _menhir_action_184 =
@@ -2966,7 +2961,7 @@ let _menhir_action_184 =
     (
 # 715 "src/parser.mly"
                ( _1 )
-# 2970 "src/parser.ml"
+# 2965 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_185 =
@@ -2974,7 +2969,7 @@ let _menhir_action_185 =
     (
 # 716 "src/parser.mly"
                 ( _1 )
-# 2978 "src/parser.ml"
+# 2973 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_186 =
@@ -2982,7 +2977,7 @@ let _menhir_action_186 =
     (
 # 717 "src/parser.mly"
             ( expr_conv _1 )
-# 2986 "src/parser.ml"
+# 2981 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_187 =
@@ -2990,7 +2985,7 @@ let _menhir_action_187 =
     (
 # 718 "src/parser.mly"
                    ( _1 )
-# 2994 "src/parser.ml"
+# 2989 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_188 =
@@ -2998,7 +2993,7 @@ let _menhir_action_188 =
     (
 # 719 "src/parser.mly"
                         ( _1 )
-# 3002 "src/parser.ml"
+# 2997 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_189 =
@@ -3006,7 +3001,7 @@ let _menhir_action_189 =
     (
 # 720 "src/parser.mly"
                       ( _1 )
-# 3010 "src/parser.ml"
+# 3005 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_190 =
@@ -3014,7 +3009,7 @@ let _menhir_action_190 =
     (
 # 721 "src/parser.mly"
             ( _1 )
-# 3018 "src/parser.ml"
+# 3013 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_191 =
@@ -3022,7 +3017,7 @@ let _menhir_action_191 =
     (
 # 513 "src/parser.mly"
           ( ScsTypedef )
-# 3026 "src/parser.ml"
+# 3021 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_192 =
@@ -3030,7 +3025,7 @@ let _menhir_action_192 =
     (
 # 514 "src/parser.mly"
          ( ScsExtern )
-# 3034 "src/parser.ml"
+# 3029 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_193 =
@@ -3038,7 +3033,7 @@ let _menhir_action_193 =
     (
 # 515 "src/parser.mly"
          ( ScsStatic )
-# 3042 "src/parser.ml"
+# 3037 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_194 =
@@ -3046,7 +3041,7 @@ let _menhir_action_194 =
     (
 # 516 "src/parser.mly"
        ( ScsAuto )
-# 3050 "src/parser.ml"
+# 3045 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_195 =
@@ -3054,7 +3049,7 @@ let _menhir_action_195 =
     (
 # 517 "src/parser.mly"
            ( ScsRegister )
-# 3058 "src/parser.ml"
+# 3053 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_196 =
@@ -3066,7 +3061,7 @@ let _menhir_action_196 =
     | Some dl -> make_decls (TDeclSpec _1) dl
     | None -> raise (NotImpl "struct_decl")
   )
-# 3070 "src/parser.ml"
+# 3065 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_197 =
@@ -3074,7 +3069,7 @@ let _menhir_action_197 =
     (
 # 574 "src/parser.mly"
   ( raise (NotImpl "Static_assert") )
-# 3078 "src/parser.ml"
+# 3073 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_198 =
@@ -3082,7 +3077,7 @@ let _menhir_action_198 =
     (
 # 563 "src/parser.mly"
               ( _1 )
-# 3086 "src/parser.ml"
+# 3081 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_199 =
@@ -3090,7 +3085,7 @@ let _menhir_action_199 =
     (
 # 564 "src/parser.mly"
                                ( _1@_2 )
-# 3094 "src/parser.ml"
+# 3089 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_200 =
@@ -3098,7 +3093,7 @@ let _menhir_action_200 =
     (
 # 581 "src/parser.mly"
              ( _1 )
-# 3102 "src/parser.ml"
+# 3097 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_201 =
@@ -3106,7 +3101,7 @@ let _menhir_action_201 =
     (
 # 583 "src/parser.mly"
   ( raise (NotImpl "Bitfield") )
-# 3110 "src/parser.ml"
+# 3105 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_202 =
@@ -3114,7 +3109,7 @@ let _menhir_action_202 =
     (
 # 577 "src/parser.mly"
                     ( [_1] )
-# 3118 "src/parser.ml"
+# 3113 "src/parser.ml"
      : (declarator list))
 
 let _menhir_action_203 =
@@ -3122,7 +3117,7 @@ let _menhir_action_203 =
     (
 # 578 "src/parser.mly"
                                                  ( _1@[_3] )
-# 3126 "src/parser.ml"
+# 3121 "src/parser.ml"
      : (declarator list))
 
 let _menhir_action_204 =
@@ -3130,7 +3125,7 @@ let _menhir_action_204 =
     (
 # 556 "src/parser.mly"
                                                ( make_struct _2 (Some _4) )
-# 3134 "src/parser.ml"
+# 3129 "src/parser.ml"
      : (Ast.def option * Ctype.ts))
 
 let _menhir_action_205 =
@@ -3138,7 +3133,7 @@ let _menhir_action_205 =
     (
 # 557 "src/parser.mly"
                ( make_struct (Some _2) None )
-# 3142 "src/parser.ml"
+# 3137 "src/parser.ml"
      : (Ast.def option * Ctype.ts))
 
 let _menhir_action_206 =
@@ -3146,7 +3141,7 @@ let _menhir_action_206 =
     (
 # 558 "src/parser.mly"
                                               ( make_union _2 (Some _4) )
-# 3150 "src/parser.ml"
+# 3145 "src/parser.ml"
      : (Ast.def option * Ctype.ts))
 
 let _menhir_action_207 =
@@ -3154,7 +3149,7 @@ let _menhir_action_207 =
     (
 # 559 "src/parser.mly"
               ( make_union (Some _2) None )
-# 3158 "src/parser.ml"
+# 3153 "src/parser.ml"
      : (Ast.def option * Ctype.ts))
 
 let _menhir_action_208 =
@@ -3165,7 +3160,7 @@ let _menhir_action_208 =
     all_labels_exist ();
     SStmts(List.flatten _3)
   )
-# 3169 "src/parser.ml"
+# 3164 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_209 =
@@ -3173,7 +3168,7 @@ let _menhir_action_209 =
     (
 # 351 "src/parser.mly"
   ( Program (List.flatten _1) )
-# 3177 "src/parser.ml"
+# 3172 "src/parser.ml"
      : (Ast.program))
 
 let _menhir_action_210 =
@@ -3181,7 +3176,7 @@ let _menhir_action_210 =
     (
 # 674 "src/parser.mly"
                  ( TDeclSpec _1 )
-# 3185 "src/parser.ml"
+# 3180 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_211 =
@@ -3189,7 +3184,7 @@ let _menhir_action_211 =
     (
 # 676 "src/parser.mly"
   ( snd (make_decl (TDeclSpec _1) _2) )
-# 3193 "src/parser.ml"
+# 3188 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_212 =
@@ -3197,7 +3192,7 @@ let _menhir_action_212 =
     (
 # 543 "src/parser.mly"
         ( TqConst )
-# 3201 "src/parser.ml"
+# 3196 "src/parser.ml"
      : (Ctype.tq))
 
 let _menhir_action_213 =
@@ -3205,7 +3200,7 @@ let _menhir_action_213 =
     (
 # 544 "src/parser.mly"
            ( TqVolatile )
-# 3209 "src/parser.ml"
+# 3204 "src/parser.ml"
      : (Ctype.tq))
 
 let _menhir_action_214 =
@@ -3213,7 +3208,7 @@ let _menhir_action_214 =
     (
 # 520 "src/parser.mly"
         ( TsVoid )
-# 3217 "src/parser.ml"
+# 3212 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_215 =
@@ -3221,7 +3216,7 @@ let _menhir_action_215 =
     (
 # 521 "src/parser.mly"
         ( TsChar )
-# 3225 "src/parser.ml"
+# 3220 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_216 =
@@ -3229,7 +3224,7 @@ let _menhir_action_216 =
     (
 # 522 "src/parser.mly"
          ( TsShort)
-# 3233 "src/parser.ml"
+# 3228 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_217 =
@@ -3237,7 +3232,7 @@ let _menhir_action_217 =
     (
 # 523 "src/parser.mly"
        ( TsInt )
-# 3241 "src/parser.ml"
+# 3236 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_218 =
@@ -3245,7 +3240,7 @@ let _menhir_action_218 =
     (
 # 524 "src/parser.mly"
         ( TsLong )
-# 3249 "src/parser.ml"
+# 3244 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_219 =
@@ -3253,7 +3248,7 @@ let _menhir_action_219 =
     (
 # 525 "src/parser.mly"
          ( TsFloat )
-# 3257 "src/parser.ml"
+# 3252 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_220 =
@@ -3261,7 +3256,7 @@ let _menhir_action_220 =
     (
 # 526 "src/parser.mly"
           ( TsDouble )
-# 3265 "src/parser.ml"
+# 3260 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_221 =
@@ -3269,7 +3264,7 @@ let _menhir_action_221 =
     (
 # 527 "src/parser.mly"
           ( TsSigned )
-# 3273 "src/parser.ml"
+# 3268 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_222 =
@@ -3277,7 +3272,7 @@ let _menhir_action_222 =
     (
 # 528 "src/parser.mly"
             ( TsUnsigned )
-# 3281 "src/parser.ml"
+# 3276 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_223 =
@@ -3289,7 +3284,7 @@ let _menhir_action_223 =
   | (Some def,ts) -> add_def def;ts
   | (None,ts) -> ts
   )
-# 3293 "src/parser.ml"
+# 3288 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_224 =
@@ -3297,7 +3292,7 @@ let _menhir_action_224 =
     (
 # 534 "src/parser.mly"
             ( _1 )
-# 3301 "src/parser.ml"
+# 3296 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_225 =
@@ -3305,7 +3300,7 @@ let _menhir_action_225 =
     (
 # 535 "src/parser.mly"
           ( TsTypedef (get_typedef _1) )
-# 3309 "src/parser.ml"
+# 3304 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_226 =
@@ -3313,7 +3308,7 @@ let _menhir_action_226 =
     (
 # 389 "src/parser.mly"
                ( _1 )
-# 3317 "src/parser.ml"
+# 3312 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_227 =
@@ -3321,7 +3316,7 @@ let _menhir_action_227 =
     (
 # 390 "src/parser.mly"
                  ( EUnary(PreInc, _2) )
-# 3325 "src/parser.ml"
+# 3320 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_228 =
@@ -3329,7 +3324,7 @@ let _menhir_action_228 =
     (
 # 391 "src/parser.mly"
                  ( EUnary(PreDec, _2) )
-# 3333 "src/parser.ml"
+# 3328 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_229 =
@@ -3337,7 +3332,7 @@ let _menhir_action_229 =
     (
 # 392 "src/parser.mly"
                  ( EUnary(Ref, _2) )
-# 3341 "src/parser.ml"
+# 3336 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_230 =
@@ -3345,7 +3340,7 @@ let _menhir_action_230 =
     (
 # 393 "src/parser.mly"
                  ( EUnary(Deref, _2) )
-# 3349 "src/parser.ml"
+# 3344 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_231 =
@@ -3353,7 +3348,7 @@ let _menhir_action_231 =
     (
 # 394 "src/parser.mly"
                  ( EUnary(Plus, _2) )
-# 3357 "src/parser.ml"
+# 3352 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_232 =
@@ -3361,7 +3356,7 @@ let _menhir_action_232 =
     (
 # 395 "src/parser.mly"
                   ( EUnary(Minus, _2) )
-# 3365 "src/parser.ml"
+# 3360 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_233 =
@@ -3369,7 +3364,7 @@ let _menhir_action_233 =
     (
 # 396 "src/parser.mly"
                 ( EUnary(BitNot, _2) )
-# 3373 "src/parser.ml"
+# 3368 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_234 =
@@ -3377,7 +3372,7 @@ let _menhir_action_234 =
     (
 # 397 "src/parser.mly"
                  ( EUnary(LogNot, _2) )
-# 3381 "src/parser.ml"
+# 3376 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_235 =
@@ -3385,7 +3380,7 @@ let _menhir_action_235 =
     (
 # 398 "src/parser.mly"
                     ( EUnary(Sizeof, _2) )
-# 3389 "src/parser.ml"
+# 3384 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_236 =
@@ -3393,7 +3388,7 @@ let _menhir_action_236 =
     (
 # 399 "src/parser.mly"
                                  ( ETyUnary(Sizeof,_3) )
-# 3397 "src/parser.ml"
+# 3392 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_print_token : token -> string =
@@ -3649,7 +3644,7 @@ include struct
           _menhir_run_216 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState226 ->
           _menhir_run_216 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState238 ->
+      | MenhirState236 ->
           _menhir_run_216 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState222 ->
           _menhir_run_216 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -3663,11 +3658,11 @@ include struct
           _menhir_run_158 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState006 ->
           _menhir_run_158 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState275 ->
+      | MenhirState273 ->
           _menhir_run_158 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState019 ->
           _menhir_run_158 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_158 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_158 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -3692,39 +3687,39 @@ include struct
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState407 ->
-          _menhir_run_252 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_250 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState368 ->
-          _menhir_run_252 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_250 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState226 ->
-          _menhir_run_252 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_250 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState000 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState405 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState303 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState395 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState316 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState332 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState357 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState362 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState366 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState201 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState222 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState238 ->
-          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState236 ->
+          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_252 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_decl_specs -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_250 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_decl_specs -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_decl_specs (_menhir_stack, _menhir_s, _1) = _menhir_stack in
       let _2 = _v in
@@ -3754,7 +3749,7 @@ include struct
           _menhir_run_368 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState201 ->
           _menhir_run_226 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState238 ->
+      | MenhirState236 ->
           _menhir_run_226 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState222 ->
           _menhir_run_226 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -3804,7 +3799,7 @@ include struct
       | NORETURN ->
           _menhir_run_205 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState407
       | LPAREN ->
-          _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState407
+          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState407
       | INLINE ->
           _menhir_run_206 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState407
       | EXTERN ->
@@ -4290,7 +4285,7 @@ include struct
           _menhir_run_029 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
       | LPAREN ->
           let _menhir_stack = MenhirCell1_LPAREN (_menhir_stack, _menhir_s) in
-          let _menhir_s = MenhirState265 in
+          let _menhir_s = MenhirState263 in
           let _tok = _menhir_lexer _menhir_lexbuf in
           (match (_tok : MenhirBasics.token) with
           | VOLATILE ->
@@ -4626,7 +4621,7 @@ include struct
           _menhir_run_215 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState226 ->
           _menhir_run_215 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState238 ->
+      | MenhirState236 ->
           _menhir_run_215 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState222 ->
           _menhir_run_215 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -4636,11 +4631,11 @@ include struct
           _menhir_run_157 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState006 ->
           _menhir_run_157 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState275 ->
+      | MenhirState273 ->
           _menhir_run_157 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState019 ->
           _menhir_run_157 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_157 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_157 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -5211,14 +5206,14 @@ include struct
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState006 ->
-          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_277 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState292 ->
-          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_277 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState019 ->
-          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState275 ->
-          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+          _menhir_run_277 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState273 ->
+          _menhir_run_277 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState263 ->
           _menhir_run_189 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_189 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -5233,20 +5228,20 @@ include struct
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_279 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_277 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _menhir_stack = MenhirCell1_spec_qual_list (_menhir_stack, _menhir_s, _v) in
       match (_tok : MenhirBasics.token) with
       | STAR ->
-          _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState279
+          _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState277
       | LPAREN ->
-          _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState279
+          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState277
       | ID _ ->
-          let _menhir_s = MenhirState279 in
+          let _menhir_s = MenhirState277 in
           let _v = _menhir_action_060 () in
           _menhir_goto_enter_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | COLON ->
-          let _menhir_s = MenhirState279 in
+          let _menhir_s = MenhirState277 in
           let _v = _menhir_action_134 () in
           _menhir_goto_option_declarator_ _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
       | SEMI ->
@@ -5280,57 +5275,59 @@ include struct
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState407 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState372 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState368 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState279 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState277 ->
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState281 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState229 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState230 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState228 ->
-          _menhir_run_229 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState279 ->
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState278 ->
+          _menhir_run_279 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState226 ->
+          _menhir_run_228 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState228 ->
           _menhir_run_228 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState227 ->
           _menhir_run_228 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState189 ->
+          _menhir_run_195 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState195 ->
           _menhir_run_195 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState194 ->
           _menhir_run_195 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_229 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_279 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _menhir_stack = MenhirCell1_pointer (_menhir_stack, _menhir_s, _v) in
       match (_tok : MenhirBasics.token) with
       | STAR ->
-          _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState229
+          _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState279
       | LPAREN ->
-          _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState229
+          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState279
       | ID _ ->
-          let _menhir_s = MenhirState229 in
+          let _menhir_s = MenhirState279 in
           let _v = _menhir_action_060 () in
           _menhir_goto_enter_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
           _eRR ()
   
-  and _menhir_run_230 : type  ttv_stack. ttv_stack -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _menhir_box_translation_unit =
+  and _menhir_run_278 : type  ttv_stack. ttv_stack -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s ->
       let _menhir_stack = MenhirCell1_LPAREN (_menhir_stack, _menhir_s) in
-      let _menhir_s = MenhirState230 in
+      let _menhir_s = MenhirState278 in
       let _tok = _menhir_lexer _menhir_lexbuf in
       match (_tok : MenhirBasics.token) with
       | STAR ->
           _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
       | LPAREN ->
-          _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
       | ID _ ->
           _menhir_reduce_060 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | _ ->
@@ -5361,11 +5358,11 @@ include struct
       match (_tok : MenhirBasics.token) with
       | LPAREN ->
           let _menhir_stack = MenhirCell1_direct_declarator (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_197 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState234
+          _menhir_run_197 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState232
       | LBRACKET ->
           let _menhir_stack = MenhirCell1_direct_declarator (_menhir_stack, _menhir_s, _v) in
-          let _menhir_stack = MenhirCell1_LBRACKET (_menhir_stack, MenhirState234) in
-          let _menhir_s = MenhirState235 in
+          let _menhir_stack = MenhirCell1_LBRACKET (_menhir_stack, MenhirState232) in
+          let _menhir_s = MenhirState233 in
           let _tok = _menhir_lexer _menhir_lexbuf in
           (match (_tok : MenhirBasics.token) with
           | ULINT _v ->
@@ -5422,68 +5419,66 @@ include struct
   and _menhir_goto_lp : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
-      | MenhirState234 ->
-          _menhir_run_238 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState247 ->
-          _menhir_run_201 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState232 ->
+          _menhir_run_236 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState196 ->
           _menhir_run_201 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_238 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_236 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _menhir_stack = MenhirCell1_lp (_menhir_stack, _menhir_s, _v) in
       match (_tok : MenhirBasics.token) with
       | VOLATILE ->
-          _menhir_run_001 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_001 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | UNION ->
-          _menhir_run_002 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_002 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TYPE_ID _v_0 ->
-          _menhir_run_007 _menhir_stack _menhir_lexbuf _menhir_lexer _v_0 MenhirState238
+          _menhir_run_007 _menhir_stack _menhir_lexbuf _menhir_lexer _v_0 MenhirState236
       | TYPEDEF ->
-          _menhir_run_202 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_202 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TVOID ->
-          _menhir_run_008 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_008 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TUNSIGNED ->
-          _menhir_run_009 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_009 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TSIGNED ->
-          _menhir_run_010 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_010 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TSHORT ->
-          _menhir_run_011 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_011 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TLONG ->
-          _menhir_run_012 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_012 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TINT ->
-          _menhir_run_013 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_013 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TFLOAT ->
-          _menhir_run_014 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_014 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TDOUBLE ->
-          _menhir_run_015 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_015 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | TCHAR ->
-          _menhir_run_016 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_016 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | STRUCT ->
-          _menhir_run_017 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_017 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | STATIC ->
-          _menhir_run_203 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_203 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | REGISTER ->
-          _menhir_run_204 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_204 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | NORETURN ->
-          _menhir_run_205 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_205 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | INLINE ->
-          _menhir_run_206 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_206 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | EXTERN ->
-          _menhir_run_207 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_207 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | ENUM ->
-          _menhir_run_037 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_037 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | CONST ->
-          _menhir_run_156 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_156 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | AUTO ->
-          _menhir_run_208 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_208 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | ALIGNAS ->
-          _menhir_run_209 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState238
+          _menhir_run_209 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState236
       | RPAREN ->
           let _v_1 = _menhir_action_148 () in
-          _menhir_run_239 _menhir_stack _menhir_lexbuf _menhir_lexer _v_1 MenhirState238 _tok
+          _menhir_run_237 _menhir_stack _menhir_lexbuf _menhir_lexer _v_1 MenhirState236 _tok
       | _ ->
           _eRR ()
   
@@ -5621,12 +5616,12 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_239 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_237 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _menhir_stack = MenhirCell1_parameter_type_list (_menhir_stack, _menhir_s, _v) in
       match (_tok : MenhirBasics.token) with
       | RPAREN ->
-          _menhir_run_219 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState239
+          _menhir_run_219 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState237
       | _ ->
           _eRR ()
   
@@ -5639,14 +5634,14 @@ include struct
   and _menhir_goto_rp : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_cell1_parameter_type_list as 'stack) -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok ->
       match _menhir_s with
-      | MenhirState239 ->
-          _menhir_run_240 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
+      | MenhirState237 ->
+          _menhir_run_238 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
       | MenhirState218 ->
           _menhir_run_220 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_240 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_cell1_parameter_type_list -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_238 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_lp, _menhir_box_translation_unit) _menhir_cell1_parameter_type_list -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _tok ->
       let MenhirCell1_parameter_type_list (_menhir_stack, _, _3) = _menhir_stack in
       let MenhirCell1_lp (_menhir_stack, _, _) = _menhir_stack in
@@ -5664,31 +5659,54 @@ include struct
   
   and _menhir_goto_direct_abstract_declarator : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
-      match _menhir_s with
-      | MenhirState189 ->
-          _menhir_run_247 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState194 ->
-          _menhir_run_247 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState226 ->
-          _menhir_run_247 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState227 ->
-          _menhir_run_247 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState228 ->
-          _menhir_run_196 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState195 ->
-          _menhir_run_196 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | _ ->
-          _menhir_fail ()
-  
-  and _menhir_run_247 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
-    fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match (_tok : MenhirBasics.token) with
       | LPAREN ->
           let _menhir_stack = MenhirCell1_direct_abstract_declarator (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_197 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState247
+          _menhir_run_197 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState196
       | LBRACKET ->
           let _menhir_stack = MenhirCell1_direct_abstract_declarator (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_198 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState247
+          let _menhir_stack = MenhirCell1_LBRACKET (_menhir_stack, MenhirState196) in
+          let _menhir_s = MenhirState198 in
+          let _tok = _menhir_lexer _menhir_lexbuf in
+          (match (_tok : MenhirBasics.token) with
+          | ULINT _v ->
+              _menhir_run_022 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | UINT _v ->
+              _menhir_run_023 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | STR _v ->
+              _menhir_run_024 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | STAR ->
+              _menhir_run_025 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | SIZEOF ->
+              _menhir_run_026 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | PLUS ->
+              _menhir_run_027 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | NOT ->
+              _menhir_run_028 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | MINUS ->
+              _menhir_run_029 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | LPAREN ->
+              _menhir_run_030 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | LINT _v ->
+              _menhir_run_031 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | INT _v ->
+              _menhir_run_032 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | INC ->
+              _menhir_run_033 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | ID _v ->
+              _menhir_run_035 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | FLOAT _v ->
+              _menhir_run_036 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | DOUBLE _v ->
+              _menhir_run_045 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
+          | DEC ->
+              _menhir_run_046 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | BANG ->
+              _menhir_run_047 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | AND ->
+              _menhir_run_048 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+          | _ ->
+              _eRR ())
       | COMMA | RPAREN ->
           let _1 = _v in
           let _v = _menhir_action_003 _1 in
@@ -5696,66 +5714,25 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_198 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_abstract_declarator as 'stack) -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _menhir_box_translation_unit =
-    fun _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s ->
-      let _menhir_stack = MenhirCell1_LBRACKET (_menhir_stack, _menhir_s) in
-      let _menhir_s = MenhirState198 in
-      let _tok = _menhir_lexer _menhir_lexbuf in
-      match (_tok : MenhirBasics.token) with
-      | ULINT _v ->
-          _menhir_run_022 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | UINT _v ->
-          _menhir_run_023 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | STR _v ->
-          _menhir_run_024 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | STAR ->
-          _menhir_run_025 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | SIZEOF ->
-          _menhir_run_026 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | PLUS ->
-          _menhir_run_027 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | NOT ->
-          _menhir_run_028 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | MINUS ->
-          _menhir_run_029 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | LPAREN ->
-          _menhir_run_030 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | LINT _v ->
-          _menhir_run_031 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | INT _v ->
-          _menhir_run_032 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | INC ->
-          _menhir_run_033 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | ID _v ->
-          _menhir_run_035 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | FLOAT _v ->
-          _menhir_run_036 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | DOUBLE _v ->
-          _menhir_run_045 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s
-      | DEC ->
-          _menhir_run_046 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | BANG ->
-          _menhir_run_047 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | AND ->
-          _menhir_run_048 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
-      | _ ->
-          _eRR ()
-  
   and _menhir_goto_abstract_declarator : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState189 ->
-          _menhir_run_255 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState226 ->
           _menhir_run_253 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState226 ->
+          _menhir_run_251 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState194 ->
-          _menhir_run_248 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_246 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState227 ->
-          _menhir_run_248 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_246 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState195 ->
+          _menhir_run_243 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState228 ->
+          _menhir_run_243 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_255 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_spec_qual_list -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_253 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_spec_qual_list -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_spec_qual_list (_menhir_stack, _menhir_s, _1) = _menhir_stack in
       let _2 = _v in
@@ -5765,10 +5742,10 @@ include struct
   and _menhir_goto_type_name : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
-      | MenhirState265 ->
-          _menhir_run_266 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState263 ->
+          _menhir_run_264 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
-          _menhir_run_259 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_257 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_211 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
       | MenhirState034 ->
@@ -5776,7 +5753,7 @@ include struct
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_266 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_SIZEOF, _menhir_box_translation_unit) _menhir_cell1_LPAREN as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_264 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_SIZEOF, _menhir_box_translation_unit) _menhir_cell1_LPAREN as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match (_tok : MenhirBasics.token) with
       | RPAREN ->
@@ -5784,7 +5761,7 @@ include struct
           (match (_tok : MenhirBasics.token) with
           | LBRACE ->
               let _menhir_stack = MenhirCell1_type_name (_menhir_stack, _menhir_s, _v) in
-              _menhir_run_165 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState267
+              _menhir_run_165 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState265
           | ADD_EQ | AND | ANDAND | AND_EQ | COLON | COMMA | DIV | DIV_EQ | EQ | EQEQ | GE | GT | HAT | LE | LSHIFT | LSHIFT_EQ | LT | MINUS | MOD | MOD_EQ | MUL_EQ | NE | OR | OROR | OR_EQ | PLUS | QUESTION | RBRACE | RBRACKET | RPAREN | RSHIFT | RSHIFT_EQ | SEMI | STAR | SUB_EQ | XOR_EQ ->
               let MenhirCell1_LPAREN (_menhir_stack, _) = _menhir_stack in
               let MenhirCell1_SIZEOF (_menhir_stack, _menhir_s) = _menhir_stack in
@@ -5933,9 +5910,9 @@ include struct
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState026 ->
-          _menhir_run_268 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_266 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState033 ->
-          _menhir_run_258 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_256 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState046 ->
           _menhir_run_148 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState303 ->
@@ -5984,7 +5961,7 @@ include struct
           _menhir_run_053 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState305 ->
           _menhir_run_053 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_053 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_053 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -6040,9 +6017,9 @@ include struct
           _menhir_run_049 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState029 ->
           _menhir_run_049 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState260 ->
+      | MenhirState258 ->
           _menhir_run_049 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_049 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_049 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -6097,14 +6074,14 @@ include struct
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_268 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_SIZEOF -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_266 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_SIZEOF -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_SIZEOF (_menhir_stack, _menhir_s) = _menhir_stack in
       let _2 = _v in
       let _v = _menhir_action_235 _2 in
       _menhir_goto_unary_expr _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_258 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_INC -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_256 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_INC -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_INC (_menhir_stack, _menhir_s) = _menhir_stack in
       let _2 = _v in
@@ -6605,15 +6582,15 @@ include struct
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState025 ->
-          _menhir_run_269 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_267 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState027 ->
-          _menhir_run_264 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState028 ->
-          _menhir_run_263 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState029 ->
           _menhir_run_262 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState260 ->
+      | MenhirState028 ->
           _menhir_run_261 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState029 ->
+          _menhir_run_260 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState258 ->
+          _menhir_run_259 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState047 ->
           _menhir_run_147 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState048 ->
@@ -6670,13 +6647,13 @@ include struct
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_064 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -6763,35 +6740,35 @@ include struct
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_269 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_STAR -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_267 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_STAR -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_STAR (_menhir_stack, _menhir_s) = _menhir_stack in
       let _2 = _v in
       let _v = _menhir_action_230 _2 in
       _menhir_goto_unary_expr _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_264 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_PLUS -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_262 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_PLUS -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_PLUS (_menhir_stack, _menhir_s) = _menhir_stack in
       let _2 = _v in
       let _v = _menhir_action_231 _2 in
       _menhir_goto_unary_expr _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_263 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_NOT -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_261 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_NOT -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_NOT (_menhir_stack, _menhir_s) = _menhir_stack in
       let _2 = _v in
       let _v = _menhir_action_233 _2 in
       _menhir_goto_unary_expr _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_262 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_MINUS -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_260 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_MINUS -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_MINUS (_menhir_stack, _menhir_s) = _menhir_stack in
       let _2 = _v in
       let _v = _menhir_action_232 _2 in
       _menhir_goto_unary_expr _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_261 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_cell1_type_name -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_259 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN, _menhir_box_translation_unit) _menhir_cell1_type_name -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_type_name (_menhir_stack, _, _2) = _menhir_stack in
       let MenhirCell1_LPAREN (_menhir_stack, _menhir_s) = _menhir_stack in
@@ -6878,13 +6855,13 @@ include struct
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_057 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -7168,13 +7145,13 @@ include struct
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_075 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -7418,13 +7395,13 @@ include struct
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_055 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -7653,13 +7630,13 @@ include struct
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_072 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -7976,13 +7953,13 @@ include struct
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_090 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -8201,13 +8178,13 @@ include struct
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_098 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -8378,13 +8355,13 @@ include struct
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_099 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -8553,13 +8530,13 @@ include struct
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_100 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -8728,13 +8705,13 @@ include struct
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_084 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -8948,7 +8925,7 @@ include struct
           _menhir_run_150 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | MenhirState021 ->
           _menhir_run_150 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
-      | MenhirState235 ->
+      | MenhirState233 ->
           _menhir_run_150 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | MenhirState210 ->
           _menhir_run_150 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
@@ -9006,7 +8983,7 @@ include struct
           _menhir_run_103 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState319 ->
           _menhir_run_103 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_103 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_103 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -10741,9 +10718,9 @@ include struct
       | MenhirState284 ->
           _menhir_run_285 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
       | MenhirState021 ->
-          _menhir_run_270 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
-      | MenhirState235 ->
-          _menhir_run_236 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_268 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
+      | MenhirState233 ->
+          _menhir_run_234 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState210 ->
           _menhir_run_213 _menhir_stack _menhir_lexbuf _menhir_lexer _tok
       | MenhirState198 ->
@@ -10764,7 +10741,7 @@ include struct
   and _menhir_goto_struct_declarator : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
-      | MenhirState279 ->
+      | MenhirState277 ->
           _menhir_run_287 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState281 ->
           _menhir_run_282 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
@@ -10788,7 +10765,7 @@ include struct
           | STAR ->
               _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
           | LPAREN ->
-              _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+              _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
           | ID _ ->
               _menhir_reduce_060 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
           | COLON ->
@@ -10864,9 +10841,9 @@ include struct
       | MenhirState019 ->
           _menhir_run_290 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState292 ->
-          _menhir_run_277 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState275 ->
-          _menhir_run_277 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_275 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState273 ->
+          _menhir_run_275 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | _ ->
           _menhir_fail ()
   
@@ -10882,7 +10859,7 @@ include struct
       | MenhirState006 ->
           _menhir_run_292 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState019 ->
-          _menhir_run_275 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_273 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
           _menhir_fail ()
   
@@ -10953,51 +10930,51 @@ include struct
       let _v = _menhir_action_223 _1 in
       _menhir_goto_type_spec _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_275 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_STRUCT, _menhir_box_translation_unit) _menhir_cell1_option_ident_ as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_273 : type  ttv_stack. (((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_STRUCT, _menhir_box_translation_unit) _menhir_cell1_option_ident_ as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match (_tok : MenhirBasics.token) with
       | VOLATILE ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_001 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_001 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | UNION ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_002 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_002 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TYPE_ID _v_0 ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_007 _menhir_stack _menhir_lexbuf _menhir_lexer _v_0 MenhirState275
+          _menhir_run_007 _menhir_stack _menhir_lexbuf _menhir_lexer _v_0 MenhirState273
       | TVOID ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_008 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_008 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TUNSIGNED ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_009 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_009 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TSIGNED ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_010 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_010 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TSHORT ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_011 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_011 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TLONG ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_012 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_012 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TINT ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_013 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_013 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TFLOAT ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_014 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_014 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TDOUBLE ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_015 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_015 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | TCHAR ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_016 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_016 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | STRUCT ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_017 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_017 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | STATIC_ASSERT ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_020 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_020 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | RBRACE ->
           let _tok = _menhir_lexer _menhir_lexbuf in
           let MenhirCell1_option_ident_ (_menhir_stack, _, _2) = _menhir_stack in
@@ -11007,14 +10984,14 @@ include struct
           _menhir_goto_struct_or_union_spec _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | ENUM ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_037 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_037 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | CONST ->
           let _menhir_stack = MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_156 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState275
+          _menhir_run_156 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState273
       | _ ->
           _eRR ()
   
-  and _menhir_run_277 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_option_ident_, _menhir_box_translation_unit) _menhir_cell1_struct_decl_list -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_275 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_option_ident_, _menhir_box_translation_unit) _menhir_cell1_struct_decl_list -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_struct_decl_list (_menhir_stack, _menhir_s, _1) = _menhir_stack in
       let _2 = _v in
@@ -11028,7 +11005,7 @@ include struct
       let _v = _menhir_action_203 _1 _3 in
       _menhir_goto_struct_declarator_list _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_270 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_STATIC_ASSERT -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_268 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_STATIC_ASSERT -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _tok ->
       match (_tok : MenhirBasics.token) with
       | COMMA ->
@@ -11076,13 +11053,13 @@ include struct
       | MenhirState000 ->
           _menhir_run_296 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | MenhirState006 ->
-          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
+          _menhir_run_276 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | MenhirState292 ->
-          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
+          _menhir_run_276 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | MenhirState019 ->
-          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
-      | MenhirState275 ->
-          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
+          _menhir_run_276 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
+      | MenhirState273 ->
+          _menhir_run_276 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
       | _ ->
           _menhir_fail ()
   
@@ -11171,12 +11148,12 @@ include struct
       let _v = _menhir_action_096 () in
       _menhir_goto_item _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_278 : type  ttv_stack. ttv_stack -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_276 : type  ttv_stack. ttv_stack -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok ->
       let _v = _menhir_action_197 () in
       _menhir_goto_struct_decl _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_236 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_LBRACKET -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_234 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_declarator, _menhir_box_translation_unit) _menhir_cell1_LBRACKET -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       match (_tok : MenhirBasics.token) with
       | RBRACKET ->
@@ -11501,7 +11478,7 @@ include struct
           _menhir_run_107 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState319 ->
           _menhir_run_107 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
+      | MenhirState263 ->
           _menhir_run_107 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
           _menhir_run_107 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
@@ -11576,7 +11553,7 @@ include struct
           | STAR ->
               _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
           | LPAREN ->
-              _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
+              _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s
           | ID _ ->
               _menhir_reduce_060 _menhir_stack _menhir_lexbuf _menhir_lexer _menhir_s _tok
           | _ ->
@@ -11896,12 +11873,12 @@ include struct
           _menhir_run_311 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState305 ->
           _menhir_run_306 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState265 ->
-          _menhir_run_256 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState263 ->
+          _menhir_run_254 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState030 ->
-          _menhir_run_256 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_254 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState034 ->
-          _menhir_run_256 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_254 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState137 ->
           _menhir_run_138 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState083 ->
@@ -12189,7 +12166,7 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_256 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_254 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match (_tok : MenhirBasics.token) with
       | RPAREN ->
@@ -12560,12 +12537,12 @@ include struct
       let _v = _menhir_action_028 _1 in
       _menhir_goto_cast_expr _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_259 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_257 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _menhir_stack = MenhirCell1_type_name (_menhir_stack, _menhir_s, _v) in
       match (_tok : MenhirBasics.token) with
       | RPAREN ->
-          let _menhir_s = MenhirState260 in
+          let _menhir_s = MenhirState258 in
           let _tok = _menhir_lexer _menhir_lexbuf in
           (match (_tok : MenhirBasics.token) with
           | ULINT _v ->
@@ -12637,7 +12614,7 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_253 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_decl_specs -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_251 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_decl_specs -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let x = _v in
       let _v = _menhir_action_131 x in
@@ -12654,15 +12631,15 @@ include struct
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
       | MenhirState201 ->
-          _menhir_run_241 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState238 ->
-          _menhir_run_241 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+          _menhir_run_239 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState236 ->
+          _menhir_run_239 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState222 ->
           _menhir_run_224 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | _ ->
           _menhir_fail ()
   
-  and _menhir_run_241 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_lp as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_239 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_lp as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _1 = _v in
       let _v = _menhir_action_146 _1 in
@@ -12742,8 +12719,8 @@ include struct
   and _menhir_goto_parameter_type_list : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_lp as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match _menhir_s with
-      | MenhirState238 ->
-          _menhir_run_239 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
+      | MenhirState236 ->
+          _menhir_run_237 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState201 ->
           _menhir_run_218 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
@@ -12765,7 +12742,7 @@ include struct
       let _v = _menhir_action_147 _1 _3 in
       _menhir_goto_parameter_list _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
-  and _menhir_run_248 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_246 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       match (_tok : MenhirBasics.token) with
       | RPAREN ->
@@ -12777,22 +12754,12 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_196 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_pointer as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
-    fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
-      match (_tok : MenhirBasics.token) with
-      | LPAREN ->
-          let _menhir_stack = MenhirCell1_direct_abstract_declarator (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_197 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState196
-      | LBRACKET ->
-          let _menhir_stack = MenhirCell1_direct_abstract_declarator (_menhir_stack, _menhir_s, _v) in
-          _menhir_run_198 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState196
-      | COMMA | RPAREN ->
-          let MenhirCell1_pointer (_menhir_stack, _menhir_s, _) = _menhir_stack in
-          let _2 = _v in
-          let _v = _menhir_action_002 _2 in
-          _menhir_goto_abstract_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | _ ->
-          _eRR ()
+  and _menhir_run_243 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_pointer -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+    fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
+      let MenhirCell1_pointer (_menhir_stack, _menhir_s, _) = _menhir_stack in
+      let _2 = _v in
+      let _v = _menhir_action_002 _2 in
+      _menhir_goto_abstract_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
   and _menhir_run_201 : type  ttv_stack. ((ttv_stack, _menhir_box_translation_unit) _menhir_cell1_direct_abstract_declarator as 'stack) -> _ -> _ -> _ -> ('stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
@@ -12859,20 +12826,20 @@ include struct
           _menhir_run_374 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState372 ->
           _menhir_run_374 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-      | MenhirState279 ->
+      | MenhirState277 ->
           _menhir_run_286 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState281 ->
           _menhir_run_286 _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | MenhirState226 ->
-          _menhir_run_251 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState228 ->
-          _menhir_run_246 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState229 ->
-          _menhir_run_246 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+          _menhir_run_249 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState278 ->
+          _menhir_run_244 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | MenhirState227 ->
           _menhir_run_244 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
-      | MenhirState230 ->
-          _menhir_run_244 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState279 ->
+          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
+      | MenhirState228 ->
+          _menhir_run_242 _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok
       | _ ->
           _menhir_fail ()
   
@@ -13084,19 +13051,12 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_251 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_decl_specs -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_249 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_decl_specs -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
       let MenhirCell1_decl_specs (_menhir_stack, _menhir_s, _1) = _menhir_stack in
       let _2 = _v in
       let _v = _menhir_action_144 _1 _2 in
       _menhir_goto_parameter_decl _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
-  
-  and _menhir_run_246 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_pointer -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
-    fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
-      let MenhirCell1_pointer (_menhir_stack, _menhir_s, _) = _menhir_stack in
-      let _2 = _v in
-      let _v = _menhir_action_045 _2 in
-      _menhir_goto_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
   and _menhir_run_244 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_LPAREN -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
@@ -13109,6 +13069,13 @@ include struct
           _menhir_goto_direct_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
       | _ ->
           _eRR ()
+  
+  and _menhir_run_242 : type  ttv_stack. (ttv_stack, _menhir_box_translation_unit) _menhir_cell1_pointer -> _ -> _ -> _ -> _ -> _menhir_box_translation_unit =
+    fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _tok ->
+      let MenhirCell1_pointer (_menhir_stack, _menhir_s, _) = _menhir_stack in
+      let _2 = _v in
+      let _v = _menhir_action_045 _2 in
+      _menhir_goto_declarator _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok
   
   and _menhir_run_228 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
@@ -13148,6 +13115,9 @@ include struct
   and _menhir_run_195 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       match (_tok : MenhirBasics.token) with
+      | STAR ->
+          let _menhir_stack = MenhirCell1_pointer (_menhir_stack, _menhir_s, _v) in
+          _menhir_run_190 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState195
       | LPAREN ->
           let _menhir_stack = MenhirCell1_pointer (_menhir_stack, _menhir_s, _v) in
           _menhir_run_194 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState195
@@ -13443,7 +13413,7 @@ include struct
       | NORETURN ->
           _menhir_run_205 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState368
       | LPAREN ->
-          _menhir_run_230 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState368
+          _menhir_run_278 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState368
       | INLINE ->
           _menhir_run_206 _menhir_stack _menhir_lexbuf _menhir_lexer MenhirState368
       | EXTERN ->
@@ -13527,7 +13497,7 @@ include struct
       | _ ->
           _eRR ()
   
-  and _menhir_run_242 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
+  and _menhir_run_240 : type  ttv_stack. ttv_stack -> _ -> _ -> _ -> (ttv_stack, _menhir_box_translation_unit) _menhir_state -> _ -> _menhir_box_translation_unit =
     fun _menhir_stack _menhir_lexbuf _menhir_lexer _v _menhir_s _tok ->
       let _1 = _v in
       let _v = _menhir_action_043 _1 in
@@ -13669,4 +13639,4 @@ let translation_unit =
 
 # 837 "src/parser.mly"
   
-# 13673 "src/parser.ml"
+# 13643 "src/parser.ml"

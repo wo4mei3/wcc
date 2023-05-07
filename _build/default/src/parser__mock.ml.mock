@@ -3904,14 +3904,14 @@ and (xv_unary_expr, xv_type_spec, xv_type_qual, xv_type_name, xv_translation_uni
 # 665 "src/parser.mly"
          _2
 # 3907 "src/parser__mock.ml.mock"
-   : 'tv_direct_abstract_declarator) (_startpos__2_ : Lexing.position) (_endpos__2_ : Lexing.position) (_startofs__2_ : int) (_endofs__2_ : int) (_loc__2_ : Lexing.position * Lexing.position) (
+   : 'tv_abstract_declarator) (_startpos__2_ : Lexing.position) (_endpos__2_ : Lexing.position) (_startofs__2_ : int) (_endofs__2_ : int) (_loc__2_ : Lexing.position * Lexing.position) (
 # 665 "src/parser.mly"
  _1
 # 3911 "src/parser__mock.ml.mock"
    : 'tv_pointer) (_startpos__1_ : Lexing.position) (_endpos__1_ : Lexing.position) (_startofs__1_ : int) (_endofs__1_ : int) (_loc__1_ : Lexing.position * Lexing.position) ->
     (
 # 665 "src/parser.mly"
-                                     ( DeclPtr _2 )
+                              ( DeclPtr _2 )
 # 3916 "src/parser__mock.ml.mock"
      : 'tv_abstract_declarator) in
   let _ = fun (_startpos : Lexing.position) (_endpos : Lexing.position) (_endpos__0_ : Lexing.position) (_symbolstartpos : Lexing.position) (_startofs : int) (_endofs : int) (_endofs__0_ : int) (_symbolstartofs : int) (_sloc : Lexing.position * Lexing.position) (_loc : Lexing.position * Lexing.position) (

@@ -662,7 +662,7 @@ parameter_decl:
 
 abstract_declarator:
 | pointer { DeclPtr (DeclIdent "") }
-| pointer direct_abstract_declarator { DeclPtr $2 }
+| pointer abstract_declarator { DeclPtr $2 }
 | direct_abstract_declarator { $1 }
 
 direct_abstract_declarator:
