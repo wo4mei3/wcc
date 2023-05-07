@@ -2,16 +2,24 @@ open Ast
 
 exception EnvError of string
 
+let raise exn =
+  match exn with
+  (*| EnvError msg -> Printf.printf "%s\n" msg;raise exn*)
+  | _ -> raise exn
+
+let spr fmt s = (Printf.sprintf  fmt s)
+
 let in_declarator = ref false
 
 let curr_scope: def list ref = ref []
+
 let stack:def list list ref = ref []
 
 let peek_curr_scope () =
   List.hd !curr_scope
 
 let pop_curr_scope () =
-  curr_scope := List.tl !curr_scope
+  curr_scope := List.rev (List.tl (List.rev !curr_scope))
 
 
 let push_def def =
@@ -42,7 +50,7 @@ let get_var name =
         aux tl
       end
     | [] ->
-      raise (EnvError "var not found")
+      raise (EnvError  (spr "var not found: %s" name))
     in aux !stack
   in id
 
@@ -64,6 +72,6 @@ let get_typedef name =
         aux tl
       end
     | [] ->
-      raise (EnvError "var not found")
+      raise (EnvError (spr "typedef not found: %s" name))
     in aux !stack
   in id

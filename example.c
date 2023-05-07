@@ -2,7 +2,9 @@ static struct X{int x;} func(struct Y{void *y;} a) {
     return (struct X){0};
 }
 
-extern int printf(const char *, ...);
+extern int printf(const char **, ...);
+
+extern int a(int(**[0])());
 
 int main () {
     goto label;
@@ -19,7 +21,7 @@ label :
         case 0:
         case 1:
         default:
-        int i =0;
+        int printf =0;
         break;
     }
 return 0;

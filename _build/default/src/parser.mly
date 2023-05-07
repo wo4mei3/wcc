@@ -204,11 +204,11 @@
       if not (lookup_var_in_scope name || lookup_typedef_in_scope name) then
         (gen_id (),Typedef (name,ty))
       else 
-        raise (NotImpl "redifinition")
+        raise (ParserError "redifinition")
 
     let make_var (name,ty) init_opt =
       if lookup_var_in_scope name then
-        raise (NotImpl "redifinition")
+        raise (ParserError "redifinition")
       else
         (gen_id (), Var((name,ty),init_opt))
 
@@ -287,7 +287,7 @@
         if List.mem goto !label_list then
           true
         else
-          begin
+          begin   
             missing_label := goto;
             false
           end
@@ -661,14 +661,18 @@ parameter_decl:
   }
 
 abstract_declarator:
-| pointer { DeclPtr (DeclIdent "") }
+| pointer { DeclPtr(DeclIdent "") }
 | pointer abstract_declarator { DeclPtr $2 }
 | direct_abstract_declarator { $1 }
 
 direct_abstract_declarator:
 | LPAREN abstract_declarator RPAREN { $2 }
+| LBRACKET constant_expr RBRACKET { DeclArr(DeclIdent "",$2) }
+| lp parameter_type_list rp { DeclFun(DeclIdent "",$2) }
 | direct_abstract_declarator LBRACKET constant_expr RBRACKET { DeclArr($1,$3) }
 | direct_abstract_declarator lp parameter_type_list rp { DeclFun($1,$3) }
+
+
 
 type_name:
 | spec_qual_list { TDeclSpec $1 }
@@ -699,12 +703,12 @@ static_assert_decl:
 
 enter_scope:
   {
-    stack := !curr_scope::!stack
+    enter_scope ()
   }
 
 leave_scope:
   {
-    stack := List.tl !stack
+    leave_scope ()
   }
 
 item:
@@ -757,6 +761,18 @@ decl_for_for_stmt:
 | decl
   { peek_curr_scope () }
 
+stmt_for_for_stmt:
+| labeled_stmt { $1 }
+| LBRACE list(item) RBRACE leave_scope
+	{
+    SStmts(List.flatten $2)
+  }
+| expr_stmt { expr_conv $1 }
+| selection_stmt_1 { $1 }
+| selection_stmt_2 end_ { $1 }
+| iteration_stmt end_ { $1 }
+| jump_stmt { $1 }
+
 iteration_stmt:
 | WHILE LPAREN expr RPAREN begin_ stmt
   { 
@@ -771,10 +787,9 @@ iteration_stmt:
     SFor(None,$3,$4,$5,$8,!curr_brk,!curr_cont)
   }
 
-| FOR LPAREN decl_for_for_stmt expr_stmt expr? RPAREN begin_ stmt
+| FOR LPAREN enter_scope decl_for_for_stmt expr_stmt expr? RPAREN begin_ stmt_for_for_stmt
   { 
-    let ret = SFor(Some $3, None,$4,$5,$8,!curr_brk,!curr_cont) in
-    pop_curr_scope ();
+    let ret = SFor(Some $4, None,$5,$6,$9,!curr_brk,!curr_cont) in
     ret
   }
 

@@ -163,6 +163,7 @@ val xv_struct_declarator : declarator
 val xv_struct_decl_list : Ctype.decl list
 val xv_struct_decl : Ctype.decl list
 val xv_storage_class_spec : Ctype.scs
+val xv_stmt_for_for_stmt : Ast.stmt
 val xv_stmt : Ast.stmt
 val xv_static_assert_decl : 'tv_static_assert_decl
 val xv_spec_qual_list : Ctype.ds list

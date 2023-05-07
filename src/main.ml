@@ -1,3 +1,19 @@
+let print_tok pos token = 
+  let open Lexing in
+  Printf.printf "(%d, %d):\"%s\"" pos.pos_lnum (pos.pos_cnum - pos.pos_bol + 1) token
+
+let curr_token = ref ""
+
+let curr_pos = 
+  let open Lexing in
+  ref {pos_fname="";pos_lnum=0;pos_bol=0;pos_cnum=0}
+
+let conv lexer =
+  fun lexbuf ->
+    curr_token := Lexing.lexeme lexbuf;
+    curr_pos := Lexing.lexeme_start_p lexbuf;
+    lexer lexbuf
+
 
 let () =
   let argc = Array.length Sys.argv in
@@ -10,8 +26,10 @@ let () =
   let inchan = open_in fname in
   let filebuf = Lexing.from_channel inchan in
   try
-    let program = Parser.translation_unit Lexer.token filebuf in
+    let program = Parser.translation_unit (conv Lexer.token) filebuf in
     Printf.printf "%s\n" (Ast.show_program program)
   with
   | Lexer.LexerError msg -> Printf.printf "%s" msg
-  | _ -> print_endline "something went wrong"
+  | Env.EnvError msg -> Printf.printf "%s" msg
+  | _ -> print_tok !curr_pos !curr_token;
+  print_endline "something went wrong."
