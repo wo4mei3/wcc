@@ -1,4 +1,4 @@
-static struct X func(struct Y{void *y;} a) {
+static struct X func(struct {void *y;} a) {
     return (struct X){0};
 }
 struct X;
