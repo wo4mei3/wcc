@@ -13,17 +13,17 @@ module MenhirBasics = struct
     | VOLATILE
     | UNION
     | ULINT of (
-# 335 "src/parser.mly"
+# 358 "src/parser.mly"
        (int)
 # 19 "src/parser.ml"
   )
     | UINT of (
-# 335 "src/parser.mly"
+# 358 "src/parser.mly"
        (int)
 # 24 "src/parser.ml"
   )
     | TYPE_ID of (
-# 338 "src/parser.mly"
+# 361 "src/parser.mly"
       (string)
 # 29 "src/parser.ml"
   )
@@ -41,7 +41,7 @@ module MenhirBasics = struct
     | SUB_EQ
     | STRUCT
     | STR of (
-# 337 "src/parser.mly"
+# 360 "src/parser.mly"
       (int list)
 # 47 "src/parser.ml"
   )
@@ -74,7 +74,7 @@ module MenhirBasics = struct
     | LSHIFT
     | LPAREN
     | LINT of (
-# 335 "src/parser.mly"
+# 358 "src/parser.mly"
        (int)
 # 80 "src/parser.ml"
   )
@@ -82,7 +82,7 @@ module MenhirBasics = struct
     | LBRACKET
     | LBRACE
     | INT of (
-# 335 "src/parser.mly"
+# 358 "src/parser.mly"
        (int)
 # 88 "src/parser.ml"
   )
@@ -90,7 +90,7 @@ module MenhirBasics = struct
     | INC
     | IF
     | ID of (
-# 338 "src/parser.mly"
+# 361 "src/parser.mly"
       (string)
 # 96 "src/parser.ml"
   )
@@ -100,7 +100,7 @@ module MenhirBasics = struct
     | GE
     | FOR
     | FLOAT of (
-# 336 "src/parser.mly"
+# 359 "src/parser.mly"
        (float)
 # 106 "src/parser.ml"
   )
@@ -112,7 +112,7 @@ module MenhirBasics = struct
     | ELSE
     | ELLIPSIS
     | DOUBLE of (
-# 336 "src/parser.mly"
+# 359 "src/parser.mly"
        (float)
 # 118 "src/parser.ml"
   )
@@ -158,7 +158,8 @@ include MenhirBasics
 
     let raise exn =
     match exn with
-    | ParserError msg -> Printf.printf "%s\n" msg;raise exn
+    | ParserError msg -> Printf.printf "ParserError: %s\n" msg;raise exn
+    | NotImpl msg -> Printf.printf "NotImpl: %s\n" msg;raise exn
     | _ -> raise exn
 
     let make_decl ty d = 
@@ -228,7 +229,7 @@ include MenhirBasics
 
     let make_struct name_opt dl =
       let name = ref "" in
-      let (id,def_opt) =
+      let (id,def_opt,status) =
       match name_opt with
       | Some n -> 
         begin
@@ -238,26 +239,33 @@ include MenhirBasics
             begin
               match dl with
               | Some _ -> raise (ParserError "redifinition")
-              | None -> (id,None)
+              | None -> (id,None,DontCare)
             end
           | (Some id,Incomplete) ->
             begin
               match dl with
-              | Some _ -> (id,Some (id,Struct(!name,dl)))
-              | None -> (id,None)
+              | Some _ -> (id,Some (id,Struct(!name,dl)),Complete)
+              | None -> (id,None,DontCare)
             end
           | _ -> 
             begin
               match lookup_struct_in_stack n with
-              | Some id -> (id,None)
-              | None -> let id = gen_id () in 
-                        (id,Some (id,Struct(!name,dl)))
+              | Some id -> (id,None,DontCare)
+              | None -> 
+                let id = gen_id () in
+                match dl with
+                | Some _ -> (id,Some (id,Struct(!name,dl)),Complete)
+                | None -> (id,None,DontCare)
             end
         end 
-      | None -> let id = gen_id () in 
-                (id,Some (id,Struct(!name,dl)))
+      | None -> let id = gen_id () in
+                match dl with 
+                | Some _ ->
+                  (id,Some (id,Struct(!name,dl)),Complete)
+                | None ->
+                  raise (ParserError "anonymous struct with no definition.")
       in
-      (def_opt, TsStruct id)
+      (def_opt, TsStruct id,status)
 
     let union_pred name =function
     | (_,Union(n,_)) when n = name ->
@@ -292,7 +300,7 @@ include MenhirBasics
 
     let make_union name_opt dl =
       let name = ref "" in
-      let (id,def_opt) =
+      let (id,def_opt,status) =
       match name_opt with
       | Some n -> 
         begin
@@ -302,26 +310,34 @@ include MenhirBasics
             begin
               match dl with
               | Some _ -> raise (ParserError "redifinition")
-              | None -> (id,None)
+              | None -> (id,None,DontCare)
             end
           | (Some id,Incomplete) ->
             begin
               match dl with
-              | Some _ -> (id,Some (id,Union(!name,dl)))
-              | None -> (id,None)
+              | Some _ -> (id,Some (id,Union(!name,dl)),Complete)
+              | None -> (id,None,DontCare)
             end
           | _ -> 
             begin
               match lookup_union_in_stack n with
-              | Some id -> (id,None)
-              | None -> let id = gen_id () in 
-                        (id,Some (id,Union(!name,dl)))
+              | Some id -> (id,None,DontCare)
+              | None -> 
+                let id = gen_id () in
+                match dl with
+                | Some _ -> (id,Some (id,Union(!name,dl)),Complete)
+                | None -> (id,None,DontCare)
             end
         end 
-      | None -> let id = gen_id () in 
-                (id,Some (id,Union(!name,dl)))
+      | None -> let id = gen_id () in
+                match dl with 
+                | Some _ ->
+                  (id,Some (id,Union(!name,dl)),Complete)
+                | None ->
+                  raise (ParserError "anonymous struct with no definition.")
       in
-      (def_opt, TsUnion id)
+      (def_opt, TsUnion id,status)
+      
 
     let lookup_var_in_scope name =
       let aux = function
@@ -373,15 +389,15 @@ include MenhirBasics
     let def_stack:def list ref = ref []
 
     let def_stack_in_params:def list ref = ref []
-    
+
     let flush_stack () = 
-      def_stack := []  
+      def_stack := [] 
 
     let get_stack () =
       let ret = List.rev !def_stack in
       flush_stack ();
       ret
-
+    
     let in_params = ref false
     
     let enter_params () =
@@ -398,10 +414,17 @@ include MenhirBasics
         add_def2 def
       else
         begin
+          push_def def
+        end
+
+    let add_ty_def def =
+      if !in_params then
+        add_def2 def
+      else
+        begin
           push_def def;
           def_stack := def::!def_stack
         end
-
 
     let flush_stack2 () = 
       def_stack_in_params := []  
@@ -462,7 +485,7 @@ include MenhirBasics
 
 
 
-# 466 "src/parser.ml"
+# 489 "src/parser.ml"
 
 type ('s, 'r) _menhir_state = 
   | MenhirState000 : ('s, _menhir_box_translation_unit) _menhir_state
@@ -1410,9 +1433,9 @@ and ('s, 'r) _menhir_cell1_GOTO =
 
 and 's _menhir_cell0_ID = 
   | MenhirCell0_ID of 's * (
-# 338 "src/parser.mly"
+# 361 "src/parser.mly"
       (string)
-# 1416 "src/parser.ml"
+# 1439 "src/parser.ml"
 )
 
 and ('s, 'r) _menhir_cell1_IF = 
@@ -1469,683 +1492,683 @@ and _menhir_box_translation_unit =
 let _menhir_action_001 =
   fun () ->
     (
-# 664 "src/parser.mly"
+# 687 "src/parser.mly"
           ( DeclPtr(DeclIdent "") )
-# 1475 "src/parser.ml"
+# 1498 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_002 =
   fun _2 ->
     (
-# 665 "src/parser.mly"
+# 688 "src/parser.mly"
                               ( DeclPtr _2 )
-# 1483 "src/parser.ml"
+# 1506 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_003 =
   fun _1 ->
     (
-# 666 "src/parser.mly"
+# 689 "src/parser.mly"
                              ( _1 )
-# 1491 "src/parser.ml"
+# 1514 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_004 =
   fun _1 ->
     (
-# 413 "src/parser.mly"
+# 436 "src/parser.mly"
                       ( _1 )
-# 1499 "src/parser.ml"
+# 1522 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_005 =
   fun _1 _3 ->
     (
-# 414 "src/parser.mly"
+# 437 "src/parser.mly"
                                          ( EBinary(Add,_1,_3) )
-# 1507 "src/parser.ml"
+# 1530 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_006 =
   fun _1 _3 ->
     (
-# 415 "src/parser.mly"
+# 438 "src/parser.mly"
                                           ( EBinary(Sub,_1,_3) )
-# 1515 "src/parser.ml"
+# 1538 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_007 =
   fun () ->
     (
-# 553 "src/parser.mly"
+# 576 "src/parser.mly"
   ( raise (NotImpl "ALIGNAS") )
-# 1523 "src/parser.ml"
+# 1546 "src/parser.ml"
      : ('tv_alignment_spec))
 
 let _menhir_action_008 =
   fun () ->
     (
-# 553 "src/parser.mly"
+# 576 "src/parser.mly"
   ( raise (NotImpl "ALIGNAS") )
-# 1531 "src/parser.ml"
+# 1554 "src/parser.ml"
      : ('tv_alignment_spec))
 
 let _menhir_action_009 =
   fun _1 ->
     (
-# 435 "src/parser.mly"
+# 458 "src/parser.mly"
                 ( _1 )
-# 1539 "src/parser.ml"
+# 1562 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_010 =
   fun _1 _3 ->
     (
-# 436 "src/parser.mly"
+# 459 "src/parser.mly"
                              ( EBinary(BitAnd,_1,_3) )
-# 1547 "src/parser.ml"
+# 1570 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_011 =
   fun _1 ->
     (
-# 385 "src/parser.mly"
+# 408 "src/parser.mly"
                   ( [_1] )
-# 1555 "src/parser.ml"
+# 1578 "src/parser.ml"
      : (Ast.expr list))
 
 let _menhir_action_012 =
   fun _1 _3 ->
     (
-# 386 "src/parser.mly"
+# 409 "src/parser.mly"
                                            ( _1@[_3] )
-# 1563 "src/parser.ml"
+# 1586 "src/parser.ml"
      : (Ast.expr list))
 
 let _menhir_action_013 =
   fun _1 ->
     (
-# 459 "src/parser.mly"
+# 482 "src/parser.mly"
                    ( _1 )
-# 1571 "src/parser.ml"
+# 1594 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_014 =
   fun _1 _3 ->
     (
-# 460 "src/parser.mly"
+# 483 "src/parser.mly"
                                 ( EAssign(None, _1,_3) )
-# 1579 "src/parser.ml"
+# 1602 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_015 =
   fun _1 _3 ->
     (
-# 461 "src/parser.mly"
+# 484 "src/parser.mly"
                                     ( EAssign(Some Mul, _1,_3) )
-# 1587 "src/parser.ml"
+# 1610 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_016 =
   fun _1 _3 ->
     (
-# 462 "src/parser.mly"
+# 485 "src/parser.mly"
                                     ( EAssign(Some Div, _1,_3) )
-# 1595 "src/parser.ml"
+# 1618 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_017 =
   fun _1 _3 ->
     (
-# 463 "src/parser.mly"
+# 486 "src/parser.mly"
                                     ( EAssign(Some Mod, _1,_3) )
-# 1603 "src/parser.ml"
+# 1626 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_018 =
   fun _1 _3 ->
     (
-# 464 "src/parser.mly"
+# 487 "src/parser.mly"
                                     ( EAssign(Some Add, _1,_3) )
-# 1611 "src/parser.ml"
+# 1634 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_019 =
   fun _1 _3 ->
     (
-# 465 "src/parser.mly"
+# 488 "src/parser.mly"
                                     ( EAssign(Some Sub, _1,_3) )
-# 1619 "src/parser.ml"
+# 1642 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_020 =
   fun _1 _3 ->
     (
-# 466 "src/parser.mly"
+# 489 "src/parser.mly"
                                        ( EAssign(Some LShift, _1,_3) )
-# 1627 "src/parser.ml"
+# 1650 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_021 =
   fun _1 _3 ->
     (
-# 467 "src/parser.mly"
+# 490 "src/parser.mly"
                                        ( EAssign(Some RShift, _1,_3) )
-# 1635 "src/parser.ml"
+# 1658 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_022 =
   fun _1 _3 ->
     (
-# 468 "src/parser.mly"
+# 491 "src/parser.mly"
                                     ( EAssign(Some BitAnd, _1,_3) )
-# 1643 "src/parser.ml"
+# 1666 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_023 =
   fun _1 _3 ->
     (
-# 469 "src/parser.mly"
+# 492 "src/parser.mly"
                                     ( EAssign(Some BitXor, _1,_3) )
-# 1651 "src/parser.ml"
+# 1674 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_024 =
   fun _1 _3 ->
     (
-# 470 "src/parser.mly"
+# 493 "src/parser.mly"
                                    ( EAssign(Some BitOr, _1,_3) )
-# 1659 "src/parser.ml"
+# 1682 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_025 =
   fun () ->
     (
-# 798 "src/parser.mly"
+# 821 "src/parser.mly"
   (
     brk := !curr_brk;
     cont := !curr_cont;
     curr_brk := gen_new_label ();
     curr_cont := gen_new_label ();
   )
-# 1672 "src/parser.ml"
+# 1695 "src/parser.ml"
      : (unit))
 
 let _menhir_action_026 =
   fun _2 _4 ->
     (
-# 735 "src/parser.mly"
+# 758 "src/parser.mly"
                                          ( SCase (_2,List.flatten _4) )
-# 1680 "src/parser.ml"
+# 1703 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_027 =
   fun _3 ->
     (
-# 736 "src/parser.mly"
+# 759 "src/parser.mly"
                            ( SDefault (List.flatten _3) )
-# 1688 "src/parser.ml"
+# 1711 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_028 =
   fun _1 ->
     (
-# 403 "src/parser.mly"
+# 426 "src/parser.mly"
              ( _1 )
-# 1696 "src/parser.ml"
+# 1719 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_029 =
   fun _2 _4 ->
     (
-# 404 "src/parser.mly"
+# 427 "src/parser.mly"
                                     ( ECast(_2,_4) )
-# 1704 "src/parser.ml"
+# 1727 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_030 =
   fun _3 ->
     (
-# 741 "src/parser.mly"
+# 764 "src/parser.mly"
  (
     SStmts(List.flatten _3)
   )
-# 1714 "src/parser.ml"
+# 1737 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_031 =
   fun _1 ->
     (
-# 455 "src/parser.mly"
+# 478 "src/parser.mly"
                   ( _1 )
-# 1722 "src/parser.ml"
+# 1745 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_032 =
   fun _1 _3 _5 ->
     (
-# 456 "src/parser.mly"
+# 479 "src/parser.mly"
                                                        ( ECond(_1,_3,_5) )
-# 1730 "src/parser.ml"
+# 1753 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_033 =
   fun () ->
     (
-# 478 "src/parser.mly"
+# 501 "src/parser.mly"
   ( 0 )
-# 1738 "src/parser.ml"
+# 1761 "src/parser.ml"
      : (int))
 
 let _menhir_action_034 =
   fun () ->
     (
-# 481 "src/parser.mly"
+# 504 "src/parser.mly"
                   ( () )
-# 1746 "src/parser.ml"
+# 1769 "src/parser.ml"
      : (unit))
 
 let _menhir_action_035 =
   fun _1 _2 ->
     (
-# 483 "src/parser.mly"
+# 506 "src/parser.mly"
   ( 
     let defs = List.map make_var_or_typedef (make_decls_with_init_opts _1 _2) in
     List.iter add_def defs
   )
-# 1757 "src/parser.ml"
+# 1780 "src/parser.ml"
      : (unit))
 
 let _menhir_action_036 =
   fun () ->
     (
-# 487 "src/parser.mly"
+# 510 "src/parser.mly"
                       ( raise (NotImpl "Static_assert") )
-# 1765 "src/parser.ml"
+# 1788 "src/parser.ml"
      : (unit))
 
 let _menhir_action_037 =
   fun () ->
     (
-# 762 "src/parser.mly"
+# 785 "src/parser.mly"
   ( peek_curr_scope () )
-# 1773 "src/parser.ml"
+# 1796 "src/parser.ml"
      : (Ast.def))
 
 let _menhir_action_038 =
   fun _1 ->
     (
-# 490 "src/parser.mly"
+# 513 "src/parser.mly"
                      ( TDeclSpec [Scs _1] )
-# 1781 "src/parser.ml"
+# 1804 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_039 =
   fun _1 ->
     (
-# 491 "src/parser.mly"
+# 514 "src/parser.mly"
             ( TDeclSpec [Tq _1] )
-# 1789 "src/parser.ml"
+# 1812 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_040 =
   fun _1 ->
     (
-# 492 "src/parser.mly"
+# 515 "src/parser.mly"
                 ( TDeclSpec [Fs _1] )
-# 1797 "src/parser.ml"
+# 1820 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_041 =
   fun () ->
     (
-# 493 "src/parser.mly"
+# 516 "src/parser.mly"
                  ( raise (NotImpl "not implemented") )
-# 1805 "src/parser.ml"
+# 1828 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_042 =
   fun _1 ->
     (
-# 494 "src/parser.mly"
+# 517 "src/parser.mly"
             ( TDeclSpec [Ts _1] )
-# 1813 "src/parser.ml"
+# 1836 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_043 =
   fun _1 ->
     (
-# 497 "src/parser.mly"
+# 520 "src/parser.mly"
             ( _1 )
-# 1821 "src/parser.ml"
+# 1844 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_044 =
   fun _1 _2 ->
     (
-# 499 "src/parser.mly"
+# 522 "src/parser.mly"
   ( append_ds_list [_1] [_2] )
-# 1829 "src/parser.ml"
+# 1852 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_045 =
   fun _2 ->
     (
-# 605 "src/parser.mly"
+# 628 "src/parser.mly"
                      ( DeclPtr _2 )
-# 1837 "src/parser.ml"
+# 1860 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_046 =
   fun _1 ->
     (
-# 606 "src/parser.mly"
+# 629 "src/parser.mly"
                     ( _1 )
-# 1845 "src/parser.ml"
+# 1868 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_047 =
   fun _1 ->
     (
-# 692 "src/parser.mly"
+# 715 "src/parser.mly"
   ( _1 )
-# 1853 "src/parser.ml"
+# 1876 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_048 =
   fun _2 ->
     (
-# 695 "src/parser.mly"
+# 718 "src/parser.mly"
                                   ( DIdx(_2,None) )
-# 1861 "src/parser.ml"
+# 1884 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_049 =
   fun _2 ->
     (
-# 696 "src/parser.mly"
+# 719 "src/parser.mly"
             ( DField(_2,None) )
-# 1869 "src/parser.ml"
+# 1892 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_050 =
   fun _2 _4 ->
     (
-# 697 "src/parser.mly"
+# 720 "src/parser.mly"
                                                   (DIdx(_2,Some _4) )
-# 1877 "src/parser.ml"
+# 1900 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_051 =
   fun _2 _3 ->
     (
-# 698 "src/parser.mly"
+# 721 "src/parser.mly"
                             ( DField(_2,Some _3) )
-# 1885 "src/parser.ml"
+# 1908 "src/parser.ml"
      : (Ast.desig))
 
 let _menhir_action_052 =
   fun _2 ->
     (
-# 669 "src/parser.mly"
+# 692 "src/parser.mly"
                                     ( _2 )
-# 1893 "src/parser.ml"
+# 1916 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_053 =
   fun _2 ->
     (
-# 670 "src/parser.mly"
+# 693 "src/parser.mly"
                                   ( DeclArr(DeclIdent "",_2) )
-# 1901 "src/parser.ml"
+# 1924 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_054 =
   fun _2 ->
     (
-# 671 "src/parser.mly"
+# 694 "src/parser.mly"
                             ( DeclFun(DeclIdent "",_2) )
-# 1909 "src/parser.ml"
+# 1932 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_055 =
   fun _1 _3 ->
     (
-# 672 "src/parser.mly"
+# 695 "src/parser.mly"
                                                              ( DeclArr(_1,_3) )
-# 1917 "src/parser.ml"
+# 1940 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_056 =
   fun _1 _3 ->
     (
-# 673 "src/parser.mly"
+# 696 "src/parser.mly"
                                                        ( DeclFun(_1,_3) )
-# 1925 "src/parser.ml"
+# 1948 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_057 =
   fun _2 ->
     (
-# 622 "src/parser.mly"
+# 645 "src/parser.mly"
                                        ( DeclIdent _2 )
-# 1933 "src/parser.ml"
+# 1956 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_058 =
   fun _2 ->
     (
-# 623 "src/parser.mly"
+# 646 "src/parser.mly"
                            ( _2 )
-# 1941 "src/parser.ml"
+# 1964 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_059 =
   fun _1 _3 ->
     (
-# 624 "src/parser.mly"
+# 647 "src/parser.mly"
                                                     ( DeclArr(_1, _3) )
-# 1949 "src/parser.ml"
+# 1972 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_060 =
   fun _1 _3 ->
     (
-# 625 "src/parser.mly"
+# 648 "src/parser.mly"
                                               ( DeclFun(_1,_3) )
-# 1957 "src/parser.ml"
+# 1980 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_061 =
   fun () ->
     (
-# 807 "src/parser.mly"
+# 830 "src/parser.mly"
   (
     curr_brk := !brk;
     curr_cont := !cont;
   )
-# 1968 "src/parser.ml"
+# 1991 "src/parser.ml"
      : (unit))
 
 let _menhir_action_062 =
   fun () ->
     (
-# 611 "src/parser.mly"
+# 634 "src/parser.mly"
   (
     in_declarator := true
   )
-# 1978 "src/parser.ml"
+# 2001 "src/parser.ml"
      : (unit))
 
 let _menhir_action_063 =
   fun () ->
     (
-# 705 "src/parser.mly"
+# 728 "src/parser.mly"
   (
     enter_scope ()
   )
-# 1988 "src/parser.ml"
+# 2011 "src/parser.ml"
      : (unit))
 
 let _menhir_action_064 =
   fun () ->
     (
-# 598 "src/parser.mly"
+# 621 "src/parser.mly"
     (  )
-# 1996 "src/parser.ml"
+# 2019 "src/parser.ml"
      : (unit))
 
 let _menhir_action_065 =
   fun () ->
     (
-# 598 "src/parser.mly"
+# 621 "src/parser.mly"
     (  )
-# 2004 "src/parser.ml"
+# 2027 "src/parser.ml"
      : (unit))
 
 let _menhir_action_066 =
   fun () ->
     (
-# 602 "src/parser.mly"
+# 625 "src/parser.mly"
     (  )
-# 2012 "src/parser.ml"
+# 2035 "src/parser.ml"
      : (unit))
 
 let _menhir_action_067 =
   fun () ->
     (
-# 593 "src/parser.mly"
+# 616 "src/parser.mly"
     ()
-# 2020 "src/parser.ml"
+# 2043 "src/parser.ml"
      : (unit))
 
 let _menhir_action_068 =
   fun () ->
     (
-# 593 "src/parser.mly"
+# 616 "src/parser.mly"
     ()
-# 2028 "src/parser.ml"
+# 2051 "src/parser.ml"
      : (unit))
 
 let _menhir_action_069 =
   fun () ->
     (
-# 588 "src/parser.mly"
+# 611 "src/parser.mly"
     ( raise (NotImpl "enum_spec") )
-# 2036 "src/parser.ml"
+# 2059 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_070 =
   fun () ->
     (
-# 588 "src/parser.mly"
+# 611 "src/parser.mly"
     ( raise (NotImpl "enum_spec") )
-# 2044 "src/parser.ml"
+# 2067 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_071 =
   fun _1 ->
     (
-# 430 "src/parser.mly"
+# 453 "src/parser.mly"
                   ( _1 )
-# 2052 "src/parser.ml"
+# 2075 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_072 =
   fun _1 _3 ->
     (
-# 431 "src/parser.mly"
+# 454 "src/parser.mly"
                                      ( EBinary(Eq,_1,_3) )
-# 2060 "src/parser.ml"
+# 2083 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_073 =
   fun _1 _3 ->
     (
-# 432 "src/parser.mly"
+# 455 "src/parser.mly"
                                    ( EBinary(Ne,_1,_3) )
-# 2068 "src/parser.ml"
+# 2091 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_074 =
   fun _1 ->
     (
-# 439 "src/parser.mly"
+# 462 "src/parser.mly"
            ( _1 )
-# 2076 "src/parser.ml"
+# 2099 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_075 =
   fun _1 _3 ->
     (
-# 440 "src/parser.mly"
+# 463 "src/parser.mly"
                                  ( EBinary(BitXor,_1,_3) )
-# 2084 "src/parser.ml"
+# 2107 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_076 =
   fun _1 ->
     (
-# 473 "src/parser.mly"
+# 496 "src/parser.mly"
                   ( _1 )
-# 2092 "src/parser.ml"
+# 2115 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_077 =
   fun _1 _3 ->
     (
-# 474 "src/parser.mly"
+# 497 "src/parser.mly"
                              ( EBinary(Comma,_1,_3) )
-# 2100 "src/parser.ml"
+# 2123 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_078 =
   fun () ->
     (
-# 746 "src/parser.mly"
+# 769 "src/parser.mly"
        ( None )
-# 2108 "src/parser.ml"
+# 2131 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_079 =
   fun _1 ->
     (
-# 747 "src/parser.mly"
+# 770 "src/parser.mly"
             ( Some _1 )
-# 2116 "src/parser.ml"
+# 2139 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_080 =
   fun _1 ->
     (
-# 823 "src/parser.mly"
-               ( _1 )
-# 2124 "src/parser.ml"
+# 847 "src/parser.mly"
+  ( _1 )
+# 2147 "src/parser.ml"
      : (Ast.def list))
 
 let _menhir_action_081 =
   fun () ->
     (
-# 825 "src/parser.mly"
+# 849 "src/parser.mly"
   ( get_stack () )
-# 2132 "src/parser.ml"
+# 2155 "src/parser.ml"
      : (Ast.def list))
 
 let _menhir_action_082 =
   fun _1 _2 ->
     (
-# 829 "src/parser.mly"
+# 853 "src/parser.mly"
   (
     let decl = make_decl _1 _2 in
     (decl,get_stack ())
   )
-# 2143 "src/parser.ml"
+# 2166 "src/parser.ml"
      : (Ctype.decl * Ast.def list))
 
 let _menhir_action_083 =
   fun _1 _2 ->
     (
-# 843 "src/parser.mly"
+# 867 "src/parser.mly"
   (
     let (decl,def_list) = _1 in
     let def2_list = get_stack2 () in
@@ -2153,244 +2176,247 @@ let _menhir_action_083 =
     | SStmts l -> l 
     | _ -> raise (ParserError "function_def") in
     let def2_list = SStmts ((List.map (fun def -> SDef def) def2_list)@(get_stmts _2)) in
-    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))]
+    let def_list =
+    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))] in
+    List.iter add_def def_list;
+    def_list
   )
-# 2159 "src/parser.ml"
+# 2185 "src/parser.ml"
      : (Ast.def list))
 
 let _menhir_action_084 =
   fun () ->
     (
-# 547 "src/parser.mly"
+# 570 "src/parser.mly"
          ( FsInline )
-# 2167 "src/parser.ml"
+# 2193 "src/parser.ml"
      : (Ctype.fs))
 
 let _menhir_action_085 =
   fun () ->
     (
-# 548 "src/parser.mly"
+# 571 "src/parser.mly"
            ( FsNoreturn )
-# 2175 "src/parser.ml"
+# 2201 "src/parser.ml"
      : (Ctype.fs))
 
 let _menhir_action_086 =
   fun _1 ->
     (
-# 354 "src/parser.mly"
+# 377 "src/parser.mly"
      ( _1 )
-# 2183 "src/parser.ml"
+# 2209 "src/parser.ml"
      : (string))
 
 let _menhir_action_087 =
   fun _1 ->
     (
-# 355 "src/parser.mly"
+# 378 "src/parser.mly"
           ( _1 )
-# 2191 "src/parser.ml"
+# 2217 "src/parser.ml"
      : (string))
 
 let _menhir_action_088 =
   fun _1 ->
     (
-# 443 "src/parser.mly"
+# 466 "src/parser.mly"
                     ( _1 )
-# 2199 "src/parser.ml"
+# 2225 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_089 =
   fun _1 _3 ->
     (
-# 444 "src/parser.mly"
+# 467 "src/parser.mly"
                                          ( EBinary(BitOr,_1,_3) )
-# 2207 "src/parser.ml"
+# 2233 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_090 =
   fun _1 ->
     (
-# 683 "src/parser.mly"
+# 706 "src/parser.mly"
                   ( IScal _1 )
-# 2215 "src/parser.ml"
+# 2241 "src/parser.ml"
      : (Ast.init))
 
 let _menhir_action_091 =
   fun _2 ->
     (
-# 684 "src/parser.mly"
+# 707 "src/parser.mly"
                                  ( IVect _2 )
-# 2223 "src/parser.ml"
+# 2249 "src/parser.ml"
      : (Ast.init))
 
 let _menhir_action_092 =
   fun _1 ->
     (
-# 508 "src/parser.mly"
+# 531 "src/parser.mly"
              ( (_1,None) )
-# 2231 "src/parser.ml"
+# 2257 "src/parser.ml"
      : (declarator * Ast.init option))
 
 let _menhir_action_093 =
   fun _1 _3 ->
     (
-# 510 "src/parser.mly"
+# 533 "src/parser.mly"
   ( (_1,Some _3) )
-# 2239 "src/parser.ml"
+# 2265 "src/parser.ml"
      : (declarator * Ast.init option))
 
 let _menhir_action_094 =
   fun _1 ->
     (
-# 503 "src/parser.mly"
+# 526 "src/parser.mly"
   ( [_1] )
-# 2247 "src/parser.ml"
+# 2273 "src/parser.ml"
      : ((declarator * Ast.init option) list))
 
 let _menhir_action_095 =
   fun _1 _3 ->
     (
-# 505 "src/parser.mly"
+# 528 "src/parser.mly"
   ( _1@[_3] )
-# 2255 "src/parser.ml"
+# 2281 "src/parser.ml"
      : ((declarator * Ast.init option) list))
 
 let _menhir_action_096 =
   fun _1 _2 ->
     (
-# 687 "src/parser.mly"
+# 710 "src/parser.mly"
               ( [(_1,_2)] )
-# 2263 "src/parser.ml"
+# 2289 "src/parser.ml"
      : ((Ast.desig option * Ast.init) list))
 
 let _menhir_action_097 =
   fun _1 _3 _4 ->
     (
-# 688 "src/parser.mly"
+# 711 "src/parser.mly"
                               ( _1@[(_3,_4)] )
-# 2271 "src/parser.ml"
+# 2297 "src/parser.ml"
      : ((Ast.desig option * Ast.init) list))
 
 let _menhir_action_098 =
   fun () ->
     (
-# 715 "src/parser.mly"
+# 738 "src/parser.mly"
        ( List.map (fun def -> SDef def) (get_stack ()) )
-# 2279 "src/parser.ml"
+# 2305 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_099 =
   fun _1 ->
     (
-# 716 "src/parser.mly"
+# 739 "src/parser.mly"
        ( [_1] )
-# 2287 "src/parser.ml"
+# 2313 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_100 =
   fun _3 _6 ->
     (
-# 778 "src/parser.mly"
+# 801 "src/parser.mly"
   ( 
     SWhile(_3,_6,!curr_brk,!curr_cont)
   )
-# 2297 "src/parser.ml"
+# 2323 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_101 =
   fun _3 _6 ->
     (
-# 782 "src/parser.mly"
+# 805 "src/parser.mly"
   ( 
     SDoWhile(_3,_6,!curr_brk,!curr_cont)
   )
-# 2307 "src/parser.ml"
+# 2333 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_102 =
   fun _3 _4 _5 _8 ->
     (
-# 786 "src/parser.mly"
+# 809 "src/parser.mly"
   ( 
     SFor(None,_3,_4,_5,_8,!curr_brk,!curr_cont)
   )
-# 2317 "src/parser.ml"
+# 2343 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_103 =
   fun _4 _5 _6 _9 ->
     (
-# 791 "src/parser.mly"
+# 814 "src/parser.mly"
   ( 
     let ret = SFor(Some _4, None,_5,_6,_9,!curr_brk,!curr_cont) in
     ret
   )
-# 2328 "src/parser.ml"
+# 2354 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_104 =
   fun _2 ->
     (
-# 814 "src/parser.mly"
+# 837 "src/parser.mly"
   ( 
     push_goto _2;
     SGoto _2
   )
-# 2339 "src/parser.ml"
+# 2365 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_105 =
   fun () ->
     (
-# 818 "src/parser.mly"
+# 841 "src/parser.mly"
                 ( SGoto !curr_cont )
-# 2347 "src/parser.ml"
+# 2373 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_106 =
   fun () ->
     (
-# 819 "src/parser.mly"
+# 842 "src/parser.mly"
              ( SGoto !curr_brk )
-# 2355 "src/parser.ml"
+# 2381 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_107 =
   fun _2 ->
     (
-# 820 "src/parser.mly"
+# 843 "src/parser.mly"
                    ( SReturn _2 )
-# 2363 "src/parser.ml"
+# 2389 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_108 =
   fun _1 _3 ->
     (
-# 729 "src/parser.mly"
+# 752 "src/parser.mly"
   ( 
     push_label _1;
     SLabel(_1,SStmts _3)
   )
-# 2374 "src/parser.ml"
+# 2400 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_109 =
   fun () ->
     (
-# 617 "src/parser.mly"
+# 640 "src/parser.mly"
   (
     in_declarator := false
   )
-# 2384 "src/parser.ml"
+# 2410 "src/parser.ml"
      : (unit))
 
 let _menhir_action_110 =
   fun () ->
     (
-# 710 "src/parser.mly"
+# 733 "src/parser.mly"
   (
     leave_scope ()
   )
-# 2394 "src/parser.ml"
+# 2420 "src/parser.ml"
      : (unit))
 
 let _menhir_action_111 =
@@ -2398,7 +2424,7 @@ let _menhir_action_111 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2402 "src/parser.ml"
+# 2428 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_112 =
@@ -2406,7 +2432,7 @@ let _menhir_action_112 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2410 "src/parser.ml"
+# 2436 "src/parser.ml"
      : (Ast.stmt list))
 
 let _menhir_action_113 =
@@ -2414,7 +2440,7 @@ let _menhir_action_113 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2418 "src/parser.ml"
+# 2444 "src/parser.ml"
      : (Ast.def list list))
 
 let _menhir_action_114 =
@@ -2422,7 +2448,7 @@ let _menhir_action_114 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2426 "src/parser.ml"
+# 2452 "src/parser.ml"
      : (Ast.def list list))
 
 let _menhir_action_115 =
@@ -2430,7 +2456,7 @@ let _menhir_action_115 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2434 "src/parser.ml"
+# 2460 "src/parser.ml"
      : (Ast.stmt list list))
 
 let _menhir_action_116 =
@@ -2438,7 +2464,7 @@ let _menhir_action_116 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2442 "src/parser.ml"
+# 2468 "src/parser.ml"
      : (Ast.stmt list list))
 
 let _menhir_action_117 =
@@ -2446,7 +2472,7 @@ let _menhir_action_117 =
     (
 # 208 "<standard.mly>"
     ( [] )
-# 2450 "src/parser.ml"
+# 2476 "src/parser.ml"
      : (Ctype.tq list))
 
 let _menhir_action_118 =
@@ -2454,79 +2480,79 @@ let _menhir_action_118 =
     (
 # 210 "<standard.mly>"
     ( x :: xs )
-# 2458 "src/parser.ml"
+# 2484 "src/parser.ml"
      : (Ctype.tq list))
 
 let _menhir_action_119 =
   fun _1 ->
     (
-# 447 "src/parser.mly"
+# 470 "src/parser.mly"
                     ( _1 )
-# 2466 "src/parser.ml"
+# 2492 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_120 =
   fun _1 _3 ->
     (
-# 448 "src/parser.mly"
+# 471 "src/parser.mly"
                                             ( EBinary(LogAnd,_1,_3) )
-# 2474 "src/parser.ml"
+# 2500 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_121 =
   fun _1 ->
     (
-# 451 "src/parser.mly"
+# 474 "src/parser.mly"
                    ( _1 )
-# 2482 "src/parser.ml"
+# 2508 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_122 =
   fun _1 _3 ->
     (
-# 452 "src/parser.mly"
+# 475 "src/parser.mly"
                                         ( EBinary(LogOr,_1,_3) )
-# 2490 "src/parser.ml"
+# 2516 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_123 =
   fun () ->
     (
-# 633 "src/parser.mly"
+# 656 "src/parser.mly"
   ( enter_params () )
-# 2498 "src/parser.ml"
+# 2524 "src/parser.ml"
      : (unit))
 
 let _menhir_action_124 =
   fun _1 ->
     (
-# 407 "src/parser.mly"
+# 430 "src/parser.mly"
             ( _1 )
-# 2506 "src/parser.ml"
+# 2532 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_125 =
   fun _1 _3 ->
     (
-# 408 "src/parser.mly"
+# 431 "src/parser.mly"
                                      ( EBinary(Mul,_1,_3) )
-# 2514 "src/parser.ml"
+# 2540 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_126 =
   fun _1 _3 ->
     (
-# 409 "src/parser.mly"
+# 432 "src/parser.mly"
                                     ( EBinary(Div,_1,_3) )
-# 2522 "src/parser.ml"
+# 2548 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_127 =
   fun _1 _3 ->
     (
-# 410 "src/parser.mly"
+# 433 "src/parser.mly"
                                     ( EBinary(Mod,_1,_3) )
-# 2530 "src/parser.ml"
+# 2556 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_128 =
@@ -2534,7 +2560,7 @@ let _menhir_action_128 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2538 "src/parser.ml"
+# 2564 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_129 =
@@ -2542,7 +2568,7 @@ let _menhir_action_129 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2546 "src/parser.ml"
+# 2572 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_130 =
@@ -2550,20 +2576,20 @@ let _menhir_action_130 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2554 "src/parser.ml"
+# 2580 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_131 =
   fun () ->
     let x = 
-# 642 "src/parser.mly"
+# 665 "src/parser.mly"
                                        ()
-# 2562 "src/parser.ml"
+# 2588 "src/parser.ml"
      in
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2567 "src/parser.ml"
+# 2593 "src/parser.ml"
      : (unit option))
 
 let _menhir_action_132 =
@@ -2571,7 +2597,7 @@ let _menhir_action_132 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2575 "src/parser.ml"
+# 2601 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_133 =
@@ -2579,7 +2605,7 @@ let _menhir_action_133 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2583 "src/parser.ml"
+# 2609 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_134 =
@@ -2587,7 +2613,7 @@ let _menhir_action_134 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2591 "src/parser.ml"
+# 2617 "src/parser.ml"
      : (Ast.expr list option))
 
 let _menhir_action_135 =
@@ -2595,7 +2621,7 @@ let _menhir_action_135 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2599 "src/parser.ml"
+# 2625 "src/parser.ml"
      : (Ast.expr list option))
 
 let _menhir_action_136 =
@@ -2603,7 +2629,7 @@ let _menhir_action_136 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2607 "src/parser.ml"
+# 2633 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_137 =
@@ -2611,7 +2637,7 @@ let _menhir_action_137 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2615 "src/parser.ml"
+# 2641 "src/parser.ml"
      : (declarator option))
 
 let _menhir_action_138 =
@@ -2619,7 +2645,7 @@ let _menhir_action_138 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2623 "src/parser.ml"
+# 2649 "src/parser.ml"
      : (Ast.desig option))
 
 let _menhir_action_139 =
@@ -2627,7 +2653,7 @@ let _menhir_action_139 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2631 "src/parser.ml"
+# 2657 "src/parser.ml"
      : (Ast.desig option))
 
 let _menhir_action_140 =
@@ -2635,7 +2661,7 @@ let _menhir_action_140 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2639 "src/parser.ml"
+# 2665 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_141 =
@@ -2643,7 +2669,7 @@ let _menhir_action_141 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2647 "src/parser.ml"
+# 2673 "src/parser.ml"
      : (Ast.expr option))
 
 let _menhir_action_142 =
@@ -2651,7 +2677,7 @@ let _menhir_action_142 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2655 "src/parser.ml"
+# 2681 "src/parser.ml"
      : (string option))
 
 let _menhir_action_143 =
@@ -2659,7 +2685,7 @@ let _menhir_action_143 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2663 "src/parser.ml"
+# 2689 "src/parser.ml"
      : (string option))
 
 let _menhir_action_144 =
@@ -2667,7 +2693,7 @@ let _menhir_action_144 =
     (
 # 111 "<standard.mly>"
     ( None )
-# 2671 "src/parser.ml"
+# 2697 "src/parser.ml"
      : (declarator list option))
 
 let _menhir_action_145 =
@@ -2675,833 +2701,833 @@ let _menhir_action_145 =
     (
 # 113 "<standard.mly>"
     ( Some x )
-# 2679 "src/parser.ml"
+# 2705 "src/parser.ml"
      : (declarator list option))
 
 let _menhir_action_146 =
   fun _1 _2 ->
     (
-# 653 "src/parser.mly"
+# 676 "src/parser.mly"
   ( 
     [make_decl _1 _2]
   )
-# 2689 "src/parser.ml"
+# 2715 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_147 =
   fun _1 _2 ->
     (
-# 657 "src/parser.mly"
+# 680 "src/parser.mly"
   (
     match _2 with
     | Some d -> [make_decl _1 d]
     | None -> [make_decl _1 (DeclIdent "")]
   )
-# 2701 "src/parser.ml"
+# 2727 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_148 =
   fun _1 ->
     (
-# 647 "src/parser.mly"
+# 670 "src/parser.mly"
   ( _1 )
-# 2709 "src/parser.ml"
+# 2735 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_149 =
   fun _1 _3 ->
     (
-# 649 "src/parser.mly"
+# 672 "src/parser.mly"
   ( _1@_3 )
-# 2717 "src/parser.ml"
+# 2743 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_150 =
   fun () ->
     (
-# 641 "src/parser.mly"
+# 664 "src/parser.mly"
   ( [] )
-# 2725 "src/parser.ml"
+# 2751 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_151 =
   fun _1 ->
     (
-# 643 "src/parser.mly"
+# 666 "src/parser.mly"
   ( _1 )
-# 2733 "src/parser.ml"
+# 2759 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_152 =
   fun () ->
     (
-# 629 "src/parser.mly"
+# 652 "src/parser.mly"
   (  )
-# 2741 "src/parser.ml"
+# 2767 "src/parser.ml"
      : (unit))
 
 let _menhir_action_153 =
   fun _1 ->
     (
-# 370 "src/parser.mly"
+# 393 "src/parser.mly"
                ( _1 )
-# 2749 "src/parser.ml"
+# 2775 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_154 =
   fun _1 _3 ->
     (
-# 371 "src/parser.mly"
+# 394 "src/parser.mly"
                                       ( EPostfix(_1,Nth _3) )
-# 2757 "src/parser.ml"
+# 2783 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_155 =
   fun _1 _3 ->
     (
-# 373 "src/parser.mly"
+# 396 "src/parser.mly"
   ( 
     match _3 with
     | Some l -> EPostfix(_1,Call l)
     | None -> EPostfix(_1,Call [])
   )
-# 2769 "src/parser.ml"
+# 2795 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_156 =
   fun _1 _3 ->
     (
-# 378 "src/parser.mly"
+# 401 "src/parser.mly"
                          ( EPostfix(_1,Member _3) )
-# 2777 "src/parser.ml"
+# 2803 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_157 =
   fun _1 _3 ->
     (
-# 379 "src/parser.mly"
+# 402 "src/parser.mly"
                            ( EPostfix(EUnary(Deref,_1),Member _3) )
-# 2785 "src/parser.ml"
+# 2811 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_158 =
   fun _1 ->
     (
-# 380 "src/parser.mly"
+# 403 "src/parser.mly"
                    ( EPostfix(_1,Inc) )
-# 2793 "src/parser.ml"
+# 2819 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_159 =
   fun _1 ->
     (
-# 381 "src/parser.mly"
+# 404 "src/parser.mly"
                    ( EPostfix(_1,Dec) )
-# 2801 "src/parser.ml"
+# 2827 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_160 =
   fun _2 _5 ->
     (
-# 382 "src/parser.mly"
+# 405 "src/parser.mly"
                                                          ( ECompoundLit(_2,IVect _5) )
-# 2809 "src/parser.ml"
+# 2835 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_161 =
   fun _1 ->
     (
-# 358 "src/parser.mly"
+# 381 "src/parser.mly"
      ( EVar (get_var _1) )
-# 2817 "src/parser.ml"
+# 2843 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_162 =
   fun _1 ->
     (
-# 359 "src/parser.mly"
+# 382 "src/parser.mly"
       ( EConst (VInt _1) )
-# 2825 "src/parser.ml"
+# 2851 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_163 =
   fun _1 ->
     (
-# 360 "src/parser.mly"
+# 383 "src/parser.mly"
        ( ECast(TDeclSpec[(Ts TsUInt)],EConst(VInt _1)) )
-# 2833 "src/parser.ml"
+# 2859 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_164 =
   fun _1 ->
     (
-# 361 "src/parser.mly"
+# 384 "src/parser.mly"
        ( ECast(TDeclSpec[(Ts TsLong)],EConst(VInt _1)) )
-# 2841 "src/parser.ml"
+# 2867 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_165 =
   fun _1 ->
     (
-# 362 "src/parser.mly"
+# 385 "src/parser.mly"
         ( ECast(TDeclSpec[(Ts TsULong)],EConst(VInt _1)) )
-# 2849 "src/parser.ml"
+# 2875 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_166 =
   fun _1 ->
     (
-# 363 "src/parser.mly"
+# 386 "src/parser.mly"
         ( EConst (VFloat _1) )
-# 2857 "src/parser.ml"
+# 2883 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_167 =
   fun _1 ->
     (
-# 364 "src/parser.mly"
+# 387 "src/parser.mly"
          ( ECast(TDeclSpec[(Ts TsDouble)],EConst(VFloat _1)) )
-# 2865 "src/parser.ml"
+# 2891 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_168 =
   fun _1 ->
     (
-# 365 "src/parser.mly"
+# 388 "src/parser.mly"
       ( EConst (VStr _1) )
-# 2873 "src/parser.ml"
+# 2899 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_169 =
   fun _2 ->
     (
-# 367 "src/parser.mly"
+# 390 "src/parser.mly"
    ( _2 )
-# 2881 "src/parser.ml"
+# 2907 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_170 =
   fun _1 ->
     (
-# 423 "src/parser.mly"
+# 446 "src/parser.mly"
              ( _1 )
-# 2889 "src/parser.ml"
+# 2915 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_171 =
   fun _1 _3 ->
     (
-# 424 "src/parser.mly"
+# 447 "src/parser.mly"
                                 ( EBinary(Lt,_1,_3) )
-# 2897 "src/parser.ml"
+# 2923 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_172 =
   fun _1 _3 ->
     (
-# 425 "src/parser.mly"
+# 448 "src/parser.mly"
                                 ( EBinary(Gt,_1,_3) )
-# 2905 "src/parser.ml"
+# 2931 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_173 =
   fun _1 _3 ->
     (
-# 426 "src/parser.mly"
+# 449 "src/parser.mly"
                                 ( EBinary(Le,_1,_3) )
-# 2913 "src/parser.ml"
+# 2939 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_174 =
   fun _1 _3 ->
     (
-# 427 "src/parser.mly"
+# 450 "src/parser.mly"
                                 ( EBinary(Ge,_1,_3) )
-# 2921 "src/parser.ml"
+# 2947 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_175 =
   fun () ->
     (
-# 637 "src/parser.mly"
+# 660 "src/parser.mly"
   ( leave_params () )
-# 2929 "src/parser.ml"
+# 2955 "src/parser.ml"
      : (unit))
 
 let _menhir_action_176 =
   fun _3 _5 ->
     (
-# 750 "src/parser.mly"
+# 773 "src/parser.mly"
                                               ( SIfElse(_3,_5,SStmts []) )
-# 2937 "src/parser.ml"
+# 2963 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_177 =
   fun _3 _5 _7 ->
     (
-# 751 "src/parser.mly"
+# 774 "src/parser.mly"
                                        ( SIfElse(_3,_5,_7) )
-# 2945 "src/parser.ml"
+# 2971 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_178 =
   fun _3 _7 ->
     (
-# 755 "src/parser.mly"
+# 778 "src/parser.mly"
   ( 
     let ret = SSwitch(_3,_7,!curr_brk) in
     ret
   )
-# 2956 "src/parser.ml"
+# 2982 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_179 =
   fun _1 ->
     (
-# 418 "src/parser.mly"
+# 441 "src/parser.mly"
                 ( _1 )
-# 2964 "src/parser.ml"
+# 2990 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_180 =
   fun _1 _3 ->
     (
-# 419 "src/parser.mly"
+# 442 "src/parser.mly"
                                   ( EBinary(LShift,_1,_3) )
-# 2972 "src/parser.ml"
+# 2998 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_181 =
   fun _1 _3 ->
     (
-# 420 "src/parser.mly"
+# 443 "src/parser.mly"
                                   ( EBinary(RShift,_1,_3) )
-# 2980 "src/parser.ml"
+# 3006 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_182 =
   fun _1 ->
     (
-# 538 "src/parser.mly"
+# 561 "src/parser.mly"
             ( [Ts _1] )
-# 2988 "src/parser.ml"
+# 3014 "src/parser.ml"
      : (Ctype.ds list))
 
 let _menhir_action_183 =
   fun _1 _2 ->
     (
-# 539 "src/parser.mly"
+# 562 "src/parser.mly"
                            ( (Ts _1)::_2 )
-# 2996 "src/parser.ml"
+# 3022 "src/parser.ml"
      : (Ctype.ds list))
 
 let _menhir_action_184 =
   fun _1 _2 ->
     (
-# 540 "src/parser.mly"
+# 563 "src/parser.mly"
                            ( (Tq _1)::_2 )
-# 3004 "src/parser.ml"
+# 3030 "src/parser.ml"
      : (Ctype.ds list))
 
 let _menhir_action_185 =
   fun () ->
     (
-# 702 "src/parser.mly"
+# 725 "src/parser.mly"
   ( raise (NotImpl "_Static_assert") )
-# 3012 "src/parser.ml"
+# 3038 "src/parser.ml"
      : ('tv_static_assert_decl))
 
 let _menhir_action_186 =
   fun _1 ->
     (
-# 719 "src/parser.mly"
+# 742 "src/parser.mly"
                ( _1 )
-# 3020 "src/parser.ml"
+# 3046 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_187 =
   fun _1 ->
     (
-# 720 "src/parser.mly"
+# 743 "src/parser.mly"
                 ( _1 )
-# 3028 "src/parser.ml"
+# 3054 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_188 =
   fun _1 ->
     (
-# 721 "src/parser.mly"
+# 744 "src/parser.mly"
             ( expr_conv _1 )
-# 3036 "src/parser.ml"
+# 3062 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_189 =
   fun _1 ->
     (
-# 722 "src/parser.mly"
+# 745 "src/parser.mly"
                    ( _1 )
-# 3044 "src/parser.ml"
+# 3070 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_190 =
   fun _1 ->
     (
-# 723 "src/parser.mly"
+# 746 "src/parser.mly"
                         ( _1 )
-# 3052 "src/parser.ml"
+# 3078 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_191 =
   fun _1 ->
     (
-# 724 "src/parser.mly"
+# 747 "src/parser.mly"
                       ( _1 )
-# 3060 "src/parser.ml"
+# 3086 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_192 =
   fun _1 ->
     (
-# 725 "src/parser.mly"
+# 748 "src/parser.mly"
             ( _1 )
-# 3068 "src/parser.ml"
+# 3094 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_193 =
   fun _1 ->
     (
-# 765 "src/parser.mly"
+# 788 "src/parser.mly"
                ( _1 )
-# 3076 "src/parser.ml"
+# 3102 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_194 =
   fun _2 ->
     (
-# 767 "src/parser.mly"
+# 790 "src/parser.mly"
  (
     SStmts(List.flatten _2)
   )
-# 3086 "src/parser.ml"
+# 3112 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_195 =
   fun _1 ->
     (
-# 770 "src/parser.mly"
+# 793 "src/parser.mly"
             ( expr_conv _1 )
-# 3094 "src/parser.ml"
+# 3120 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_196 =
   fun _1 ->
     (
-# 771 "src/parser.mly"
+# 794 "src/parser.mly"
                    ( _1 )
-# 3102 "src/parser.ml"
+# 3128 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_197 =
   fun _1 ->
     (
-# 772 "src/parser.mly"
+# 795 "src/parser.mly"
                         ( _1 )
-# 3110 "src/parser.ml"
+# 3136 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_198 =
   fun _1 ->
     (
-# 773 "src/parser.mly"
+# 796 "src/parser.mly"
                       ( _1 )
-# 3118 "src/parser.ml"
+# 3144 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_199 =
   fun _1 ->
     (
-# 774 "src/parser.mly"
+# 797 "src/parser.mly"
             ( _1 )
-# 3126 "src/parser.ml"
+# 3152 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_200 =
   fun () ->
     (
-# 513 "src/parser.mly"
+# 536 "src/parser.mly"
           ( ScsTypedef )
-# 3134 "src/parser.ml"
+# 3160 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_201 =
   fun () ->
     (
-# 514 "src/parser.mly"
+# 537 "src/parser.mly"
          ( ScsExtern )
-# 3142 "src/parser.ml"
+# 3168 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_202 =
   fun () ->
     (
-# 515 "src/parser.mly"
+# 538 "src/parser.mly"
          ( ScsStatic )
-# 3150 "src/parser.ml"
+# 3176 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_203 =
   fun () ->
     (
-# 516 "src/parser.mly"
+# 539 "src/parser.mly"
        ( ScsAuto )
-# 3158 "src/parser.ml"
+# 3184 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_204 =
   fun () ->
     (
-# 517 "src/parser.mly"
+# 540 "src/parser.mly"
            ( ScsRegister )
-# 3166 "src/parser.ml"
+# 3192 "src/parser.ml"
      : (Ctype.scs))
 
 let _menhir_action_205 =
   fun _1 _2 ->
     (
-# 568 "src/parser.mly"
+# 591 "src/parser.mly"
   (
     match _2 with
     | Some dl -> make_decls (TDeclSpec _1) dl
     | None -> raise (NotImpl "struct_decl")
   )
-# 3178 "src/parser.ml"
+# 3204 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_206 =
   fun () ->
     (
-# 574 "src/parser.mly"
+# 597 "src/parser.mly"
   ( raise (NotImpl "Static_assert") )
-# 3186 "src/parser.ml"
+# 3212 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_207 =
   fun _1 ->
     (
-# 563 "src/parser.mly"
+# 586 "src/parser.mly"
               ( _1 )
-# 3194 "src/parser.ml"
+# 3220 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_208 =
   fun _1 _2 ->
     (
-# 564 "src/parser.mly"
+# 587 "src/parser.mly"
                                ( _1@_2 )
-# 3202 "src/parser.ml"
+# 3228 "src/parser.ml"
      : (Ctype.decl list))
 
 let _menhir_action_209 =
   fun _1 ->
     (
-# 581 "src/parser.mly"
+# 604 "src/parser.mly"
              ( _1 )
-# 3210 "src/parser.ml"
+# 3236 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_210 =
   fun () ->
     (
-# 583 "src/parser.mly"
+# 606 "src/parser.mly"
   ( raise (NotImpl "Bitfield") )
-# 3218 "src/parser.ml"
+# 3244 "src/parser.ml"
      : (declarator))
 
 let _menhir_action_211 =
   fun _1 ->
     (
-# 577 "src/parser.mly"
+# 600 "src/parser.mly"
                     ( [_1] )
-# 3226 "src/parser.ml"
+# 3252 "src/parser.ml"
      : (declarator list))
 
 let _menhir_action_212 =
   fun _1 _3 ->
     (
-# 578 "src/parser.mly"
+# 601 "src/parser.mly"
                                                  ( _1@[_3] )
-# 3234 "src/parser.ml"
+# 3260 "src/parser.ml"
      : (declarator list))
 
 let _menhir_action_213 =
   fun _2 _4 ->
     (
-# 556 "src/parser.mly"
+# 579 "src/parser.mly"
                                                ( make_struct _2 (Some _4) )
-# 3242 "src/parser.ml"
-     : (Ast.def option * Ctype.ts))
+# 3268 "src/parser.ml"
+     : (Ast.def option * Ctype.ts * is_incomplete))
 
 let _menhir_action_214 =
   fun _2 ->
     (
-# 557 "src/parser.mly"
+# 580 "src/parser.mly"
                ( make_struct (Some _2) None )
-# 3250 "src/parser.ml"
-     : (Ast.def option * Ctype.ts))
+# 3276 "src/parser.ml"
+     : (Ast.def option * Ctype.ts * is_incomplete))
 
 let _menhir_action_215 =
   fun _2 _4 ->
     (
-# 558 "src/parser.mly"
+# 581 "src/parser.mly"
                                               ( make_union _2 (Some _4) )
-# 3258 "src/parser.ml"
-     : (Ast.def option * Ctype.ts))
+# 3284 "src/parser.ml"
+     : (Ast.def option * Ctype.ts * is_incomplete))
 
 let _menhir_action_216 =
   fun _2 ->
     (
-# 559 "src/parser.mly"
+# 582 "src/parser.mly"
               ( make_union (Some _2) None )
-# 3266 "src/parser.ml"
-     : (Ast.def option * Ctype.ts))
+# 3292 "src/parser.ml"
+     : (Ast.def option * Ctype.ts * is_incomplete))
 
 let _menhir_action_217 =
   fun _3 ->
     (
-# 836 "src/parser.mly"
+# 860 "src/parser.mly"
  (
     all_labels_exist ();
     SStmts(List.flatten _3)
   )
-# 3277 "src/parser.ml"
+# 3303 "src/parser.ml"
      : (Ast.stmt))
 
 let _menhir_action_218 =
   fun _1 ->
     (
-# 351 "src/parser.mly"
+# 374 "src/parser.mly"
   ( Program (List.flatten _1) )
-# 3285 "src/parser.ml"
+# 3311 "src/parser.ml"
      : (Ast.program))
 
 let _menhir_action_219 =
   fun _1 ->
     (
-# 678 "src/parser.mly"
+# 701 "src/parser.mly"
                  ( TDeclSpec _1 )
-# 3293 "src/parser.ml"
+# 3319 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_220 =
   fun _1 _2 ->
     (
-# 680 "src/parser.mly"
+# 703 "src/parser.mly"
   ( snd (make_decl (TDeclSpec _1) _2) )
-# 3301 "src/parser.ml"
+# 3327 "src/parser.ml"
      : (Ctype.ty))
 
 let _menhir_action_221 =
   fun () ->
     (
-# 543 "src/parser.mly"
+# 566 "src/parser.mly"
         ( TqConst )
-# 3309 "src/parser.ml"
+# 3335 "src/parser.ml"
      : (Ctype.tq))
 
 let _menhir_action_222 =
   fun () ->
     (
-# 544 "src/parser.mly"
+# 567 "src/parser.mly"
            ( TqVolatile )
-# 3317 "src/parser.ml"
+# 3343 "src/parser.ml"
      : (Ctype.tq))
 
 let _menhir_action_223 =
   fun () ->
     (
-# 520 "src/parser.mly"
+# 543 "src/parser.mly"
         ( TsVoid )
-# 3325 "src/parser.ml"
+# 3351 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_224 =
   fun () ->
     (
-# 521 "src/parser.mly"
+# 544 "src/parser.mly"
         ( TsChar )
-# 3333 "src/parser.ml"
+# 3359 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_225 =
   fun () ->
     (
-# 522 "src/parser.mly"
+# 545 "src/parser.mly"
          ( TsShort)
-# 3341 "src/parser.ml"
+# 3367 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_226 =
   fun () ->
     (
-# 523 "src/parser.mly"
+# 546 "src/parser.mly"
        ( TsInt )
-# 3349 "src/parser.ml"
+# 3375 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_227 =
   fun () ->
     (
-# 524 "src/parser.mly"
+# 547 "src/parser.mly"
         ( TsLong )
-# 3357 "src/parser.ml"
+# 3383 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_228 =
   fun () ->
     (
-# 525 "src/parser.mly"
+# 548 "src/parser.mly"
          ( TsFloat )
-# 3365 "src/parser.ml"
+# 3391 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_229 =
   fun () ->
     (
-# 526 "src/parser.mly"
+# 549 "src/parser.mly"
           ( TsDouble )
-# 3373 "src/parser.ml"
+# 3399 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_230 =
   fun () ->
     (
-# 527 "src/parser.mly"
+# 550 "src/parser.mly"
           ( TsSigned )
-# 3381 "src/parser.ml"
+# 3407 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_231 =
   fun () ->
     (
-# 528 "src/parser.mly"
+# 551 "src/parser.mly"
             ( TsUnsigned )
-# 3389 "src/parser.ml"
+# 3415 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_232 =
   fun _1 ->
     (
-# 529 "src/parser.mly"
+# 552 "src/parser.mly"
                        ( 
   match _1 with
-  | (Some def,ts) -> add_def def;ts
-  | (None,ts) -> ts
+  | (Some def,ts,Complete) -> add_ty_def def;ts
+  | (_,ts,_) -> ts
   )
-# 3401 "src/parser.ml"
+# 3427 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_233 =
   fun _1 ->
     (
-# 534 "src/parser.mly"
+# 557 "src/parser.mly"
             ( _1 )
-# 3409 "src/parser.ml"
+# 3435 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_234 =
   fun _1 ->
     (
-# 535 "src/parser.mly"
+# 558 "src/parser.mly"
           ( TsTypedef (get_typedef _1) )
-# 3417 "src/parser.ml"
+# 3443 "src/parser.ml"
      : (Ctype.ts))
 
 let _menhir_action_235 =
   fun _1 ->
     (
-# 389 "src/parser.mly"
+# 412 "src/parser.mly"
                ( _1 )
-# 3425 "src/parser.ml"
+# 3451 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_236 =
   fun _2 ->
     (
-# 390 "src/parser.mly"
+# 413 "src/parser.mly"
                  ( EUnary(PreInc, _2) )
-# 3433 "src/parser.ml"
+# 3459 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_237 =
   fun _2 ->
     (
-# 391 "src/parser.mly"
+# 414 "src/parser.mly"
                  ( EUnary(PreDec, _2) )
-# 3441 "src/parser.ml"
+# 3467 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_238 =
   fun _2 ->
     (
-# 392 "src/parser.mly"
+# 415 "src/parser.mly"
                  ( EUnary(Ref, _2) )
-# 3449 "src/parser.ml"
+# 3475 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_239 =
   fun _2 ->
     (
-# 393 "src/parser.mly"
+# 416 "src/parser.mly"
                  ( EUnary(Deref, _2) )
-# 3457 "src/parser.ml"
+# 3483 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_240 =
   fun _2 ->
     (
-# 394 "src/parser.mly"
+# 417 "src/parser.mly"
                  ( EUnary(Plus, _2) )
-# 3465 "src/parser.ml"
+# 3491 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_241 =
   fun _2 ->
     (
-# 395 "src/parser.mly"
+# 418 "src/parser.mly"
                   ( EUnary(Minus, _2) )
-# 3473 "src/parser.ml"
+# 3499 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_242 =
   fun _2 ->
     (
-# 396 "src/parser.mly"
+# 419 "src/parser.mly"
                 ( EUnary(BitNot, _2) )
-# 3481 "src/parser.ml"
+# 3507 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_243 =
   fun _2 ->
     (
-# 397 "src/parser.mly"
+# 420 "src/parser.mly"
                  ( EUnary(LogNot, _2) )
-# 3489 "src/parser.ml"
+# 3515 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_244 =
   fun _2 ->
     (
-# 398 "src/parser.mly"
+# 421 "src/parser.mly"
                     ( EUnary(Sizeof, _2) )
-# 3497 "src/parser.ml"
+# 3523 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_action_245 =
   fun _3 ->
     (
-# 399 "src/parser.mly"
+# 422 "src/parser.mly"
                                  ( ETyUnary(Sizeof,_3) )
-# 3505 "src/parser.ml"
+# 3531 "src/parser.ml"
      : (Ast.expr))
 
 let _menhir_print_token : token -> string =
@@ -14347,6 +14373,6 @@ let translation_unit =
     let MenhirBox_translation_unit v = _menhir_run_000 _menhir_stack _menhir_lexbuf _menhir_lexer in
     v
 
-# 852 "src/parser.mly"
+# 879 "src/parser.mly"
   
-# 14353 "src/parser.ml"
+# 14379 "src/parser.ml"

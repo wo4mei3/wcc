@@ -36,6 +36,12 @@ type item =
 and def = int * item
 [@@deriving show]
 
+and def_list = def list
+[@@deriving show]
+
+and def_ll = def_list list
+[@@deriving show]
+
 and expr =
 | EConst  of value
 | EVar    of int

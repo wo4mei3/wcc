@@ -1,12 +1,15 @@
-static struct X{int x;} func(struct Y{void *y;} a) {
+static struct X func(struct Y{void *y;} a) {
     return (struct X){0};
 }
+struct X;
+struct X{int x;};
 
 extern int printf(const char **, ...);
 
 extern int a(int(**[0])());
 
 int main () {
+    func();
     goto label;
     struct Y a; 
     struct Y{int a;};

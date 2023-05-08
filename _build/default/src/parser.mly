@@ -14,7 +14,8 @@
 
     let raise exn =
     match exn with
-    | ParserError msg -> Printf.printf "%s\n" msg;raise exn
+    | ParserError msg -> Printf.printf "ParserError: %s\n" msg;raise exn
+    | NotImpl msg -> Printf.printf "NotImpl: %s\n" msg;raise exn
     | _ -> raise exn
 
     let make_decl ty d = 
@@ -84,7 +85,7 @@
 
     let make_struct name_opt dl =
       let name = ref "" in
-      let (id,def_opt) =
+      let (id,def_opt,status) =
       match name_opt with
       | Some n -> 
         begin
@@ -94,26 +95,33 @@
             begin
               match dl with
               | Some _ -> raise (ParserError "redifinition")
-              | None -> (id,None)
+              | None -> (id,None,DontCare)
             end
           | (Some id,Incomplete) ->
             begin
               match dl with
-              | Some _ -> (id,Some (id,Struct(!name,dl)))
-              | None -> (id,None)
+              | Some _ -> (id,Some (id,Struct(!name,dl)),Complete)
+              | None -> (id,None,DontCare)
             end
           | _ -> 
             begin
               match lookup_struct_in_stack n with
-              | Some id -> (id,None)
-              | None -> let id = gen_id () in 
-                        (id,Some (id,Struct(!name,dl)))
+              | Some id -> (id,None,DontCare)
+              | None -> 
+                let id = gen_id () in
+                match dl with
+                | Some _ -> (id,Some (id,Struct(!name,dl)),Complete)
+                | None -> (id,None,DontCare)
             end
         end 
-      | None -> let id = gen_id () in 
-                (id,Some (id,Struct(!name,dl)))
+      | None -> let id = gen_id () in
+                match dl with 
+                | Some _ ->
+                  (id,Some (id,Struct(!name,dl)),Complete)
+                | None ->
+                  raise (ParserError "anonymous struct with no definition.")
       in
-      (def_opt, TsStruct id)
+      (def_opt, TsStruct id,status)
 
     let union_pred name =function
     | (_,Union(n,_)) when n = name ->
@@ -148,7 +156,7 @@
 
     let make_union name_opt dl =
       let name = ref "" in
-      let (id,def_opt) =
+      let (id,def_opt,status) =
       match name_opt with
       | Some n -> 
         begin
@@ -158,26 +166,34 @@
             begin
               match dl with
               | Some _ -> raise (ParserError "redifinition")
-              | None -> (id,None)
+              | None -> (id,None,DontCare)
             end
           | (Some id,Incomplete) ->
             begin
               match dl with
-              | Some _ -> (id,Some (id,Union(!name,dl)))
-              | None -> (id,None)
+              | Some _ -> (id,Some (id,Union(!name,dl)),Complete)
+              | None -> (id,None,DontCare)
             end
           | _ -> 
             begin
               match lookup_union_in_stack n with
-              | Some id -> (id,None)
-              | None -> let id = gen_id () in 
-                        (id,Some (id,Union(!name,dl)))
+              | Some id -> (id,None,DontCare)
+              | None -> 
+                let id = gen_id () in
+                match dl with
+                | Some _ -> (id,Some (id,Union(!name,dl)),Complete)
+                | None -> (id,None,DontCare)
             end
         end 
-      | None -> let id = gen_id () in 
-                (id,Some (id,Union(!name,dl)))
+      | None -> let id = gen_id () in
+                match dl with 
+                | Some _ ->
+                  (id,Some (id,Union(!name,dl)),Complete)
+                | None ->
+                  raise (ParserError "anonymous struct with no definition.")
       in
-      (def_opt, TsUnion id)
+      (def_opt, TsUnion id,status)
+      
 
     let lookup_var_in_scope name =
       let aux = function
@@ -229,15 +245,15 @@
     let def_stack:def list ref = ref []
 
     let def_stack_in_params:def list ref = ref []
-    
+
     let flush_stack () = 
-      def_stack := []  
+      def_stack := [] 
 
     let get_stack () =
       let ret = List.rev !def_stack in
       flush_stack ();
       ret
-
+    
     let in_params = ref false
     
     let enter_params () =
@@ -254,10 +270,17 @@
         add_def2 def
       else
         begin
+          push_def def
+        end
+
+    let add_ty_def def =
+      if !in_params then
+        add_def2 def
+      else
+        begin
           push_def def;
           def_stack := def::!def_stack
         end
-
 
     let flush_stack2 () = 
       def_stack_in_params := []  
@@ -528,8 +551,8 @@ type_spec:
 | TUNSIGNED { TsUnsigned }
 | struct_or_union_spec { 
   match $1 with
-  | (Some def,ts) -> add_def def;ts
-  | (None,ts) -> ts
+  | (Some def,ts,Complete) -> add_ty_def def;ts
+  | (_,ts,_) -> ts
   }
 | enum_spec { $1 }
 | TYPE_ID { TsTypedef (get_typedef $1) }
@@ -820,7 +843,8 @@ jump_stmt:
 | RETURN expr_stmt { SReturn $2 }
 
 external_decl:
-| function_def { $1 }
+| function_def
+  { $1 }
 | decl
   { get_stack () }
 
@@ -847,6 +871,9 @@ function_def:
     | SStmts l -> l 
     | _ -> raise (ParserError "function_def") in
     let def2_list = SStmts ((List.map (fun def -> SDef def) def2_list)@(get_stmts $2)) in
-    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))]
+    let def_list =
+    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))] in
+    List.iter add_def def_list;
+    def_list
   }
 %%

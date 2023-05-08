@@ -1,4 +1,3 @@
-
 type ty =
 | TFun of ty * decl list
 | TPtr of ty 

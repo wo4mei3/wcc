@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/wo4mei3/wcc
 # Auto-detected concurrency: 4
-$ /home/wo4mei3/.opam/4.14.1/bin/ocamlc.opt -config > /tmp/dune_160861_output
+$ /home/wo4mei3/.opam/4.14.1/bin/ocamlc.opt -config > /tmp/dune_b702e6_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -112,7 +112,7 @@ $ /home/wo4mei3/.opam/4.14.1/bin/ocamlc.opt -config > /tmp/dune_160861_output
 $ (cd _build/default && /home/wo4mei3/.opam/4.14.1/bin/menhir src/parser.mly --base src/parser --infer-write-query src/parser__mock.ml.mock)
 $ (cd _build/default && .ppx/0bb5094b13567c3c4e1ee33245b80e63/ppx.exe -o src/parser__mock.ml.pp.mock --impl src/parser__mock.ml.mock -corrected-suffix .ppx-corrected -diff-cmd - -dump-ast)
 $ (cd _build/default && /home/wo4mei3/.opam/4.14.1/bin/ocamldep.opt -modules -impl src/parser__mock.ml.pp.mock) > _build/default/src/.main.eobjs/parser__mock.impl.d
-$ (cd _build/.sandbox/461a2e3b954e685c59381f71289e03df/default && /home/wo4mei3/.opam/4.14.1/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I src/.main.eobjs/byte -I /home/wo4mei3/.opam/4.14.1/lib/ppx_deriving/runtime -I /home/wo4mei3/.opam/4.14.1/lib/result -open Dune__exe -short-paths -i -impl src/parser__mock.ml.pp.mock) > _build/.sandbox/461a2e3b954e685c59381f71289e03df/default/src/parser__mock.mli.inferred
+$ (cd _build/.sandbox/d8c9f17bda1d652a0eb486de967649e0/default && /home/wo4mei3/.opam/4.14.1/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I src/.main.eobjs/byte -I /home/wo4mei3/.opam/4.14.1/lib/ppx_deriving/runtime -I /home/wo4mei3/.opam/4.14.1/lib/result -open Dune__exe -short-paths -i -impl src/parser__mock.ml.pp.mock) > _build/.sandbox/d8c9f17bda1d652a0eb486de967649e0/default/src/parser__mock.mli.inferred
 $ (cd _build/default && /home/wo4mei3/.opam/4.14.1/bin/menhir src/parser.mly --base src/parser --infer-read-reply src/parser__mock.mli.inferred)
 $ (cd _build/default && .ppx/0bb5094b13567c3c4e1ee33245b80e63/ppx.exe -o src/parser.pp.ml --impl src/parser.ml -corrected-suffix .ppx-corrected -diff-cmd - -dump-ast)
 $ (cd _build/default && /home/wo4mei3/.opam/4.14.1/bin/ocamldep.opt -modules -impl src/parser.pp.ml) > _build/default/src/.main.eobjs/dune__exe__Parser.impl.d

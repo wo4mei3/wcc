@@ -11,9 +11,13 @@ let spr fmt s = (Printf.sprintf  fmt s)
 
 let in_declarator = ref false
 
-let curr_scope: def list ref = ref []
+let global_scope:def list ref = ref []
+
+let curr_scope: def list ref = global_scope
 
 let stack:def list list ref = ref []
+
+
 
 let peek_curr_scope () =
   List.hd !curr_scope
@@ -36,6 +40,7 @@ let get_var name =
   let pred (_,item) =
   match item with
   | Var((n,_),_) when n = name -> true
+  | Function(_,(n,_),_) when n = name -> true
   | _ -> false
   in
   let (id,_) = try 
@@ -50,7 +55,10 @@ let get_var name =
         aux tl
       end
     | [] ->
-      raise (EnvError  (spr "var not found: %s" name))
+    begin
+      (*Printf.printf "%s" (show_def_ll !stack);*)
+      raise (EnvError  (spr "var not found: %s\n" name))
+    end
     in aux !stack
   in id
 
@@ -72,6 +80,6 @@ let get_typedef name =
         aux tl
       end
     | [] ->
-      raise (EnvError (spr "typedef not found: %s" name))
+      raise (EnvError  (spr "typedef not found: %s\n" name))
     in aux !stack
   in id

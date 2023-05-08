@@ -112,13 +112,15 @@ val lookup_struct_in_scope : string -> int option * is_incomplete
 val lookup_struct_in_stack : string -> int option
 val make_struct :
   string option ->
-  Ctype.decl list option -> (int * Ast.item) option * Ctype.ts
+  Ctype.decl list option ->
+  (int * Ast.item) option * Ctype.ts * is_incomplete
 val union_pred : string -> 'a * Ast.item -> bool
 val lookup_union_in_scope : string -> int option * is_incomplete
 val lookup_union_in_stack : string -> int option
 val make_union :
   string option ->
-  Ctype.decl list option -> (int * Ast.item) option * Ctype.ts
+  Ctype.decl list option ->
+  (int * Ast.item) option * Ctype.ts * is_incomplete
 val lookup_var_in_scope : string -> bool
 val lookup_typedef_in_scope : string -> bool
 val is_typedef_definition : Ctype.ty -> bool
@@ -136,6 +138,7 @@ val enter_params : unit -> unit
 val leave_params : unit -> unit
 val add_def2 : Ast.def -> unit
 val add_def : Ast.def -> unit
+val add_ty_def : Ast.def -> unit
 val flush_stack2 : unit -> unit
 val get_stack2 : unit -> Ast.def list
 val expr_conv : Ast.expr option -> Ast.stmt
@@ -157,7 +160,7 @@ val xv_type_qual : Ctype.tq
 val xv_type_name : Ctype.ty
 val xv_translation_unit : Ast.program
 val xv_top_compound_stmt : Ast.stmt
-val xv_struct_or_union_spec : Ast.def option * Ctype.ts
+val xv_struct_or_union_spec : Ast.def option * Ctype.ts * is_incomplete
 val xv_struct_declarator_list : declarator list
 val xv_struct_declarator : declarator
 val xv_struct_decl_list : Ctype.decl list
