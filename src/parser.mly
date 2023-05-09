@@ -272,8 +272,6 @@
 
     let def_buf:def list ref = ref []
 
-    let def_buf_in_params:def list ref = ref []
-
     let flush_stack () = 
       def_buf := [] 
 
@@ -282,19 +280,28 @@
       flush_stack ();
       ret
 
-    let in_params = ref false
+    let curr_params = ref []
+
+    let params_stack = ref []
     
     let enter_params () =
-      in_params := true
+      params_stack := !curr_params::!params_stack;
+      curr_params := []
 
     let leave_params () =
-      in_params := false
+      curr_params := List.hd !params_stack;
+      params_stack := List.tl !params_stack
+
+    let is_in_params () =
+      match !curr_params with
+      | [] -> false
+      | _ -> true
 
     let add_def2 def =
-      def_buf_in_params := def::!def_buf_in_params
+      curr_params := def::!curr_params
     
     let add_def def =
-      if !in_params then
+      if is_in_params () then
         add_def2 def
       else
         begin
@@ -302,13 +309,9 @@
           def_buf := def::!def_buf
         end
 
-    let flush_stack2 () = 
-      def_buf_in_params := []  
 
     let get_params_buf () =
-      let ret = List.rev !def_buf_in_params in
-      flush_stack2 ();
-      ret
+      List.rev !curr_params
 
     let expr_conv = function
     | Some e -> SExpr e 
