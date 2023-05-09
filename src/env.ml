@@ -34,6 +34,7 @@ let enter_scope () =
   curr_scope := []
 
 let leave_scope () =
+  curr_scope := List.hd !stack;
   stack := List.tl !stack
 
 let get_var name =
