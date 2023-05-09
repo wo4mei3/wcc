@@ -302,15 +302,6 @@
           def_buf := def::!def_buf
         end
 
-    let add_ty_def def =
-      if !in_params then
-        add_def2 def
-      else
-        begin
-          push_def def;
-          def_buf := def::!def_buf
-        end
-
     let flush_stack2 () = 
       def_buf_in_params := []  
 
@@ -580,7 +571,7 @@ type_spec:
 | TUNSIGNED { TsUnsigned }
 | struct_or_union_spec { 
   match $1 with
-  | (Some def,ts,_) -> add_ty_def def;ts
+  | (Some def,ts,_) -> add_def def;ts
   | (_,ts,_) -> ts
   }
 | enum_spec { $1 }
