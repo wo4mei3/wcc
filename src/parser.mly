@@ -576,15 +576,10 @@ alignment_spec:
   { raise (NotImpl "ALIGNAS") }
 
 struct_or_union_spec:
-| STRUCT ident? LBRACE struct_decl_list RBRACE { make_struct $2 (Some $4) }
+| STRUCT ident? LBRACE list(struct_decl) RBRACE { make_struct $2 (Some (List.flatten $4)) }
 | STRUCT ident { make_struct (Some $2) None } 
-| UNION ident? LBRACE struct_decl_list RBRACE { make_union $2 (Some $4) }
+| UNION ident? LBRACE list(struct_decl) RBRACE { make_union $2 (Some (List.flatten $4)) }
 | UNION ident { make_union (Some $2) None }
-
-
-struct_decl_list:
-| struct_decl { $1 }
-| struct_decl_list struct_decl { $1@$2 }
 
 struct_decl:
 | spec_qual_list struct_declarator_list? SEMI
@@ -785,16 +780,16 @@ decl_for_for_stmt:
   { peek_curr_scope () }
 
 stmt_for_for_stmt:
-| labeled_stmt { $1 }
+| labeled_stmt leave_scope { $1 }
 | LBRACE list(item) RBRACE leave_scope
 	{
     SStmts(List.flatten $2)
   }
-| expr_stmt { expr_conv $1 }
-| selection_stmt_1 { $1 }
-| selection_stmt_2 end_ { $1 }
-| iteration_stmt end_ { $1 }
-| jump_stmt { $1 }
+| expr_stmt leave_scope { expr_conv $1 }
+| selection_stmt_1 leave_scope { $1 }
+| selection_stmt_2 end_ leave_scope { $1 }
+| iteration_stmt end_ leave_scope { $1 }
+| jump_stmt leave_scope { $1 }
 
 iteration_stmt:
 | WHILE LPAREN expr RPAREN begin_ stmt
@@ -867,12 +862,8 @@ function_def:
   {
     let (decl,def_list) = $1 in
     let def2_list = get_stack2 () in
-    let get_stmts = function 
-    | SStmts l -> l 
-    | _ -> raise (ParserError "function_def") in
-    let def2_list = SStmts ((List.map (fun def -> SDef def) def2_list)@(get_stmts $2)) in
     let def_list =
-    def_list@[(gen_id (),Function(get_stack2 ()@get_params (snd decl),decl,Some def2_list))] in
+    def_list@[(gen_id (),Function(def2_list@get_params (snd decl),decl,Some $2))] in
     List.iter add_def def_list;
     def_list
   }
