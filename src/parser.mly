@@ -785,7 +785,7 @@ case_or_default:
 
 compound_stmt:
 | enter_scope LBRACE list(item) RBRACE leave_scope
-	{
+  {
     SStmts(List.flatten $3)
   }
 
@@ -811,7 +811,7 @@ decl_for_for_stmt:
 stmt_for_for_stmt:
 | labeled_stmt leave_scope { $1 }
 | LBRACE list(item) RBRACE leave_scope
-	{
+  {
     SStmts(List.flatten $2)
   }
 | expr_stmt leave_scope { expr_conv $1 }
@@ -880,7 +880,7 @@ function_decl:
 
 top_compound_stmt:
 | enter_scope LBRACE list(item) RBRACE leave_scope
-	{
+  {
     all_labels_exist ();
     SStmts(List.flatten $3)
   }
