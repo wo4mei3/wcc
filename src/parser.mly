@@ -403,9 +403,9 @@ ident:
 primary_expr:
 | ID { EVar (get_var $1) }
 | INT { EConst (VInt $1) }
-| UINT { ECast(TDeclSpec[(Ts TsUInt)],EConst(VInt $1)) }
+| UINT { ECast(TDeclSpec[(Ts TsInt);(Ts TsUnsigned)],EConst(VInt $1)) }
 | LINT { ECast(TDeclSpec[(Ts TsLong)],EConst(VInt $1)) }
-| ULINT { ECast(TDeclSpec[(Ts TsULong)],EConst(VInt $1)) }
+| ULINT { ECast(TDeclSpec[(Ts TsLong);(Ts TsUnsigned)],EConst(VInt $1)) }
 | FLOAT { EConst (VFloat $1) }
 | DOUBLE { ECast(TDeclSpec[(Ts TsDouble)],EConst(VFloat $1)) }
 | STR { EConst (VStr $1) }

@@ -1,5 +1,14 @@
 open Ctype
 
+exception ASTError of string
+
+let raise exn =
+  match exn with
+  (*| ASTError msg -> Printf.printf "%s\n" msg;raise exn*)
+  | _ -> raise exn
+
+let spr fmt s = (Printf.sprintf  fmt s)
+
 type value =
 | VInt   of int
 | VFloat of float
@@ -92,3 +101,75 @@ and stmt =
 type program =
 | Program of def list
 [@@deriving show]
+
+let rec get_def_from_ast id program =
+  match program with
+  | Program l ->
+    get_def_from_def_list id l 
+
+and get_def_from_def_list id l =
+  match l with
+  | [] -> None
+  | x::xs ->
+  match get_def_from_def id x with
+  | Some x -> Some x
+  | None -> get_def_from_def_list id xs
+
+and get_def_from_def id def =
+  match def with
+  | (i, Var(_,_)) when id = i -> Some def
+  | (i, Param(_)) when id = i -> Some def
+  | (i, Struct(_,_)) when id = i -> Some def
+  | (i, Union(_,_)) when id = i -> Some def
+  | (i, Enum(_,_)) when id = i -> Some def
+  | (i, Typedef(_)) when id = i -> Some def
+  | (i, Function(_,_,_)) when id = i -> Some def
+  | (_, Function(def_list,_,stmt_opt)) ->
+  begin
+        let rec get_def_from_stmts id stmts =
+        match stmts with
+        | [] -> None
+        | x::xs ->
+        begin
+          match get_def_from_stmt id x with
+          | Some _ as def -> def
+          | None -> get_def_from_stmts id xs
+        end
+        and get_def_from_stmt id stmt = 
+          match stmt with
+          | SDef def -> get_def_from_def id def
+          | SStmts l -> get_def_from_stmts id l 
+          | SWhile(_,stmt,_,_) -> get_def_from_stmt id stmt
+          | SDoWhile(stmt,_,_,_) -> get_def_from_stmt id stmt
+          | SFor(def_opt,_,_,_,stmt,_,_) ->
+          begin
+            match def_opt with
+            | Some def -> 
+            begin 
+              match get_def_from_def id def with
+              | Some _ as def -> def
+              | None -> get_def_from_stmt id stmt
+            end
+            | None -> get_def_from_stmt id stmt
+          end
+          | SIfElse(_,s1,s2) ->
+          begin
+            match get_def_from_stmt id s1 with
+            | Some _ as def -> def
+            | None -> get_def_from_stmt id s2
+          end
+          | SSwitch(_,stmts,_) -> get_def_from_stmts id stmts
+          | SCase(_,stmts) -> get_def_from_stmts id stmts
+          | SDefault(stmts) -> get_def_from_stmts id stmts
+          | _ -> None
+        in
+    match get_def_from_def_list id def_list with
+    | Some _ as def -> def
+    | None ->
+    begin
+      match stmt_opt with
+      | Some stmt -> get_def_from_stmt id stmt
+      | None -> None
+    end
+  end
+  | _ -> None

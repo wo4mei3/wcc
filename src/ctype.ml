@@ -1,3 +1,12 @@
+exception TypeError of string
+
+let raise exn =
+  match exn with
+  (*| TypeError msg -> Printf.printf "%s\n" msg;raise exn*)
+  | _ -> raise exn
+
+let spr fmt s = (Printf.sprintf  fmt s)
+
 type ty =
 | TFun of ty * decl list
 | TPtr of ty 
@@ -17,7 +26,6 @@ and ds =
 
 and ts =
 | TsInt  | TsShort  | TsLong  | TsChar
-| TsUInt | TsUShort | TsULong | TsUChar
 | TsFloat | TsDouble | TsSigned | TsUnsigned
 | TsVoid
 | TsStruct of int
@@ -42,3 +50,4 @@ and fs =
 | FsInline
 | FsNoreturn
 [@@deriving show]
+
