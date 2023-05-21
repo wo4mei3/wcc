@@ -218,13 +218,13 @@ rule token = parse
 | (integer as i) ("ul" | "UL")
   { ULINT (stoi i) }
 | '\'' (char as c) '\''
-  { INT (cast_char_to_int c) }
+  { CHAR (cast_char_to_int c) }
 | (fnum as f) [ 'f' 'F' ]?
   { FLOAT (float_of_string f) }
 | (fnum as f) [ 'l' 'L' ]
   { DOUBLE (float_of_string f) }
 | '\"'
-  { STR (string_elements lexbuf) }
+  { STR ((string_elements lexbuf)@0::[]) }
 | ident  as n
   {
     let is_type_id name =

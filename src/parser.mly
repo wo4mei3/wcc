@@ -378,7 +378,7 @@
 %token STRUCT UNION ENUM 
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
-%token <int> INT UINT LINT ULINT
+%token <int> CHAR INT UINT LINT ULINT
 %token <float> FLOAT DOUBLE
 %token<int list> STR
 %token<string> ID TYPE_ID
@@ -403,13 +403,14 @@ ident:
 
 primary_expr:
 | ID { EVar (None, get_var $1) }
-| INT { EConst (None, VInt $1) }
-| UINT { ECast(None, TDeclSpec[(Ts TsInt);(Ts TsUnsigned)],EConst(None, VInt $1)) }
-| LINT { ECast(None, TDeclSpec[(Ts TsLong)],EConst(None, VInt $1)) }
-| ULINT { ECast(None, TDeclSpec[(Ts TsLong);(Ts TsUnsigned)],EConst(None, VInt $1)) }
-| FLOAT { EConst (None, VFloat $1) }
-| DOUBLE { ECast(None, TDeclSpec[(Ts TsDouble)],EConst(None, VFloat $1)) }
-| STR { EConst (None, VStr $1) }
+| CHAR { EConst (Some (TDeclSpec[(Ts TsChar)]), VInt $1) }
+| INT { EConst (Some (TDeclSpec[(Ts TsInt)]), VInt $1) }
+| UINT { EConst(Some (TDeclSpec[(Ts TsInt);(Ts TsUnsigned)]), VInt $1) }
+| LINT { EConst(Some (TDeclSpec[(Ts TsLong)]), VInt $1) }
+| ULINT { EConst(Some (TDeclSpec[(Ts TsLong);(Ts TsUnsigned)]), VInt $1) }
+| FLOAT { EConst (Some (TDeclSpec[(Ts TsFloat)]), VFloat $1) }
+| DOUBLE { EConst(Some (TDeclSpec[(Ts TsDouble)]), VFloat $1) }
+| STR { EConst (Some (TArr(TDeclSpec[(Ts TsChar)],List.length $1)), VStr $1) }
 | LPAREN expr RPAREN
    { $2 }
 

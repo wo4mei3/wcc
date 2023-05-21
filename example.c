@@ -29,4 +29,4 @@ label :
     }
 return 0;
 }
-int **var[5];
+int **var[5] = "abc";
