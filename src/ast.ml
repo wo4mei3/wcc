@@ -52,16 +52,16 @@ and def_ll = def_list list
 [@@deriving show]
 
 and expr =
-| EConst  of value
-| EVar    of int
-| EBinary  of binary * expr * expr
-| EAssign of binary option * expr * expr
-| EUnary  of unary * expr
-| ETyUnary of unary * ty
-| EPostfix of expr * postfix
-| ECond   of expr * expr * expr
-| ECast   of ty * expr
-| ECompoundLit of ty * init
+| EConst  of ty option * value
+| EVar    of ty option * int
+| EBinary  of ty option * binary * expr * expr
+| EAssign of ty option * binary option * expr * expr
+| EUnary  of ty option * unary * expr
+| ETyUnary of ty option * unary * ty
+| EPostfix of ty option * expr * postfix
+| ECond   of ty option * expr * expr * expr
+| ECast   of ty option * ty * expr
+| ECompoundLit of ty option * ty * init
 [@@deriving show]
 
 and postfix =
@@ -119,9 +119,9 @@ and get_def_from_def id def =
   match def with
   | (i, Var(_,_)) when id = i -> Some def
   | (i, Param(_)) when id = i -> Some def
-  | (i, Struct(_,_)) when id = i -> Some def
-  | (i, Union(_,_)) when id = i -> Some def
-  | (i, Enum(_,_)) when id = i -> Some def
+  | (i, Struct(_,Some _)) when id = i -> Some def
+  | (i, Union(_,Some _)) when id = i -> Some def
+  | (i, Enum(_,Some _)) when id = i -> Some def
   | (i, Typedef(_)) when id = i -> Some def
   | (i, Function(_,_,_)) when id = i -> Some def
   | (_, Function(def_list,_,stmt_opt)) ->
@@ -173,3 +173,8 @@ and get_def_from_def id def =
     end
   end
   | _ -> None
+
+let get_typedef_from_ast id program =
+  match get_def_from_ast id program with
+  | Some  (_,Typedef(_) as def) -> def
+  | _ -> raise (ASTError (spr "typedef not found with id %d" id))

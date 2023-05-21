@@ -51,3 +51,9 @@ and fs =
 | FsNoreturn
 [@@deriving show]
 
+let rec get_declspecs ty =
+  match ty with
+  | TFun(t,_) -> get_declspecs t 
+  | TPtr t -> get_declspecs t 
+  | TArr(t,_) -> get_declspecs t 
+  | TDeclSpec dsl -> dsl

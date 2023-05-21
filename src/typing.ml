@@ -1,6 +1,6 @@
 open Ctype
 
-let declspecs dsl attr =
+let rec declspecs attr is_encountered dsl program =
   let is_typedef = ref false
   and is_static = ref false
   and is_extern = ref false
@@ -36,8 +36,7 @@ let declspecs dsl attr =
   "typedef may not be used together with static, extern, inline"))
   else ()
   ;
-  let is_encountered = ref false
-  and is_char_or_int = ref false
+  let is_char_or_int = ref false
   and is_int = ref false
   and is_int_or_double = ref false
   and is_short = ref false
@@ -54,7 +53,17 @@ let declspecs dsl attr =
   | Ts TsDouble -> is_encountered := true; is_int_or_double := true
   | Ts (TsStruct _)
   | Ts (TsUnion _) -> is_encountered := true
-  | Ts (TsTypedef _)
+  | Ts (TsTypedef i) -> is_encountered := true;
+  begin 
+    match get_def_from_ast i program with
+    | Some  (_,Typedef(decl)) -> 
+    begin
+      let ty = snd decl in
+      let dsl = get_declspecs ty in
+      declspecs attr is_encountered dsl program
+    end
+    | _ -> raise (ASTError (spr "typedef not found with id %d" id))
+  end
   | _ -> ()
   in
   List.iter pred dsl;

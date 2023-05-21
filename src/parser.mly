@@ -400,32 +400,33 @@ ident:
 | ID { $1 }
 | TYPE_ID { $1 }
 
+
 primary_expr:
-| ID { EVar (get_var $1) }
-| INT { EConst (VInt $1) }
-| UINT { ECast(TDeclSpec[(Ts TsInt);(Ts TsUnsigned)],EConst(VInt $1)) }
-| LINT { ECast(TDeclSpec[(Ts TsLong)],EConst(VInt $1)) }
-| ULINT { ECast(TDeclSpec[(Ts TsLong);(Ts TsUnsigned)],EConst(VInt $1)) }
-| FLOAT { EConst (VFloat $1) }
-| DOUBLE { ECast(TDeclSpec[(Ts TsDouble)],EConst(VFloat $1)) }
-| STR { EConst (VStr $1) }
+| ID { EVar (None, get_var $1) }
+| INT { EConst (None, VInt $1) }
+| UINT { ECast(None, TDeclSpec[(Ts TsInt);(Ts TsUnsigned)],EConst(None, VInt $1)) }
+| LINT { ECast(None, TDeclSpec[(Ts TsLong)],EConst(None, VInt $1)) }
+| ULINT { ECast(None, TDeclSpec[(Ts TsLong);(Ts TsUnsigned)],EConst(None, VInt $1)) }
+| FLOAT { EConst (None, VFloat $1) }
+| DOUBLE { ECast(None, TDeclSpec[(Ts TsDouble)],EConst(None, VFloat $1)) }
+| STR { EConst (None, VStr $1) }
 | LPAREN expr RPAREN
    { $2 }
 
 postfix_expr:
 | primary_expr { $1 }
-| postfix_expr LBRACKET expr RBRACKET { EPostfix($1,Nth $3) }
+| postfix_expr LBRACKET expr RBRACKET { EPostfix(None, $1,Nth $3) }
 | postfix_expr LPAREN argument_expr_list? RPAREN
   { 
     match $3 with
-    | Some l -> EPostfix($1,Call l)
-    | None -> EPostfix($1,Call [])
+    | Some l -> EPostfix(None, $1,Call l)
+    | None -> EPostfix(None, $1,Call [])
   }
-| postfix_expr DOT ident { EPostfix($1,Member $3) }
-| postfix_expr ARROW ident { EPostfix(EUnary(Deref,$1),Member $3) }
-| postfix_expr INC { EPostfix($1,Inc) }
-| postfix_expr DEC { EPostfix($1,Dec) }
-| LPAREN type_name RPAREN LBRACE init_list COMMA? RBRACE { ECompoundLit($2,IVect $5) }
+| postfix_expr DOT ident { EPostfix(None, $1,Member $3) }
+| postfix_expr ARROW ident { EPostfix(None, EUnary(None, Deref,$1),Member $3) }
+| postfix_expr INC { EPostfix(None, $1,Inc) }
+| postfix_expr DEC { EPostfix(None, $1,Dec) }
+| LPAREN type_name RPAREN LBRACE init_list COMMA? RBRACE { ECompoundLit(None, $2,IVect $5) }
 
 argument_expr_list:
 | assignment_expr { [$1] }
@@ -433,95 +434,96 @@ argument_expr_list:
 
 unary_expr:
 | postfix_expr { $1 }
-| INC unary_expr { EUnary(PreInc, $2) }
-| DEC unary_expr { EUnary(PreDec, $2) }
-| AND cast_expr  { EUnary(Ref, $2) }
-| STAR cast_expr { EUnary(Deref, $2) }
-| PLUS cast_expr { EUnary(Plus, $2) }
-| MINUS cast_expr { EUnary(Minus, $2) }
-| NOT cast_expr { EUnary(BitNot, $2) }
-| BANG cast_expr { EUnary(LogNot, $2) }
-| SIZEOF unary_expr { EUnary(Sizeof, $2) }
-| SIZEOF LPAREN type_name RPAREN { ETyUnary(Sizeof,$3) }
+| INC unary_expr { EUnary(None, PreInc, $2) }
+| DEC unary_expr { EUnary(None, PreDec, $2) }
+| AND cast_expr  { EUnary(None, Ref, $2) }
+| STAR cast_expr { EUnary(None, Deref, $2) }
+| PLUS cast_expr { EUnary(None, Plus, $2) }
+| MINUS cast_expr { EUnary(None, Minus, $2) }
+| NOT cast_expr { EUnary(None, BitNot, $2) }
+| BANG cast_expr { EUnary(None, LogNot, $2) }
+| SIZEOF unary_expr { EUnary(None, Sizeof, $2) }
+| SIZEOF LPAREN type_name RPAREN { ETyUnary(None, Sizeof,$3) }
 
 
 cast_expr:
 | unary_expr { $1 }
-| LPAREN type_name RPAREN cast_expr { ECast($2,$4) }
+| LPAREN type_name RPAREN cast_expr { ECast(None, $2,$4) }
 
 multiplicative_expr:
 | cast_expr { $1 }
-| multiplicative_expr STAR cast_expr { EBinary(Mul,$1,$3) }
-| multiplicative_expr DIV cast_expr { EBinary(Div,$1,$3) }
-| multiplicative_expr MOD cast_expr { EBinary(Mod,$1,$3) }
+| multiplicative_expr STAR cast_expr { EBinary(None, Mul,$1,$3) }
+| multiplicative_expr DIV cast_expr { EBinary(None, Div,$1,$3) }
+| multiplicative_expr MOD cast_expr { EBinary(None, Mod,$1,$3) }
 
 additive_expr:
 | multiplicative_expr { $1 }
-| additive_expr PLUS multiplicative_expr { EBinary(Add,$1,$3) }
-| additive_expr MINUS multiplicative_expr { EBinary(Sub,$1,$3) }
+| additive_expr PLUS multiplicative_expr { EBinary(None, Add,$1,$3) }
+| additive_expr MINUS multiplicative_expr { EBinary(None, Sub,$1,$3) }
 
 shift_expr:
 | additive_expr { $1 }
-| shift_expr LSHIFT additive_expr { EBinary(LShift,$1,$3) }
-| shift_expr RSHIFT additive_expr { EBinary(RShift,$1,$3) }
+| shift_expr LSHIFT additive_expr { EBinary(None, LShift,$1,$3) }
+| shift_expr RSHIFT additive_expr { EBinary(None, RShift,$1,$3) }
 
 relational_expr:
 | shift_expr { $1 }
-| relational_expr LT shift_expr { EBinary(Lt,$1,$3) }
-| relational_expr GT shift_expr { EBinary(Gt,$1,$3) }
-| relational_expr LE shift_expr { EBinary(Le,$1,$3) }
-| relational_expr GE shift_expr { EBinary(Ge,$1,$3) }
+| relational_expr LT shift_expr { EBinary(None, Lt,$1,$3) }
+| relational_expr GT shift_expr { EBinary(None, Gt,$1,$3) }
+| relational_expr LE shift_expr { EBinary(None, Le,$1,$3) }
+| relational_expr GE shift_expr { EBinary(None, Ge,$1,$3) }
 
 equality_expr:
 | relational_expr { $1 }
-| equality_expr EQEQ relational_expr { EBinary(Eq,$1,$3) }
-| equality_expr NE relational_expr { EBinary(Ne,$1,$3) }
+| equality_expr EQEQ relational_expr { EBinary(None, Eq,$1,$3) }
+| equality_expr NE relational_expr { EBinary(None, Ne,$1,$3) }
 
 and_expr:
 | equality_expr { $1 }
-| and_expr AND equality_expr { EBinary(BitAnd,$1,$3) }
+| and_expr AND equality_expr { EBinary(None, BitAnd,$1,$3) }
 
 exclusive_or_expr:
 | and_expr { $1 }
-| exclusive_or_expr HAT and_expr { EBinary(BitXor,$1,$3) }
+| exclusive_or_expr HAT and_expr { EBinary(None, BitXor,$1,$3) }
 
 inclusive_or_expr:
 | exclusive_or_expr { $1 }
-| inclusive_or_expr OR exclusive_or_expr { EBinary(BitOr,$1,$3) }
+| inclusive_or_expr OR exclusive_or_expr { EBinary(None, BitOr,$1,$3) }
 
 logical_and_expr:
 | inclusive_or_expr { $1 }
-| logical_and_expr ANDAND inclusive_or_expr { EBinary(LogAnd,$1,$3) }
+| logical_and_expr ANDAND inclusive_or_expr { EBinary(None, LogAnd,$1,$3) }
 
 logical_or_expr:
 | logical_and_expr { $1 }
-| logical_or_expr OROR logical_and_expr { EBinary(LogOr,$1,$3) }
+| logical_or_expr OROR logical_and_expr { EBinary(None, LogOr,$1,$3) }
 
 conditional_expr:
 | logical_or_expr { $1 }
-| logical_or_expr QUESTION expr COLON conditional_expr { ECond($1,$3,$5) }
+| logical_or_expr QUESTION expr COLON conditional_expr { ECond(None, $1,$3,$5) }
 
 assignment_expr:
 | conditional_expr { $1 }
-| unary_expr EQ assignment_expr { EAssign(None, $1,$3) }
-| unary_expr MUL_EQ assignment_expr { EAssign(Some Mul, $1,$3) }
-| unary_expr DIV_EQ assignment_expr { EAssign(Some Div, $1,$3) }
-| unary_expr MOD_EQ assignment_expr { EAssign(Some Mod, $1,$3) }
-| unary_expr ADD_EQ assignment_expr { EAssign(Some Add, $1,$3) }
-| unary_expr SUB_EQ assignment_expr { EAssign(Some Sub, $1,$3) }
-| unary_expr LSHIFT_EQ assignment_expr { EAssign(Some LShift, $1,$3) }
-| unary_expr RSHIFT_EQ assignment_expr { EAssign(Some RShift, $1,$3) }
-| unary_expr AND_EQ assignment_expr { EAssign(Some BitAnd, $1,$3) }
-| unary_expr XOR_EQ assignment_expr { EAssign(Some BitXor, $1,$3) }
-| unary_expr OR_EQ assignment_expr { EAssign(Some BitOr, $1,$3) }
+| unary_expr EQ assignment_expr { EAssign(None, None, $1,$3) }
+| unary_expr MUL_EQ assignment_expr { EAssign(None, Some Mul, $1,$3) }
+| unary_expr DIV_EQ assignment_expr { EAssign(None, Some Div, $1,$3) }
+| unary_expr MOD_EQ assignment_expr { EAssign(None, Some Mod, $1,$3) }
+| unary_expr ADD_EQ assignment_expr { EAssign(None, Some Add, $1,$3) }
+| unary_expr SUB_EQ assignment_expr { EAssign(None, Some Sub, $1,$3) }
+| unary_expr LSHIFT_EQ assignment_expr { EAssign(None, Some LShift, $1,$3) }
+| unary_expr RSHIFT_EQ assignment_expr { EAssign(None, Some RShift, $1,$3) }
+| unary_expr AND_EQ assignment_expr { EAssign(None, Some BitAnd, $1,$3) }
+| unary_expr XOR_EQ assignment_expr { EAssign(None, Some BitXor, $1,$3) }
+| unary_expr OR_EQ assignment_expr { EAssign(None, Some BitOr, $1,$3) }
 
 expr:
 | assignment_expr { $1 }
-| expr COMMA assignment_expr { EBinary(Comma,$1,$3) }
+| expr COMMA assignment_expr { EBinary(None, Comma,$1,$3) }
 
 constant_expr:
 | conditional_expr
   { 0 }
+
 
 decl:
 | decl_specs SEMI { () }
