@@ -30,3 +30,4 @@ label :
 return 0;
 }
 int **var[5] = "abc";
+char c = '\n';

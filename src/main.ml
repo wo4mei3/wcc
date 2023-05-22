@@ -29,7 +29,7 @@ let () =
     let program = Parser.translation_unit (conv Lexer.token) filebuf in
     Printf.printf "%s\n" (Ast.show_program program)
   with
-  | Lexer.LexerError msg -> Printf.printf "%s" msg
+  | Lexer.LexerError msg -> Printf.printf "Lexer error:%s" msg
   | Env.EnvError msg -> Printf.printf "%s" msg
   | _ -> print_tok !curr_pos !curr_token;
   print_endline "something went wrong."
