@@ -52,16 +52,16 @@ and def_ll = def_list list
 [@@deriving show]
 
 and expr =
-| EConst  of ty option * value
-| EVar    of ty option * int
-| EBinary  of ty option * binary * expr * expr
-| EAssign of ty option * binary option * expr * expr
-| EUnary  of ty option * unary * expr
-| ETyUnary of ty option * unary * ty
-| EPostfix of ty option * expr * postfix
-| ECond   of ty option * expr * expr * expr
-| ECast   of ty option * ty * expr
-| ECompoundLit of ty option * ty * init
+| EConst  of ty option ref * value
+| EVar    of ty option ref * int
+| EBinary  of ty option ref * binary * expr * expr
+| EAssign of ty option ref * binary option * expr * expr
+| EUnary  of ty option ref * unary * expr
+| ETyUnary of ty option ref * unary * ty
+| EPostfix of ty option ref * expr * postfix
+| ECond   of ty option ref * expr * expr * expr
+| ECast   of ty option ref * ty * expr
+| ECompoundLit of ty option ref * ty * init
 [@@deriving show]
 
 and postfix =
