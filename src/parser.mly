@@ -39,13 +39,38 @@
       item_id := !item_id + 1;
       !item_id
 
+    let unsigned_flag = ref false
+
+    let get_declspecs = function
+    | Some (TDeclSpec x) when !unsigned_flag  ->
+      TDeclSpec ( 
+        List.map (
+        function
+        | Ts TsChar -> Ts TsUChar
+        | Ts TsInt -> Ts TsUInt
+        | Ts TsShort -> Ts TsUShort
+        | Ts TsLong -> Ts TsULong
+        | _ as ds -> ds
+      ) x )
+    | Some ty -> ty
+    | None when !unsigned_flag -> TDeclSpec ([Ts TsUInt])
+    | None -> TDeclSpec ([Ts TsInt])
+
+
     let append_ds_list a b =
       let pred a b c = 
       match (a,b,c) with
-      | (TDeclSpec x,TDeclSpec y,TDeclSpec z) -> TDeclSpec(x@y@z) 
+      | (None,None,None) -> None
+      | (Some (TDeclSpec x),None,None) -> Some (TDeclSpec(x))
+      | (None,Some (TDeclSpec y),None) -> Some (TDeclSpec(y))
+      | (None,None,Some (TDeclSpec z)) -> Some (TDeclSpec(z))
+      | (Some (TDeclSpec x),Some (TDeclSpec y),None) -> Some (TDeclSpec(x@y))
+      | (Some (TDeclSpec x),None,Some (TDeclSpec z)) -> Some (TDeclSpec(x@z))
+      | (None,Some (TDeclSpec y),Some (TDeclSpec z)) -> Some (TDeclSpec(y@z))
+      | (Some (TDeclSpec x),Some (TDeclSpec y),Some (TDeclSpec z)) -> Some (TDeclSpec(x@y@z))
       | _ -> raise (ParserError "decl_spec")
       in
-      List.fold_left2 pred (TDeclSpec []) a b
+      List.fold_left2 pred None a b
 
     type is_incomplete =
     | Complete
@@ -405,9 +430,9 @@ primary_expr:
 | ID { EVar (ref None, get_var $1) }
 | CHAR { EConst (ref (Some (TDeclSpec[(Ts TsChar)])), VInt $1) }
 | INT { EConst (ref (Some (TDeclSpec[(Ts TsInt)])), VInt $1) }
-| UINT { EConst(ref (Some (TDeclSpec[(Ts TsInt);(Ts TsUnsigned)])), VInt $1) }
+| UINT { EConst(ref (Some (TDeclSpec[(Ts TsUInt)])), VInt $1) }
 | LINT { EConst(ref (Some (TDeclSpec[(Ts TsLong)])), VInt $1) }
-| ULINT { EConst(ref (Some (TDeclSpec[(Ts TsLong);(Ts TsUnsigned)])), VInt $1) }
+| ULINT { EConst(ref (Some (TDeclSpec[(Ts TsULong)])), VInt $1) }
 | FLOAT { EConst (ref (Some (TDeclSpec[(Ts TsFloat)])), VFloat $1) }
 | DOUBLE { EConst(ref (Some (TDeclSpec[(Ts TsDouble)])), VFloat $1) }
 | STR { EConst (ref (Some (TArr(TDeclSpec[(Ts TsChar)],List.length $1))), VStr $1) }
@@ -536,15 +561,28 @@ decl:
 | static_assert_decl  { raise (NotImpl "Static_assert") }
 
 decl_spec:
-| storage_class_spec { TDeclSpec [Scs $1] }
-| type_qual { TDeclSpec [Tq $1] }
-| function_spec { TDeclSpec [Fs $1] }
+| storage_class_spec { Some (TDeclSpec [Scs $1]) }
+| type_qual { Some (TDeclSpec [Tq $1]) }
+| function_spec { Some (TDeclSpec [Fs $1]) }
 | alignment_spec { raise (NotImpl "not implemented") }
-| type_spec { TDeclSpec [Ts $1] }
+| type_spec 
+  { 
+    match $1 with
+    | Some ts -> Some (TDeclSpec [Ts ts])
+    | None -> None
+  }
 
 decl_specs:
+| decl_specs_sub
+  {
+    let ret = get_declspecs $1 in
+    unsigned_flag := false;
+    ret
+  }
+
+decl_specs_sub:
 | decl_spec { $1 }
-| decl_specs decl_spec
+| decl_specs_sub decl_spec
   { append_ds_list [$1] [$2] }
 
 init_declarator_list:
@@ -566,27 +604,63 @@ storage_class_spec:
 | REGISTER { ScsRegister }
 
 type_spec:
-| TVOID { TsVoid }
-| TCHAR { TsChar }
-| TSHORT { TsShort}
-| TINT { TsInt }
-| TLONG { TsLong }
-| TFLOAT { TsFloat }
-| TDOUBLE { TsDouble }
-| TSIGNED { TsSigned }
-| TUNSIGNED { TsUnsigned }
+| TVOID { Some TsVoid }
+| TCHAR { Some TsChar }
+| TSHORT { Some TsShort}
+| TINT { Some TsInt }
+| TLONG { Some TsLong }
+| TFLOAT { Some TsFloat }
+| TDOUBLE { Some TsDouble }
+| TSIGNED { None }
+| TUNSIGNED { unsigned_flag := true ; None }
 | struct_or_union_spec { 
   match $1 with
-  | (Some def,ts,_) -> add_def def;ts
-  | (_,ts,_) -> ts
+  | (Some def,ts,_) -> add_def def;Some ts
+  | (_,ts,_) ->Some ts
   }
-| enum_spec { $1 }
-| TYPE_ID { TsTypedef (get_typedef $1) }
+| enum_spec { Some $1 }
+| TYPE_ID { Some (TsTypedef (get_typedef $1)) }
 
 spec_qual_list:
-| type_spec { [Ts $1] }
-| type_spec spec_qual_list { (Ts $1)::$2 }
-| type_qual spec_qual_list { (Tq $1)::$2 }
+| spec_qual_list_sub
+  {
+    let ret =
+    match $1 with
+    | [] when !unsigned_flag -> [Ts TsUInt]
+    | [] -> [Ts TsInt]
+    | _ ->
+    begin
+      if !unsigned_flag then
+        List.map (
+          function
+          | Ts TsChar -> Ts TsUChar
+          | Ts TsInt -> Ts TsUInt
+          | Ts TsShort -> Ts TsUShort
+          | Ts TsLong -> Ts TsULong
+          | _ as ds -> ds
+        ) $1
+      else 
+        $1
+    end
+    in 
+    unsigned_flag := false;
+    ret
+  }
+
+spec_qual_list_sub:
+| type_spec
+  {
+    match $1 with
+    | Some ts -> [Ts ts]
+    | None -> [] 
+  }
+| type_spec spec_qual_list_sub
+  { 
+    match $1 with
+    | Some ts -> (Ts ts)::$2
+    | None -> $2
+  }
+| type_qual spec_qual_list_sub { (Tq $1)::$2 }
 
 type_qual:
 | CONST { TqConst }

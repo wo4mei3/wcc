@@ -26,7 +26,8 @@ and ds =
 
 and ts =
 | TsInt  | TsShort  | TsLong  | TsChar
-| TsFloat | TsDouble | TsSigned | TsUnsigned
+| TsUInt  | TsUShort  | TsULong  | TsUChar
+| TsFloat | TsDouble 
 | TsVoid
 | TsStruct of int
 | TsUnion of int

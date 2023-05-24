@@ -33,3 +33,5 @@ let () =
   | Env.EnvError msg -> Printf.printf "%s" msg
   | _ -> print_tok !curr_pos !curr_token;
   print_endline "something went wrong."
+
+  (*open Typing*)

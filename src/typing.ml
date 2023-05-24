@@ -1,4 +1,14 @@
 open Ctype
+open Ast
+
+exception TypingError of string
+
+let raise exn =
+  match exn with
+  (*| TypeError msg -> Printf.printf "%s\n" msg;raise exn*)
+  | _ -> raise exn
+
+let spr fmt s = (Printf.sprintf  fmt s)
 
 let rec declspecs attr is_encountered dsl program =
   let is_typedef = ref false
@@ -41,8 +51,6 @@ let rec declspecs attr is_encountered dsl program =
   and is_int_or_double = ref false
   and is_short = ref false
   and is_long = ref false
-  and is_signed = ref false
-  and is_unsigned = ref false
   in
   let pred = function 
   | Ts TsVoid -> is_encountered := true
@@ -62,7 +70,7 @@ let rec declspecs attr is_encountered dsl program =
       let dsl = get_declspecs ty in
       declspecs attr is_encountered dsl program
     end
-    | _ -> raise (ASTError (spr "typedef not found with id %d" id))
+    | _ -> raise (ASTError (spr "typedef not found with id %d" i))
   end
   | _ -> ()
   in
@@ -83,14 +91,49 @@ let rec declspecs attr is_encountered dsl program =
         raise (TypeError ( 
   "long with other than int or double is not allowed"))
     else ()
-  end;
-  if !is_signed && !is_unsigned then
-       raise (TypeError ( 
-  "both signed and unsigned are appear"))
-  else if !is_signed || !is_unsigned then
-  begin
-    if not !is_char_or_int && !is_encountered then
-            raise (TypeError ( 
-  "signed or unsigned with other than char or int is not allowed"))
-    else ()
   end
+
+let rec sizeof ty = 
+  match ty with
+  | TDeclSpec dsl ->
+    if List.mem (Ts TsVoid) dsl then
+      raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
+    else if List.mem (Ts TsChar) dsl then
+      1
+    else if List.mem (Ts TsShort) dsl then
+      2
+    else if List.mem (Ts TsLong) dsl then
+      8
+    else if List.mem (Ts TsInt) dsl then
+      4
+    else if List.mem (Ts TsSigned) dsl || List.mem (Ts TsUnsigned) dsl then
+      4
+    else raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
+  | TArr(ty, sz) -> (sizeof ty) * sz
+  | TPtr _ -> 8
+  | _ -> 0
+
+let is_integer = function
+| TDeclSpec dsl ->
+  let l = [Ts TsInt; Ts TsShort; Ts TsLong; Ts TsChar] in
+    let aux init f = init || List.mem f dsl in
+    List.fold_left aux false l
+| _ -> false
+
+let is_flonum = function
+| TDeclSpec dsl ->
+  let l = [Ts TsFloat; Ts TsDouble] in
+    let aux init f = init || List.mem f dsl in
+    List.fold_left aux false l
+| _ -> false
+
+let is_numeric ty =
+  is_integer ty || is_flonum ty
+
+let is_unsigned ty = 
+match ty with
+| TDeclSpec dsl -> List.mem (Ts TsUnsigned) dsl && is_numeric ty
+| _ -> false
+
+let is_signed ty =
+  is_numeric ty && not (is_unsigned ty)

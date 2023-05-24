@@ -2,7 +2,7 @@ static struct X func(struct {void *y;} a) {
     return (struct X){0};
 }
 struct X;
-struct X{int x;};
+struct X{unsigned x;};
 
 extern int printf(const char **, ...);
 
@@ -31,3 +31,4 @@ return 0;
 }
 int **var[5] = "abc";
 char c = '\n';
+unsigned i = 5;
