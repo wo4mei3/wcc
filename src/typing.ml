@@ -10,7 +10,7 @@ let raise exn =
 
 let spr fmt s = (Printf.sprintf  fmt s)
 
-let rec declspecs attr is_encountered dsl program =
+let rec declspecs attr is_encountered dsl =
   let is_typedef = ref false
   and is_static = ref false
   and is_extern = ref false
@@ -63,12 +63,12 @@ let rec declspecs attr is_encountered dsl program =
   | Ts (TsUnion _) -> is_encountered := true
   | Ts (TsTypedef i) -> is_encountered := true;
   begin 
-    match get_def_from_ast i program with
+    match get_def_from_ast i with
     | Some  (_,Typedef(decl)) -> 
     begin
       let ty = snd decl in
       let dsl = get_declspecs ty in
-      declspecs attr is_encountered dsl program
+      declspecs attr is_encountered dsl
     end
     | _ -> raise (ASTError (spr "typedef not found with id %d" i))
   end
@@ -93,47 +93,87 @@ let rec declspecs attr is_encountered dsl program =
     else ()
   end
 
-let rec sizeof ty = 
+
+let rec alignof ty =
+  match ty with
+  | TDeclSpec dsl ->
+    if List.mem (Ts TsVoid) dsl then
+      raise (TypingError (spr "alignof error: %s" (show_ty ty)))
+    else if List.mem (Ts TsChar) dsl || List.mem (Ts TsUChar) dsl then
+      1
+    else if List.mem (Ts TsShort) dsl || List.mem (Ts TsUShort) dsl then
+      2
+    else if List.mem (Ts TsInt) dsl || List.mem (Ts TsUInt) dsl || List.mem (Ts TsFloat) dsl then
+      4
+    else if List.mem (Ts TsLong) dsl || List.mem (Ts TsULong) dsl || List.mem (Ts TsDouble) dsl then
+      8
+    else if is_struct ty then
+      let id = get_struct_id ty in
+      let mems = get_struct_members id in
+      let aux init decl = 
+        let ty = snd decl in
+        let align = alignof ty in
+        if init < align then
+          align
+        else
+          init
+      in
+      List.fold_left aux 0 mems
+    else if is_union ty then
+      let id = get_union_id ty in
+      let mems = get_union_members id in
+      let aux init decl = 
+        let ty = snd decl in
+        let align = alignof ty in
+        if init < align then
+          align
+        else
+          init
+      in
+      List.fold_left aux 0 mems
+    else raise (TypingError (spr "alignof error: %s" (show_ty ty)))
+  | TArr(ty, _) -> alignof ty
+  | TPtr _ -> 8
+  | TFun _ -> raise (TypingError (spr "alignof error: %s" (show_ty ty)))
+
+and aligned ty n =
+  let a = alignof ty in
+  (n + a - 1) / a * a
+
+and sizeof ty = 
   match ty with
   | TDeclSpec dsl ->
     if List.mem (Ts TsVoid) dsl then
       raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
-    else if List.mem (Ts TsChar) dsl then
+    else if List.mem (Ts TsChar) dsl || List.mem (Ts TsUChar) dsl then
       1
-    else if List.mem (Ts TsShort) dsl then
+    else if List.mem (Ts TsShort) dsl || List.mem (Ts TsUShort) dsl then
       2
-    else if List.mem (Ts TsLong) dsl then
+    else if List.mem (Ts TsInt) dsl || List.mem (Ts TsUInt) dsl || List.mem (Ts TsFloat) dsl then
+      4
+    else if List.mem (Ts TsLong) dsl || List.mem (Ts TsULong) dsl || List.mem (Ts TsDouble) dsl then
       8
-    else if List.mem (Ts TsInt) dsl then
-      4
-    else if List.mem (Ts TsSigned) dsl || List.mem (Ts TsUnsigned) dsl then
-      4
+    else if is_struct ty then
+      let id = get_struct_id ty in
+      let mems = get_struct_members id in
+      let aux n decl = 
+        let ty = snd decl in
+        aligned ty n + sizeof ty
+      in
+      aligned ty (List.fold_left aux 0 mems)
+    else if is_union ty then
+      let id = get_union_id ty in
+      let mems = get_union_members id in
+      let aux init decl = 
+        let ty = snd decl in
+        let size = sizeof ty in
+        if init < size then
+          size
+        else
+          init
+      in
+      List.fold_left aux 0 mems
     else raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
   | TArr(ty, sz) -> (sizeof ty) * sz
   | TPtr _ -> 8
-  | _ -> 0
-
-let is_integer = function
-| TDeclSpec dsl ->
-  let l = [Ts TsInt; Ts TsShort; Ts TsLong; Ts TsChar] in
-    let aux init f = init || List.mem f dsl in
-    List.fold_left aux false l
-| _ -> false
-
-let is_flonum = function
-| TDeclSpec dsl ->
-  let l = [Ts TsFloat; Ts TsDouble] in
-    let aux init f = init || List.mem f dsl in
-    List.fold_left aux false l
-| _ -> false
-
-let is_numeric ty =
-  is_integer ty || is_flonum ty
-
-let is_unsigned ty = 
-match ty with
-| TDeclSpec dsl -> List.mem (Ts TsUnsigned) dsl && is_numeric ty
-| _ -> false
-
-let is_signed ty =
-  is_numeric ty && not (is_unsigned ty)
+  | TFun _ -> raise (TypingError (spr "alignof error: %s" (show_ty ty)))

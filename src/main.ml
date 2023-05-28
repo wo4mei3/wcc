@@ -26,8 +26,8 @@ let () =
   let inchan = open_in fname in
   let filebuf = Lexing.from_channel inchan in
   try
-    let program = Parser.translation_unit (conv Lexer.token) filebuf in
-    Printf.printf "%s\n" (Ast.show_program program)
+    Ast.program := Parser.translation_unit (conv Lexer.token) filebuf;
+    Printf.printf "%s\n" (Ast.show_program !Ast.program)
   with
   | Lexer.LexerError msg -> Printf.printf "Lexer error:%s" msg
   | Env.EnvError msg -> Printf.printf "%s" msg

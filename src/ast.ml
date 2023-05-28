@@ -102,8 +102,10 @@ type program =
 | Program of def list
 [@@deriving show]
 
-let rec get_def_from_ast id program =
-  match program with
+let program = ref (Program [])
+
+let rec get_def_from_ast id =
+  match !program with
   | Program l ->
     get_def_from_def_list id l 
 
@@ -174,7 +176,28 @@ and get_def_from_def id def =
   end
   | _ -> None
 
-let get_typedef_from_ast id program =
-  match get_def_from_ast id program with
-  | Some  (_,Typedef(_) as def) -> def
-  | _ -> raise (ASTError (spr "typedef not found with id %d" id))
+
+let get_typedef_from_ast id =
+  match get_def_from_ast id with
+  | Some  (_,Typedef(_) as def) -> Some(def)
+  | _ -> None
+
+let get_struct_from_ast id =
+  match get_def_from_ast id with
+  | Some  (_,Struct(_) as def) -> Some(def)
+  | _ -> None
+
+let get_union_from_ast id =
+  match get_def_from_ast id with
+  | Some  (_,Union(_) as def) -> Some(def)
+  | _ -> None
+
+let get_struct_members id =
+    match get_def_from_ast id with
+  | Some  (_,Struct(_,Some(ret))) -> ret
+  | _ -> raise (ASTError (spr "get_struct_members error: %d" id))
+
+let get_union_members id =
+    match get_def_from_ast id with
+  | Some  (_,Union(_,Some(ret))) -> ret
+  | _ -> raise (ASTError (spr "get_union_members error: %d" id))
