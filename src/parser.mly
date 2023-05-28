@@ -82,14 +82,29 @@
       true
     | _ -> false
 
+    let lookup_struct_definition name scope =
+      try 
+        let (id,item) = List.find (struct_pred name) scope 
+        in
+        match item with
+        | Struct(_,Some _) -> (Some id,Complete)
+        | _ -> (None,DontCare)
+      with Not_found ->
+        (None,DontCare)
+
     let lookup_struct_in_scope name =
       try 
         let (id,item) = List.find (struct_pred name) !curr_scope 
-      in
-      match item with
-      | Struct(_,Some _) -> (Some id,Complete)
-      | Struct(_,None) -> (Some id,Incomplete)
-      | _ -> (None,DontCare)
+        in
+        match item with
+        | Struct(_,Some _) -> (Some id,Complete)
+        | Struct(_,None) ->
+        begin
+        match lookup_struct_definition name !curr_scope with
+        | (Some id,Complete) -> (Some id,Complete)
+        | _ -> (Some id,Incomplete)
+        end
+        | _ -> (None,DontCare)
       with Not_found ->
         (None,DontCare)
 
@@ -103,7 +118,17 @@
         in
         match item with
         | Struct(_,Some _) -> (Some id,Complete)
-        | Struct(_,None) -> (Some id,Incomplete)
+        | Struct(_,None) -> 
+        begin
+          match lookup_struct_definition name hd with
+          | (Some id,Complete) -> (Some id,Complete)
+          | _ -> 
+          begin 
+          match aux tl with
+          | (Some id,Complete) -> (Some id,Complete)
+          | _ -> (Some id,Incomplete)
+          end
+        end
         | _ -> (None,DontCare)
         with Not_found ->
           aux tl
@@ -167,13 +192,28 @@
       true
     | _ -> false
 
-    let lookup_union_in_scope name =
+    let lookup_union_definition name scope =
+      try 
+        let (id,item) = List.find (union_pred name) scope 
+        in
+        match item with
+        | Union(_,Some _) -> (Some id,Complete)
+        | _ -> (None,DontCare)
+      with Not_found ->
+        (None,DontCare)
+
+    let lookup_union_in_scope name=
       try 
         let (id,item) = List.find (union_pred name) !curr_scope 
       in
       match item with
       | Union(_,Some _) -> (Some id,Complete)
-      | Union(_,None) -> (Some id,Incomplete)
+      | Union(_,None) -> 
+        begin
+        match lookup_union_definition name !curr_scope with
+        | (Some id,Complete) -> (Some id,Complete)
+        | _ -> (Some id,Incomplete)
+        end
       | _ -> (None,DontCare)
       with Not_found ->
         (None,DontCare)
@@ -189,7 +229,17 @@
         in
         match item with
         | Union(_,Some _) -> (Some id,Complete)
-        | Union(_,None) -> (Some id,Incomplete)
+        | Union(_,None) ->       
+        begin
+          match lookup_union_definition name hd with
+          | (Some id,Complete) -> (Some id,Complete)
+          | _ -> 
+          begin 
+          match aux tl with
+          | (Some id,Complete) -> (Some id,Complete)
+          | _ -> (Some id,Incomplete)
+          end
+        end
         | _ -> (None,DontCare)
         with Not_found ->
           aux tl

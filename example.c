@@ -3,6 +3,7 @@ static struct X func(struct {void *y;} a) {
 }
 struct X;
 struct X{unsigned x;};
+struct X;
 
 extern int printf(const char **, ...);
 

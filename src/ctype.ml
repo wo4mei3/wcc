@@ -62,7 +62,7 @@ let rec get_declspecs ty =
 
 let is_integer = function
 | TDeclSpec dsl ->
-  let l = [Ts TsInt; Ts TsShort; Ts TsLong; Ts TsChar;Ts TsUInt; Ts TsUShort; Ts TsULong; Ts TsUChar] in
+  let l = [Ts TsInt; Ts TsShort; Ts TsLong; Ts TsChar; Ts TsUInt; Ts TsUShort; Ts TsULong; Ts TsUChar] in
     let aux init f = init || List.mem f dsl in
     List.fold_left aux false l
 | _ -> false
