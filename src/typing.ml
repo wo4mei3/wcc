@@ -176,4 +176,4 @@ and sizeof ty =
     else raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
   | TArr(ty, sz) -> (sizeof ty) * sz
   | TPtr _ -> 8
-  | TFun _ -> raise (TypingError (spr "alignof error: %s" (show_ty ty)))
+  | TFun _ -> raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
