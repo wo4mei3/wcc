@@ -95,6 +95,11 @@ let rec declspecs attr is_encountered dsl =
 
 
 let rec alignof ty =
+  if is_typedef ty then
+    match get_typedef_from_ast (get_typedef_id ty) with
+    | Some decl -> alignof (snd decl)
+    | None -> raise (TypingError (spr "alignof error: %s" (show_ty ty)))
+  else begin
   match ty with
   | TDeclSpec dsl ->
     if List.mem (Ts TsVoid) dsl then
@@ -135,12 +140,18 @@ let rec alignof ty =
   | TArr(ty, _) -> alignof ty
   | TPtr _ -> 8
   | TFun _ -> raise (TypingError (spr "alignof error: %s" (show_ty ty)))
+  end
 
 and aligned ty n =
   let a = alignof ty in
   (n + a - 1) / a * a
 
 and sizeof ty = 
+  if is_typedef ty then
+    match get_typedef_from_ast (get_typedef_id ty) with
+    | Some decl -> sizeof (snd decl)
+    | None -> raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
+  else begin
   match ty with
   | TDeclSpec dsl ->
     if List.mem (Ts TsVoid) dsl then
@@ -177,3 +188,57 @@ and sizeof ty =
   | TArr(ty, sz) -> (sizeof ty) * sz
   | TPtr _ -> 8
   | TFun _ -> raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
+  end
+
+let rec is_compatible lty rty =
+  if is_struct lty  && is_struct rty then
+    get_struct_id lty = get_struct_id rty
+  else if is_union lty  && is_union rty then
+    get_union_id lty = get_union_id rty
+  else if is_typedef lty then
+    let origin = match get_typedef_from_ast (get_typedef_id lty) with
+    | Some decl -> snd decl
+    | None -> raise (TypingError (spr "is_compatible error: %s" (show_ty lty)))
+    in
+    is_compatible origin rty
+  else if is_typedef rty then
+    let origin = match get_typedef_from_ast (get_typedef_id rty) with
+    | Some decl -> snd decl
+    | None -> raise (TypingError (spr "is_compatible error: %s" (show_ty rty)))
+    in
+    is_compatible lty origin
+  else if is_numeric lty && is_numeric rty then
+    true
+  else
+    begin
+    let map l = List.map (fun x -> snd x) l in
+    match (lty, rty) with
+    | (TPtr(TFun(lty,ll)),TFun(rty,rl)) 
+    | (TFun(lty,ll),TPtr(TFun(rty,rl))) 
+    | (TFun(lty,ll),TFun(rty,rl)) -> is_compatible lty rty && List.for_all2 is_compatible (map ll) (map rl)
+    | (TPtr lty,TPtr rty)
+    | (TPtr lty,TArr(rty,_))
+    | (TArr(lty,_),TPtr rty)
+    | (TArr(lty,_),TArr(rty,_)) -> is_compatible lty rty
+    | _ -> raise (TypingError (spr "is_compatible error: %s and %s is not compatible" (show_ty lty) (show_ty rty)))
+    end
+
+  let get_common_type lty rty =
+    let ty = match (lty, rty) with
+    | (TArr(lty,_),_) -> TPtr lty
+    | (_,TArr(rty,_)) -> TPtr rty
+    | (TFun(_,_),_) -> TPtr lty
+    | (_,TFun(_,_)) -> TPtr rty
+    | (TPtr _,_) -> lty
+    | (_,TPtr _) -> rty
+    | (TDeclSpec _,_) when is_numeric lty && sizeof lty = 4 -> TDeclSpec [Ts TsFloat]
+    | (_,TDeclSpec _) when is_numeric rty && sizeof rty = 4 -> TDeclSpec [Ts TsFloat]
+    | (TDeclSpec _,_) when is_numeric lty && sizeof lty = 8 -> TDeclSpec [Ts TsDouble]
+    | (_,TDeclSpec _) when is_numeric rty && sizeof rty = 8 -> TDeclSpec [Ts TsDouble]
+    | (TDeclSpec _,_) when is_unsigned lty -> lty
+    | (_,TDeclSpec _) when is_unsigned rty -> rty
+    | _ -> if sizeof lty < sizeof rty then rty else lty 
+    in
+    if is_compatible ty lty && is_compatible ty rty then ty
+    else raise (TypingError (spr "get_common_type error: %s is not the common type" (show_ty ty)))
+      

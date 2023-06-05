@@ -179,7 +179,7 @@ and get_def_from_def id def =
 
 let get_typedef_from_ast id =
   match get_def_from_ast id with
-  | Some  (_,Typedef(_) as def) -> Some(def)
+  | Some  (_,Typedef decl) -> Some(decl)
   | _ -> None
 
 let get_struct_from_ast id =
@@ -193,11 +193,11 @@ let get_union_from_ast id =
   | _ -> None
 
 let get_struct_members id =
-    match get_def_from_ast id with
+  match get_def_from_ast id with
   | Some  (_,Struct(_,Some(ret))) -> ret
   | _ -> raise (ASTError (spr "get_struct_members error: %d" id))
 
 let get_union_members id =
-    match get_def_from_ast id with
+  match get_def_from_ast id with
   | Some  (_,Union(_,Some(ret))) -> ret
   | _ -> raise (ASTError (spr "get_union_members error: %d" id))

@@ -128,3 +128,22 @@ let get_union_id = function
   in
   aux dsl
 | _ -> raise (TypeError "get_union_id")
+
+let is_typedef = function
+| TDeclSpec dsl -> 
+  let aux = function
+  | Ts (TsTypedef _) -> true 
+  | _ -> false
+  in
+  List.exists aux dsl
+| _ -> false
+
+let get_typedef_id = function
+| TDeclSpec dsl -> 
+  let rec aux = function
+  | [] -> raise (TypeError "get_typedef_id")
+  | Ts (TsTypedef id)::_ -> id 
+  | _::xs -> aux xs
+  in
+  aux dsl
+| _ -> raise (TypeError "get_typedef_id")
