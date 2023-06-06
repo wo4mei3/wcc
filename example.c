@@ -33,3 +33,4 @@ return 0;
 int **var[5] = "abc";
 char c = '\n';
 unsigned i = 5;
+struct X x= {.x=0,};

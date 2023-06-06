@@ -333,21 +333,60 @@ match expr with
     let (ty,then_,else_) = usual_arith_conv then_ else_ in
     ECond(Some ty,flag,then_,else_)
 | ECast(_,ty,expr) -> ECast(Some ty,ty,ty_expr expr)
-| ECompoundLit(_,ty,init) -> ECompoundLit(Some ty,ty,init)
+| ECompoundLit(_,ty,init) -> ECompoundLit(Some ty,ty,ty_init ty init)
 
 and ty_init ty init =
 match init with
 | IScal expr when is_compatible ty (typeof (ty_expr expr)) -> IScal expr
-| IVect _
+| IVect l ->
+  begin
+    let loc = ref 0 in
+    match ty with
+    | TArr(ty,sz) ->
+      let rec aux loc = function
+      | [] when !loc < sz -> []
+      | (desig_opt,init)::xs -> 
+        let x = (desig_opt, ty_init (ty_desig ty desig_opt loc) init) in
+        loc := !loc + 1;
+        x::aux loc xs
+      | _ -> raise (TypingError (spr "ty_init error: excess elements %d" !loc))
+      in 
+      IVect (aux loc l)
+    | ty when is_struct ty ->
+      let members = get_struct_members (get_struct_id ty) in
+      let rec aux loc mems l =
+        match (mems, l) with
+        | (_,[]) -> []
+        | ([],_) -> raise (TypingError (spr "ty_init error: excess elements %d" !loc))
+        | ((_,memty)::_,(desig_opt,init)::xs) -> 
+          let elem_ty = match desig_opt with
+          | Some _ -> ty_desig ty desig_opt loc
+          | None -> memty
+          in
+          loc := !loc + 1;
+          let rec get_remain_members members x =
+            match (members, x) with
+            | (members,0) -> members
+            | ([],x) -> raise (TypingError (spr "ty_init error: excess elements %d" x))
+            | (_::members,x) -> get_remain_members members (x - 1)
+          in
+          (desig_opt, ty_init elem_ty init)::aux loc (get_remain_members members !loc) xs
+      in IVect (aux loc members l)
+    | _ -> raise (TypingError (spr "ty_init error: invalid ty or init %s, %s" (show_ty ty) (show_init init)))
+  end
 | _ -> raise (TypingError (spr "ty_init error: invalid ty or init %s, %s" (show_ty ty) (show_init init)))
 
-and ty_desig ty desig_opt =
+and ty_desig ty desig_opt loc =
 match (ty,desig_opt) with
-| (TArr(ty,n),Some (DIdx(i,desig_opt))) when i < n -> ty_desig ty desig_opt
+| (TArr(ty,n),Some (DIdx(i,desig_opt))) when i < n -> loc := i; ty_desig ty desig_opt (ref 0)
 | (TArr(_,n),Some (DIdx(i,_))) when i >= n -> raise (TypingError (spr "ty_desig error: invalid index %d" i))
 | (ty,Some (DField(name,desig_opt))) when is_struct ty ->
   let members = get_struct_members (get_struct_id ty) in
-  let ty = List.assoc name members in
-  ty_desig ty desig_opt
+  let rec aux i = function
+  | [] -> raise (TypingError (spr "ty_desig error: no such member %s" name))
+  | (n,ty)::_ when n = name -> loc := i; ty
+  | _::xs -> aux (i + 1) xs
+  in
+  ty_desig (aux 0 members) desig_opt (ref 0)
 | (_,None) -> ty
-| _ -> raise (TypingError (spr "ty_desig error: invalid desig %s" (show_desig_opt desig_opt)))
+| _ -> raise (TypingError (spr "ty_desig error: invalid desig %s" (show_desig_opt desig_opt))) 
