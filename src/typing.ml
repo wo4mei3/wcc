@@ -334,3 +334,20 @@ match expr with
     ECond(Some ty,flag,then_,else_)
 | ECast(_,ty,expr) -> ECast(Some ty,ty,ty_expr expr)
 | ECompoundLit(_,ty,init) -> ECompoundLit(Some ty,ty,init)
+
+and ty_init ty init =
+match init with
+| IScal expr when is_compatible ty (typeof (ty_expr expr)) -> IScal expr
+| IVect _
+| _ -> raise (TypingError (spr "ty_init error: invalid ty or init %s, %s" (show_ty ty) (show_init init)))
+
+and ty_desig ty desig_opt =
+match (ty,desig_opt) with
+| (TArr(ty,n),Some (DIdx(i,desig_opt))) when i < n -> ty_desig ty desig_opt
+| (TArr(_,n),Some (DIdx(i,_))) when i >= n -> raise (TypingError (spr "ty_desig error: invalid index %d" i))
+| (ty,Some (DField(name,desig_opt))) when is_struct ty ->
+  let members = get_struct_members (get_struct_id ty) in
+  let ty = List.assoc name members in
+  ty_desig ty desig_opt
+| (_,None) -> ty
+| _ -> raise (TypingError (spr "ty_desig error: invalid desig %s" (show_desig_opt desig_opt)))

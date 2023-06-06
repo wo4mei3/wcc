@@ -78,6 +78,9 @@ and desig =
 | DField of string * desig option
 [@@deriving show]
 
+and desig_opt = desig option
+[@@deriving show]
+
 and stmt =
 | SDef of def
 | SStmts of stmt list
