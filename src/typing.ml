@@ -337,7 +337,10 @@ match expr with
 
 and ty_init ty init =
 match init with
-| IScal expr when is_compatible ty (typeof (ty_expr expr)) -> IScal expr
+| IScal expr -> 
+  let expr = ty_expr expr in
+  let ty = (typeof expr) in
+  IScal  (ECast (Some ty,ty, expr))
 | IVect l ->
   begin
     let loc = ref 0 in
@@ -374,7 +377,6 @@ match init with
       in IVect (aux loc members l)
     | _ -> raise (TypingError (spr "ty_init error: invalid ty or init %s, %s" (show_ty ty) (show_init init)))
   end
-| _ -> raise (TypingError (spr "ty_init error: invalid ty or init %s, %s" (show_ty ty) (show_init init)))
 
 and ty_desig ty desig_opt loc =
 match (ty,desig_opt) with
