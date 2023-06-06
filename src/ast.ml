@@ -52,16 +52,16 @@ and def_ll = def_list list
 [@@deriving show]
 
 and expr =
-| EConst  of ty option ref * value
-| EVar    of ty option ref * int
-| EBinary  of ty option ref * binary * expr * expr
-| EAssign of ty option ref * binary option * expr * expr
-| EUnary  of ty option ref * unary * expr
-| ETyUnary of ty option ref * unary * ty
-| EPostfix of ty option ref * expr * postfix
-| ECond   of ty option ref * expr * expr * expr
-| ECast   of ty option ref * ty * expr
-| ECompoundLit of ty option ref * ty * init
+| EConst  of ty option * value
+| EVar    of ty option * int
+| EBinary  of ty option * binary * expr * expr
+| EAssign of ty option * binary option * expr * expr
+| EUnary  of ty option * unary * expr
+| ETyUnary of ty option * unary * ty
+| EPostfix of ty option * expr * postfix
+| ECond   of ty option * expr * expr * expr
+| ECast   of ty option * ty * expr
+| ECompoundLit of ty option * ty * init
 [@@deriving show]
 
 and postfix =
@@ -201,3 +201,17 @@ let get_union_members id =
   match get_def_from_ast id with
   | Some  (_,Union(_,Some(ret))) -> ret
   | _ -> raise (ASTError (spr "get_union_members error: %d" id))
+
+let typeof expr =
+match expr with
+| EConst(Some ty,_)
+| EVar(Some ty,_)
+| EBinary(Some ty,_,_,_)
+| EAssign(Some ty,_,_,_)
+| EUnary(Some ty,_,_)
+| ETyUnary(Some ty,_,_)
+| EPostfix(Some ty,_,_)
+| ECond(Some ty,_,_,_)
+| ECast(Some ty,_,_)
+| ECompoundLit(Some ty,_,_) -> ty
+| _ -> raise (ASTError (spr "typeof error: %s" (show_expr expr)))

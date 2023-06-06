@@ -34,4 +34,4 @@ let () =
   | _ -> print_tok !curr_pos !curr_token;
   print_endline "something went wrong."
 
-  open Typing
+(*open Typing*)

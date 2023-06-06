@@ -223,7 +223,7 @@ let rec is_compatible lty rty =
     | _ -> raise (TypingError (spr "is_compatible error: %s and %s is not compatible" (show_ty lty) (show_ty rty)))
     end
 
-  let get_common_type lty rty =
+let get_common_type lty rty =
     let ty = match (lty, rty) with
     | (TArr(lty,_),_) -> TPtr lty
     | (_,TArr(rty,_)) -> TPtr rty
@@ -241,4 +241,16 @@ let rec is_compatible lty rty =
     in
     if is_compatible ty lty && is_compatible ty rty then ty
     else raise (TypingError (spr "get_common_type error: %s is not the common type" (show_ty ty)))
-      
+
+
+let usual_arith_conv lhs rhs =
+  let lty = typeof lhs in
+  let rty = typeof rhs in
+  let ty = get_common_type lty rty in
+  (ECast(Some ty,ty,lhs),ECast(Some ty,ty,rhs))
+
+
+
+
+
+
