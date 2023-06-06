@@ -27,8 +27,7 @@ type binary =
 [@@deriving show]
 
 type unary = 
-| Plus | Minus | BitNot | LogNot | PreInc 
-| PreDec | Ref | Deref | Sizeof
+| Plus | Minus | BitNot | LogNot | Ref | Deref | Sizeof
 [@@deriving show]
 
 type item =
@@ -55,7 +54,7 @@ and expr =
 | EConst  of ty option * value
 | EVar    of ty option * int
 | EBinary  of ty option * binary * expr * expr
-| EAssign of ty option * binary option * expr * expr
+| EAssign of ty option * expr * expr
 | EUnary  of ty option * unary * expr
 | ETyUnary of ty option * unary * ty
 | EPostfix of ty option * expr * postfix
@@ -65,10 +64,8 @@ and expr =
 [@@deriving show]
 
 and postfix =
-| Nth of expr
 | Call of expr list
 | Member of string
-| Inc | Dec
 [@@deriving show]
 
 and init =
@@ -207,7 +204,7 @@ match expr with
 | EConst(Some ty,_)
 | EVar(Some ty,_)
 | EBinary(Some ty,_,_,_)
-| EAssign(Some ty,_,_,_)
+| EAssign(Some ty,_,_)
 | EUnary(Some ty,_,_)
 | ETyUnary(Some ty,_,_)
 | EPostfix(Some ty,_,_)

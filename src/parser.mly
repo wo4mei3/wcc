@@ -491,7 +491,7 @@ primary_expr:
 
 postfix_expr:
 | primary_expr { $1 }
-| postfix_expr LBRACKET expr RBRACKET { EPostfix(None, $1,Nth $3) }
+| postfix_expr LBRACKET expr RBRACKET { EUnary(None, Deref, EBinary(None, Add,$1,$3)) }
 | postfix_expr LPAREN argument_expr_list? RPAREN
   { 
     match $3 with
@@ -500,8 +500,18 @@ postfix_expr:
   }
 | postfix_expr DOT ident { EPostfix(None, $1,Member $3) }
 | postfix_expr ARROW ident { EPostfix(None, EUnary(None, Deref,$1),Member $3) }
-| postfix_expr INC { EPostfix(None, $1,Inc) }
-| postfix_expr DEC { EPostfix(None, $1,Dec) }
+| postfix_expr INC 
+  { 
+  EBinary(None, Sub,
+  EAssign(None, $1,EBinary(None, Add,$1,EConst (Some (TDeclSpec[(Ts TsInt)]), VInt 1)))
+  ,EConst (Some (TDeclSpec[(Ts TsInt)]), VInt 1)) 
+  }
+| postfix_expr DEC
+  { 
+  EBinary(None, Add,
+  EAssign(None, $1,EBinary(None, Sub,$1,EConst (Some (TDeclSpec[(Ts TsInt)]), VInt 1)))
+  ,EConst (Some (TDeclSpec[(Ts TsInt)]), VInt 1)) 
+  }
 | LPAREN type_name RPAREN LBRACE init_list COMMA? RBRACE { ECompoundLit(None, $2,IVect $5) }
 
 argument_expr_list:
@@ -510,8 +520,8 @@ argument_expr_list:
 
 unary_expr:
 | postfix_expr { $1 }
-| INC unary_expr { EUnary(None, PreInc, $2) }
-| DEC unary_expr { EUnary(None, PreDec, $2) }
+| INC unary_expr { EAssign(None, $2,EBinary(None, Add,$2,EConst (Some (TDeclSpec[(Ts TsInt)]), VInt 1)))  }
+| DEC unary_expr { EAssign(None, $2,EBinary(None, Sub,$2,EConst (Some (TDeclSpec[(Ts TsInt)]), VInt 1))) }
 | AND cast_expr  { EUnary(None, Ref, $2) }
 | STAR cast_expr { EUnary(None, Deref, $2) }
 | PLUS cast_expr { EUnary(None, Plus, $2) }
@@ -580,17 +590,17 @@ conditional_expr:
 
 assignment_expr:
 | conditional_expr { $1 }
-| unary_expr EQ assignment_expr { EAssign(None, None, $1,$3) }
-| unary_expr MUL_EQ assignment_expr { EAssign(None, Some Mul, $1,$3) }
-| unary_expr DIV_EQ assignment_expr { EAssign(None, Some Div, $1,$3) }
-| unary_expr MOD_EQ assignment_expr { EAssign(None, Some Mod, $1,$3) }
-| unary_expr ADD_EQ assignment_expr { EAssign(None, Some Add, $1,$3) }
-| unary_expr SUB_EQ assignment_expr { EAssign(None, Some Sub, $1,$3) }
-| unary_expr LSHIFT_EQ assignment_expr { EAssign(None, Some LShift, $1,$3) }
-| unary_expr RSHIFT_EQ assignment_expr { EAssign(None, Some RShift, $1,$3) }
-| unary_expr AND_EQ assignment_expr { EAssign(None, Some BitAnd, $1,$3) }
-| unary_expr XOR_EQ assignment_expr { EAssign(None, Some BitXor, $1,$3) }
-| unary_expr OR_EQ assignment_expr { EAssign(None, Some BitOr, $1,$3) }
+| unary_expr EQ assignment_expr { EAssign(None, $1,$3) }
+| unary_expr MUL_EQ assignment_expr { EAssign(None, $1,EBinary(None, Mul,$1,$3)) }
+| unary_expr DIV_EQ assignment_expr { EAssign(None, $1,EBinary(None, Div,$1,$3)) }
+| unary_expr MOD_EQ assignment_expr { EAssign(None, $1,EBinary(None, Mod,$1,$3)) }
+| unary_expr ADD_EQ assignment_expr { EAssign(None, $1,EBinary(None, Add,$1,$3)) }
+| unary_expr SUB_EQ assignment_expr { EAssign(None, $1,EBinary(None, Sub,$1,$3)) }
+| unary_expr LSHIFT_EQ assignment_expr { EAssign(None, $1,EBinary(None, LShift,$1,$3)) }
+| unary_expr RSHIFT_EQ assignment_expr { EAssign(None, $1,EBinary(None, RShift,$1,$3)) }
+| unary_expr AND_EQ assignment_expr { EAssign(None, $1,EBinary(None, BitAnd,$1,$3)) }
+| unary_expr XOR_EQ assignment_expr { EAssign(None, $1,EBinary(None, BitXor,$1,$3)) }
+| unary_expr OR_EQ assignment_expr { EAssign(None, $1,EBinary(None, BitOr,$1,$3)) }
 
 expr:
 | assignment_expr { $1 }

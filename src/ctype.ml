@@ -60,6 +60,13 @@ let rec get_declspecs ty =
   | TDeclSpec dsl -> dsl
 
 
+let is_void = function
+| TDeclSpec dsl ->
+  let l = [Ts TsVoid] in
+    let aux init f = init || List.mem f dsl in
+    List.fold_left aux false l
+| _ -> false
+
 let is_integer = function
 | TDeclSpec dsl ->
   let l = [Ts TsInt; Ts TsShort; Ts TsLong; Ts TsChar; Ts TsUInt; Ts TsUShort; Ts TsULong; Ts TsUChar] in

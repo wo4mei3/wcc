@@ -247,10 +247,90 @@ let usual_arith_conv lhs rhs =
   let lty = typeof lhs in
   let rty = typeof rhs in
   let ty = get_common_type lty rty in
-  (ECast(Some ty,ty,lhs),ECast(Some ty,ty,rhs))
+  (ty,ECast(Some ty,ty,lhs), ECast(Some ty,ty,rhs))
 
 
-
-
-
-
+let rec ty_expr expr =
+match expr with
+| EConst(_,_)
+| EVar(_,_) -> expr
+| EBinary(_,bin,lhs,rhs) ->
+  let (lhs,rhs) = (ty_expr lhs,ty_expr rhs) in
+  begin
+    match bin with
+    | Add | Sub | Mul | Div | Mod
+    | BitAnd | BitOr | BitXor ->
+    let (ty,lhs,rhs) = usual_arith_conv lhs rhs in
+    EBinary(Some ty,bin,lhs,rhs)
+    | LShift | RShift ->
+    EBinary(Some (typeof lhs),bin,lhs,rhs)
+    | LogAnd | LogOr ->
+    EBinary(Some (TDeclSpec [Ts TsInt]),bin,lhs,rhs)
+    | Lt | Le | Gt | Ge | Eq | Ne ->
+    let (_,lhs,rhs) = usual_arith_conv lhs rhs in
+    EBinary(Some (TDeclSpec [Ts TsInt]),bin,lhs,rhs)
+    | Comma -> EBinary(Some (typeof rhs),bin,lhs,rhs)
+  end
+| EAssign(_,lhs,rhs) ->
+  let (lhs,rhs) = (ty_expr lhs,ty_expr rhs) in
+  let ty = typeof lhs in
+  begin
+  match ty with
+  | TArr(_,_) -> raise (TypingError (spr "ty_expr error: array is not a lvalue %s" (show_ty ty)))
+  | _ when is_struct ty -> raise (TypingError (spr "ty_expr error: struct cannot be a lvalue %s" (show_ty ty)))
+  | _ -> let rhs = ECast(Some ty,ty,rhs) in EAssign(Some ty,lhs,rhs)
+  end
+| EUnary(_,unary,expr) ->
+  let expr = ty_expr expr in
+  let ty = typeof expr in
+  begin
+    match unary with
+    | Plus -> EUnary(Some ty,unary,expr)
+    | Minus -> let ty = get_common_type (TDeclSpec [Ts TsInt]) ty in ECast(Some ty,ty,expr)
+    | BitNot -> EUnary(Some ty,unary,expr)
+    | LogNot -> EUnary(Some (TDeclSpec [Ts TsInt]),unary,expr)
+    | Ref ->
+    begin
+    let ty =
+    match ty with
+    | TArr(ty,_) -> TPtr ty
+    | _ -> TPtr ty
+    in EUnary(Some ty,unary,expr)
+    end
+    | Deref ->
+    begin
+    match ty with
+    | TPtr ty when is_void ty -> raise (TypingError (spr "ty_expr error: dereference a void pointer %s" (show_ty ty)))
+    | TPtr ty -> EUnary(Some ty,unary,expr)
+    | _ -> raise (TypingError (spr "ty_expr error: invalid value dereference %s" (show_ty ty)))
+    end
+    | Sizeof -> EUnary(Some (TDeclSpec [Ts TsUInt]),unary,expr)
+  end
+| ETyUnary(_,unary,ty) -> ETyUnary(Some (TDeclSpec [Ts TsUInt]),unary,ty)
+| EPostfix(_,expr,postfix) as e-> 
+  let expr = ty_expr expr in
+  let ty = typeof expr in
+  let ret_ty = TDeclSpec (get_declspecs ty) in
+  begin
+  match postfix with
+  | Call l -> 
+    let l = List.map ty_expr l in
+    let tys = List.map (fun x -> ("",typeof x)) l in
+    let ty = get_common_type ty (TFun(ret_ty,tys)) in
+    let ret_ty = TDeclSpec (get_declspecs ty) in
+    EPostfix(Some ret_ty,expr,Call l)
+  | Member name when is_struct ty ->
+    let members = get_struct_members (get_struct_id ty) in
+    let ty = List.assoc name members in
+    EPostfix(Some ty,expr,postfix)
+  | _ -> raise (TypingError (spr "ty_expr error: invalid postfix expr %s" (show_expr e)))
+  end
+| ECond(_,flag,then_,else_) ->
+  let (then_,else_) = (ty_expr then_,ty_expr else_) in
+  if is_void (typeof then_) || is_void (typeof else_) then
+    ECond(Some (TDeclSpec [Ts TsVoid]),flag,then_,else_)
+  else
+    let (ty,then_,else_) = usual_arith_conv then_ else_ in
+    ECond(Some ty,flag,then_,else_)
+| ECast(_,ty,expr) -> ECast(Some ty,ty,ty_expr expr)
+| ECompoundLit(_,ty,init) -> ECompoundLit(Some ty,ty,init)
