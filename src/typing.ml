@@ -392,3 +392,36 @@ match (ty,desig_opt) with
   ty_desig (aux 0 members) desig_opt (ref 0)
 | (_,None) -> ty
 | _ -> raise (TypingError (spr "ty_desig error: invalid desig %s" (show_desig_opt desig_opt))) 
+
+and ty_stmt stmt =
+match stmt with
+| SDef def -> SDef def
+| SStmts stmts -> SStmts (List.map ty_stmt stmts)
+| SWhile(expr,stmt,s1,s2) -> SWhile(ty_expr expr,ty_stmt stmt,s1,s2)
+| SDoWhile(stmt,expr,s1,s2) -> SDoWhile(ty_stmt stmt,ty_expr expr,s1,s2)
+| SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,stmt,s1,s2) ->
+  let def_opt = match def_opt with
+  | Some def -> Some (def)
+  | None -> None in
+  let expr_opt1 = match expr_opt1 with
+  | Some expr -> Some (ty_expr expr)
+  | None -> None in
+  let expr_opt2 = match expr_opt2 with
+  | Some expr -> Some (ty_expr expr)
+  | None -> None in
+  let expr_opt3 = match expr_opt3 with
+  | Some expr -> Some (ty_expr expr)
+  | None -> None in
+  SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,ty_stmt stmt,s1,s2)
+| SIfElse(expr,stmt1,stmt2) -> SIfElse(ty_expr expr,ty_stmt stmt1,ty_stmt stmt2)
+| SReturn expr_opt ->
+  let expr_opt = match expr_opt with
+  | Some expr -> Some (ty_expr expr)
+  | None -> None in
+  SReturn expr_opt
+| SLabel(s,stmt) -> SLabel(s,ty_stmt stmt)
+| SGoto s -> SGoto s
+| SSwitch(expr,stmts,s) -> SSwitch(ty_expr expr,List.map ty_stmt stmts,s)
+| SCase(expr,stmts) -> SCase(ty_expr expr,List.map ty_stmt stmts)
+| SDefault stmts -> SDefault(List.map ty_stmt stmts)
+| SExpr expr -> SExpr(ty_expr expr)
