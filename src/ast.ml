@@ -176,6 +176,11 @@ and get_def_from_def id def =
   end
   | _ -> None
 
+let get_var_from_ast id =
+  match get_def_from_ast id with
+  | Some  (_,Var(decl,_)) 
+  | Some (_,Function(_,decl,_)) -> Some(decl)
+  | _ -> None
 
 let get_typedef_from_ast id =
   match get_def_from_ast id with

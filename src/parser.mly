@@ -72,6 +72,13 @@
       in
       List.fold_left2 pred None a b
 
+    let check_member_redifinition decls =
+      let rec aux l = function
+      | [] -> false
+      | (name,_) as x::xs -> List.mem_assoc name (l@xs) || aux (x::l) xs
+      in
+      if aux [] decls then raise (ParserError "member redefiniton")
+
     type is_incomplete =
     | Complete
     | Incomplete 
@@ -153,7 +160,7 @@
           | (Some id,Incomplete) ->
             begin
               match dl with
-              | Some _ -> (Some (id,Struct(!name,dl)),id,Complete)
+              | Some decls -> check_member_redifinition decls; (Some (id,Struct(!name,dl)),id,Complete)
               | None -> (None,id,Incomplete)
             end
           | _ -> 
@@ -162,25 +169,25 @@
               | (Some id,Complete) -> 
                 begin
                   match dl with
-                  | Some _ -> (Some (id,Struct(!name,dl)),id,Complete)
+                  | Some decls -> check_member_redifinition decls; check_member_redifinition decls; (Some (id,Struct(!name,dl)),id,Complete)
                   | None -> (None,id,Complete)
                 end
               | (Some id,Incomplete) ->
                 begin
                   match dl with
-                  | Some _ -> (Some (id,Struct(!name,dl)),id,Complete)
+                  | Some decls -> check_member_redifinition decls; (Some (id,Struct(!name,dl)),id,Complete)
                   | None -> (None,id,Incomplete)
                 end
               | _ -> 
                 let id = gen_id () in
                 match dl with
-                | Some _ -> (Some (id,Struct(!name,dl)),id,Complete)
+                | Some decls -> check_member_redifinition decls; (Some (id,Struct(!name,dl)),id,Complete)
                 | None -> (Some (id,Struct(!name,dl)),id,Incomplete)
             end
         end 
       | None -> let id = gen_id () in
                 match dl with 
-                | Some _ ->
+                | Some decls -> check_member_redifinition decls; 
                   (Some (id,Struct(!name,dl)),id,Complete)
                 | None ->
                   raise (ParserError "anonymous struct with no definition.")
@@ -258,13 +265,13 @@
           | (Some id,Complete) -> 
             begin
               match dl with
-              | Some _ -> raise (ParserError (Printf.sprintf "redifinition of %s \n" !name))
+              | Some decls -> check_member_redifinition decls; raise (ParserError (Printf.sprintf "redifinition of %s \n" !name))
               | None -> (None,id,Complete)
             end
           | (Some id,Incomplete) ->
             begin
               match dl with
-              | Some _ -> (Some (id,Union(!name,dl)),id,Complete)
+              | Some decls -> check_member_redifinition decls; (Some (id,Union(!name,dl)),id,Complete)
               | None -> (None,id,Incomplete)
             end
           | _ -> 
@@ -273,25 +280,25 @@
               | (Some id,Complete) -> 
                 begin
                   match dl with
-                  | Some _ -> (Some (id,Union(!name,dl)),id,Complete)
+                  | Some decls -> check_member_redifinition decls; (Some (id,Union(!name,dl)),id,Complete)
                   | None -> (None,id,Complete)
                 end
               | (Some id,Incomplete) ->
                 begin
                   match dl with
-                  | Some _ -> (Some (id,Union(!name,dl)),id,Complete)
+                  | Some decls -> check_member_redifinition decls; (Some (id,Union(!name,dl)),id,Complete)
                   | None -> (None,id,Incomplete)
                 end
               | _ -> 
                 let id = gen_id () in
                 match dl with
-                | Some _ -> (Some (id,Union(!name,dl)),id,Complete)
+                | Some decls -> check_member_redifinition decls; (Some (id,Union(!name,dl)),id,Complete)
                 | None -> (Some (id,Union(!name,dl)),id,Incomplete)
             end
         end 
       | None -> let id = gen_id () in
                 match dl with 
-                | Some _ ->
+                | Some decls -> check_member_redifinition decls; 
                   (Some (id,Union(!name,dl)),id,Complete)
                 | None ->
                   raise (ParserError "anonymous union with no definition.")
@@ -311,6 +318,7 @@
       | _ -> false
       in
       List.exists aux !curr_scope 
+
 
     let rec is_typedef_definition ty =
       match ty with

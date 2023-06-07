@@ -5,7 +5,7 @@ exception TypingError of string
 
 let raise exn =
   match exn with
-  (*| TypeError msg -> Printf.printf "%s\n" msg;raise exn*)
+  | TypingError msg -> Printf.printf "%s\n" msg;raise exn
   | _ -> raise exn
 
 let spr fmt s = (Printf.sprintf  fmt s)
@@ -215,7 +215,14 @@ let rec is_compatible lty rty =
     match (lty, rty) with
     | (TPtr(TFun(lty,ll)),TFun(rty,rl)) 
     | (TFun(lty,ll),TPtr(TFun(rty,rl))) 
-    | (TFun(lty,ll),TFun(rty,rl)) -> is_compatible lty rty && List.for_all2 is_compatible (map ll) (map rl)
+    | (TFun(lty,ll),TFun(rty,rl)) -> 
+      let rec check_args lhs rhs =
+        match (lhs,rhs) with
+        | (l::ls,r::rs) -> is_compatible l r && check_args ls rs
+        | ([],[]) -> true
+        | _ -> false
+      in
+      is_compatible lty rty && check_args (map ll) (map rl)
     | (TPtr lty,TPtr rty)
     | (TPtr lty,TArr(rty,_))
     | (TArr(lty,_),TPtr rty)
@@ -240,7 +247,7 @@ let get_common_type lty rty =
     | _ -> if sizeof lty < sizeof rty then rty else lty 
     in
     if is_compatible ty lty && is_compatible ty rty then ty
-    else raise (TypingError (spr "get_common_type error: %s is not the common type" (show_ty ty)))
+    else raise (TypingError (spr "is_compatible error: %s and %s is not compatible" (show_ty lty) (show_ty rty)))
 
 
 let usual_arith_conv lhs rhs =
@@ -252,8 +259,12 @@ let usual_arith_conv lhs rhs =
 
 let rec ty_expr expr =
 match expr with
-| EConst(_,_)
-| EVar(_,_) -> expr
+| EConst(_,_) -> expr
+| EVar(_,id) -> 
+  let decl = match get_var_from_ast id with
+  | Some decl -> decl
+  | None -> raise (TypingError (spr "ty_expr error: no such id %d" id)) in
+  EVar(Some (snd decl),id)
 | EBinary(_,bin,lhs,rhs) ->
   let (lhs,rhs) = (ty_expr lhs,ty_expr rhs) in
   begin
@@ -339,8 +350,11 @@ and ty_init ty init =
 match init with
 | IScal expr -> 
   let expr = ty_expr expr in
-  let ty = (typeof expr) in
-  IScal  (ECast (Some ty,ty, expr))
+  let rty = (typeof expr) in
+  if ty = rty then
+    IScal expr
+  else
+    IScal  (ECast (Some ty,ty, expr))
 | IVect l ->
   begin
     let loc = ref 0 in
@@ -395,13 +409,13 @@ match (ty,desig_opt) with
 
 and ty_stmt stmt =
 match stmt with
-| SDef def -> SDef def
+| SDef def -> SDef (ty_def def)
 | SStmts stmts -> SStmts (List.map ty_stmt stmts)
 | SWhile(expr,stmt,s1,s2) -> SWhile(ty_expr expr,ty_stmt stmt,s1,s2)
 | SDoWhile(stmt,expr,s1,s2) -> SDoWhile(ty_stmt stmt,ty_expr expr,s1,s2)
 | SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,stmt,s1,s2) ->
   let def_opt = match def_opt with
-  | Some def -> Some (def)
+  | Some def -> Some (ty_def def)
   | None -> None in
   let expr_opt1 = match expr_opt1 with
   | Some expr -> Some (ty_expr expr)
@@ -425,3 +439,27 @@ match stmt with
 | SCase(expr,stmts) -> SCase(ty_expr expr,List.map ty_stmt stmts)
 | SDefault stmts -> SDefault(List.map ty_stmt stmts)
 | SExpr expr -> SExpr(ty_expr expr)
+
+and ty_item item =
+match item with
+| Var(decl,init_opt) ->
+  let init_opt = match init_opt with
+  | Some init -> Some(ty_init (snd decl) init)
+  | None -> None in 
+  Var(decl,init_opt)
+| Function(l,decl,stmt_opt) ->
+  let stmt_opt = match stmt_opt with
+  | Some stmt -> Some (ty_stmt stmt)
+  | None -> None in
+  Function(l,decl,stmt_opt)
+| _ -> item
+
+and ty_def def =
+let (i,item) = def in
+(i,ty_item item)
+
+and ty_program program =
+match program with
+| Program l -> Program(List.map ty_def l)
+
+let typing program = ty_program program

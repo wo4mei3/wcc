@@ -17,8 +17,6 @@ let curr_scope: def list ref = global_scope
 
 let stack:def list list ref = ref []
 
-
-
 let peek_curr_scope () =
   List.hd !curr_scope
 

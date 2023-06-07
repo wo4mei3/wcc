@@ -1,10 +1,10 @@
 exception TypeError of string
-
+(*
 let raise exn =
   match exn with
-  (*| TypeError msg -> Printf.printf "%s\n" msg;raise exn*)
+  | TypeError msg -> Printf.printf "%s\n" msg;raise exn
   | _ -> raise exn
-
+*)
 let spr fmt s = (Printf.sprintf  fmt s)
 
 type ty =

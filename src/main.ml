@@ -12,7 +12,7 @@ let conv lexer =
   fun lexbuf ->
     curr_token := Lexing.lexeme lexbuf;
     curr_pos := Lexing.lexeme_start_p lexbuf;
-    lexer lexbuf
+    lexer lexbuf 
 
 
 let () =
@@ -25,13 +25,11 @@ let () =
   let fname = Sys.argv.(1) in
   let inchan = open_in fname in
   let filebuf = Lexing.from_channel inchan in
+  begin
   try
-    Ast.program := Parser.translation_unit (conv Lexer.token) filebuf;
-    Printf.printf "%s\n" (Ast.show_program !Ast.program)
+    Ast.program := Parser.translation_unit (conv Lexer.token) filebuf
   with
-  | Lexer.LexerError msg -> Printf.printf "Lexer error:%s" msg
-  | Env.EnvError msg -> Printf.printf "%s" msg
-  | _ -> print_tok !curr_pos !curr_token;
-  print_endline "something went wrong."
-
-(*open Typing*)
+  | _ -> print_tok !curr_pos !curr_token; print_endline "something went wrong while parsing"
+  end;
+  Ast.program := Typing.typing !Ast.program;
+  Printf.printf "%s\n" (Ast.show_program !Ast.program)
