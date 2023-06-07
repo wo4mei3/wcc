@@ -27,9 +27,13 @@ let () =
   let filebuf = Lexing.from_channel inchan in
   begin
   try
-    Ast.program := Parser.translation_unit (conv Lexer.token) filebuf
+    Ast.program := Parser.translation_unit (conv Lexer.token) filebuf;
+    Ast.program := Typing.typing !Ast.program
   with
-  | _ -> print_tok !curr_pos !curr_token; print_endline "something went wrong while parsing"
+  | Dune__exe__Parser_helper.ParserError _
+  | Dune__exe__Parser_helper.NotImpl _
+  | Dune__exe__Ctype.TypeError _ 
+  | Dune__exe__Ast.ASTError _
+  | Dune__exe__Typing.TypingError _ -> print_tok !curr_pos !curr_token; print_endline "something went wrong while parsing"
   end;
-  Ast.program := Typing.typing !Ast.program;
   Printf.printf "%s\n" (Ast.show_program !Ast.program)
