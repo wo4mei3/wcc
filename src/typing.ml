@@ -442,16 +442,16 @@ match stmt with
 
 and ty_item item =
 match item with
-| Var(decl,init_opt) ->
+| Var(decl,init_opt,offset) ->
   let init_opt = match init_opt with
   | Some init -> Some(ty_init (snd decl) init)
   | None -> None in 
-  Var(decl,init_opt)
-| Function(l,decl,stmt_opt) ->
+  Var(decl,init_opt,offset)
+| Function(l,decl,stmt_opt,offset,stack_size) ->
   let stmt_opt = match stmt_opt with
   | Some stmt -> Some (ty_stmt stmt)
   | None -> None in
-  Function(l,decl,stmt_opt)
+  Function(l,decl,stmt_opt,offset,stack_size)
 | _ -> item
 
 and ty_def def =

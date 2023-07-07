@@ -299,7 +299,7 @@
 
     let lookup_var_in_scope name =
       let aux = function
-      | (_,Var((n,_),_)) when n = name -> true
+      | (_,Var((n,_),_,_)) when n = name -> true
       | _ -> false
       in
       List.exists aux !curr_scope  
@@ -329,7 +329,7 @@
       if lookup_var_in_scope name then
         raise (ParserError "redifinition")
       else
-        (gen_id (), Var((name,ty),init_opt))
+        (gen_id (), Var((name,ty),init_opt,None))
 
     let make_var_or_typedef ((name,ty),init_opt) =
       if is_typedef_definition ty then
@@ -342,7 +342,7 @@
         make_var (name,ty) init_opt
 
     let get_params = function
-    | TFun(_,dl) -> List.map (fun d-> (gen_id () ,Param d)) dl
+    | TFun(_,dl) -> List.map (fun d-> (gen_id () ,Param (d,None))) dl
     | _ -> raise (ParserError "not a function declarator given")
 
     let def_buf:def list ref = ref []
@@ -1028,7 +1028,7 @@ function_def:
     let decl = $1 in
     let def2_list = get_params_buf () in
     let def_list =
-    [(gen_id (),Function(def2_list@get_params (snd decl),decl,Some $2))] in
+    [(gen_id (),Function(def2_list@get_params (snd decl),decl,Some $2,None,None))] in
     List.iter add_def def_list
   }
 %%
