@@ -31,17 +31,14 @@ type unary =
 [@@deriving show]
 
 type item =
-| Var of decl * init option * offset
-| Param of decl * offset
+| Var of decl * init option
+| Param of decl
 | Struct of string * decl list option
 | Union of string * decl list option
 | Enum of string * (string * int) list option
 | Typedef of decl
-| Function of def list * decl * stmt option * offset * stack_size
+| Function of def list * decl * stmt option * stack_size
 | Static_assert
-[@@deriving show]
-
-and offset = int option
 [@@deriving show]
 
 and stack_size = int option
@@ -131,14 +128,14 @@ and get_def_from_def_list id l =
 
 and get_def_from_def id def =
   match def with
-  | (i, Var(_,_,_)) when id = i -> Some def
-  | (i, Param(_,_)) when id = i -> Some def
+  | (i, Var(_,_)) when id = i -> Some def
+  | (i, Param(_)) when id = i -> Some def
   | (i, Struct(_,Some _)) when id = i -> Some def
   | (i, Union(_,Some _)) when id = i -> Some def
   | (i, Enum(_,Some _)) when id = i -> Some def
   | (i, Typedef(_)) when id = i -> Some def
-  | (i, Function(_,_,_,_,_)) when id = i -> Some def
-  | (_, Function(def_list,_,stmt_opt,_,_)) ->
+  | (i, Function(_,_,_,_)) when id = i -> Some def
+  | (_, Function(def_list,_,stmt_opt,_)) ->
   begin
         let rec get_def_from_stmts id stmts =
         match stmts with
@@ -190,8 +187,8 @@ and get_def_from_def id def =
 
 let get_var_from_ast id =
   match get_def_from_ast id with
-  | Some  (_,Var(decl,_,_)) 
-  | Some (_,Function(_,decl,_,_,_)) -> Some(decl)
+  | Some  (_,Var(decl,_)) 
+  | Some (_,Function(_,decl,_,_)) -> Some(decl)
   | _ -> None
 
 let get_typedef_from_ast id =

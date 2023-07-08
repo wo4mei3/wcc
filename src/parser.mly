@@ -17,7 +17,7 @@
       | DeclIdent n -> name := n; ty 
       | DeclArr(d,sz) -> aux (TArr(ty,sz)) d 
       | DeclFun(d,dl) -> aux (TFun(ty,dl)) d
-      in (!name, aux ty d)
+      in (!name, aux ty d, None)
 
     let make_decls ty dl =
       List.map (fun d -> make_decl ty d) dl
@@ -67,7 +67,7 @@
     let check_member_redifinition decls =
       let rec aux l = function
       | [] -> false
-      | (name,_) as x::xs -> List.mem_assoc name (l@xs) || aux (x::l) xs
+      | (name,_,_) as x::xs -> mem_assoc name (l@xs) || aux (x::l) xs
       in
       if aux [] decls then raise (ParserError "member redefiniton")
 
@@ -299,14 +299,14 @@
 
     let lookup_var_in_scope name =
       let aux = function
-      | (_,Var((n,_),_,_)) when n = name -> true
+      | (_,Var((n,_,_),_)) when n = name -> true
       | _ -> false
       in
       List.exists aux !curr_scope  
 
     let lookup_typedef_in_scope name =
       let aux = function
-      | (_,Typedef(n,_)) when n = name -> true
+      | (_,Typedef(n,_,_)) when n = name -> true
       | _ -> false
       in
       List.exists aux !curr_scope 
@@ -319,30 +319,30 @@
       | TArr(t,_) -> is_typedef_definition t 
       | TDeclSpec dsl -> List.mem (Scs ScsTypedef) dsl
     
-    let make_typedef (name, ty) =
+    let make_typedef (name, ty,offset) =
       if not (lookup_var_in_scope name || lookup_typedef_in_scope name) then
-        (gen_id (),Typedef (name,ty))
+        (gen_id (),Typedef (name,ty,offset))
       else 
         raise (ParserError "redifinition")
 
-    let make_var (name,ty) init_opt =
+    let make_var (name,ty,offset) init_opt =
       if lookup_var_in_scope name then
         raise (ParserError "redifinition")
       else
-        (gen_id (), Var((name,ty),init_opt,None))
+        (gen_id (), Var((name,ty,offset),init_opt))
 
-    let make_var_or_typedef ((name,ty),init_opt) =
+    let make_var_or_typedef ((name,ty,offset),init_opt) =
       if is_typedef_definition ty then
         begin
           match init_opt with
           | Some _ -> raise (ParserError "typedef has init")
-          | None -> make_typedef (name,ty)
+          | None -> make_typedef (name,ty,offset)
         end
       else
-        make_var (name,ty) init_opt
+        make_var (name,ty,offset) init_opt
 
     let get_params = function
-    | TFun(_,dl) -> List.map (fun d-> (gen_id () ,Param (d,None))) dl
+    | TFun(_,dl) -> List.map (fun d-> (gen_id () ,Param (d))) dl
     | _ -> raise (ParserError "not a function declarator given")
 
     let def_buf:def list ref = ref []
@@ -855,7 +855,7 @@ direct_abstract_declarator:
 type_name:
 | spec_qual_list { TDeclSpec $1 }
 | spec_qual_list abstract_declarator
-  { snd (make_decl (TDeclSpec $1) $2) }
+  { snd_ (make_decl (TDeclSpec $1) $2) }
 
 init:
 | assignment_expr { IScal $1 }
@@ -1028,7 +1028,7 @@ function_def:
     let decl = $1 in
     let def2_list = get_params_buf () in
     let def_list =
-    [(gen_id (),Function(def2_list@get_params (snd decl),decl,Some $2,None,None))] in
+    [(gen_id (),Function(def2_list@get_params (snd_ decl),decl,Some $2,None))] in
     List.iter add_def def_list
   }
 %%

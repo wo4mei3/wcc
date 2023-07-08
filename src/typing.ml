@@ -66,7 +66,7 @@ let rec declspecs attr is_encountered dsl =
     match get_def_from_ast i with
     | Some  (_,Typedef(decl)) -> 
     begin
-      let ty = snd decl in
+      let ty = snd_ decl in
       let dsl = get_declspecs ty in
       declspecs attr is_encountered dsl
     end
@@ -97,7 +97,7 @@ let rec declspecs attr is_encountered dsl =
 let rec alignof ty =
   if is_typedef ty then
     match get_typedef_from_ast (get_typedef_id ty) with
-    | Some decl -> alignof (snd decl)
+    | Some decl -> alignof (snd_ decl)
     | None -> raise (TypingError (spr "alignof error: %s" (show_ty ty)))
   else begin
   match ty with
@@ -123,7 +123,7 @@ let rec alignof ty =
         else
           init
       in
-      List.fold_left aux 0 mems
+      List.fold_left aux 0 (List.map (fun (f,s,_)->(f,s)) mems)
     else if is_union ty then
       let id = get_union_id ty in
       let mems = get_union_members id in
@@ -135,7 +135,7 @@ let rec alignof ty =
         else
           init
       in
-      List.fold_left aux 0 mems
+      List.fold_left aux 0 (List.map (fun (f,s,_)->(f,s)) mems)
     else raise (TypingError (spr "alignof error: %s" (show_ty ty)))
   | TArr(ty, _) -> alignof ty
   | TPtr _ -> 8
@@ -149,7 +149,7 @@ and aligned ty n =
 and sizeof ty = 
   if is_typedef ty then
     match get_typedef_from_ast (get_typedef_id ty) with
-    | Some decl -> sizeof (snd decl)
+    | Some decl -> sizeof (snd_ decl)
     | None -> raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
   else begin
   match ty with
@@ -171,7 +171,7 @@ and sizeof ty =
         let ty = snd decl in
         aligned ty n + sizeof ty
       in
-      aligned ty (List.fold_left aux 0 mems)
+      aligned ty (List.fold_left aux 0 (List.map (fun (f,s,_)->(f,s)) mems))
     else if is_union ty then
       let id = get_union_id ty in
       let mems = get_union_members id in
@@ -183,7 +183,7 @@ and sizeof ty =
         else
           init
       in
-      List.fold_left aux 0 mems
+      List.fold_left aux 0 (List.map (fun (f,s,_)->(f,s)) mems)
     else raise (TypingError (spr "sizeof error: %s" (show_ty ty)))
   | TArr(ty, sz) -> (sizeof ty) * sz
   | TPtr _ -> 8
@@ -197,13 +197,13 @@ let rec is_compatible lty rty =
     get_union_id lty = get_union_id rty
   else if is_typedef lty then
     let origin = match get_typedef_from_ast (get_typedef_id lty) with
-    | Some decl -> snd decl
+    | Some decl -> snd_ decl
     | None -> raise (TypingError (spr "is_compatible error: %s" (show_ty lty)))
     in
     is_compatible origin rty
   else if is_typedef rty then
     let origin = match get_typedef_from_ast (get_typedef_id rty) with
-    | Some decl -> snd decl
+    | Some decl -> snd_ decl
     | None -> raise (TypingError (spr "is_compatible error: %s" (show_ty rty)))
     in
     is_compatible lty origin
@@ -211,7 +211,7 @@ let rec is_compatible lty rty =
     true
   else
     begin
-    let map l = List.map (fun x -> snd x) l in
+    let map l = List.map (fun x -> snd_ x) l in
     match (lty, rty) with
     | (TPtr(TFun(lty,ll)),TFun(rty,rl)) 
     | (TFun(lty,ll),TPtr(TFun(rty,rl))) 
@@ -264,7 +264,7 @@ match expr with
   let decl = match get_var_from_ast id with
   | Some decl -> decl
   | None -> raise (TypingError (spr "ty_expr error: no such id %d" id)) in
-  EVar(Some (snd decl),id)
+  EVar(Some (snd_ decl),id)
 | EBinary(_,bin,lhs,rhs) ->
   let (lhs,rhs) = (ty_expr lhs,ty_expr rhs) in
   begin
@@ -326,13 +326,13 @@ match expr with
   match postfix with
   | Call l -> 
     let l = List.map ty_expr l in
-    let tys = List.map (fun x -> ("",typeof x)) l in
+    let tys = List.map (fun x -> ("",typeof x,None)) l in
     let ty = get_common_type ty (TFun(ret_ty,tys)) in
     let ret_ty = TDeclSpec (get_declspecs ty) in
     EPostfix(Some ret_ty,expr,Call l)
   | Member name when is_struct ty ->
     let members = get_struct_members (get_struct_id ty) in
-    let ty = List.assoc name members in
+    let ty = assoc name members in
     EPostfix(Some ty,expr,postfix)
   | _ -> raise (TypingError (spr "ty_expr error: invalid postfix expr %s" (show_expr e)))
   end
@@ -375,7 +375,7 @@ match init with
         match (mems, l) with
         | (_,[]) -> []
         | ([],_) -> raise (TypingError (spr "ty_init error: excess elements %d" !loc))
-        | ((_,memty)::_,(desig_opt,init)::xs) -> 
+        | ((_,memty,_)::_,(desig_opt,init)::xs) -> 
           let elem_ty = match desig_opt with
           | Some _ -> ty_desig ty desig_opt loc
           | None -> memty
@@ -400,7 +400,7 @@ match (ty,desig_opt) with
   let members = get_struct_members (get_struct_id ty) in
   let rec aux i = function
   | [] -> raise (TypingError (spr "ty_desig error: no such member %s" name))
-  | (n,ty)::_ when n = name -> loc := i; ty
+  | (n,ty,_)::_ when n = name -> loc := i; ty
   | _::xs -> aux (i + 1) xs
   in
   ty_desig (aux 0 members) desig_opt (ref 0)
@@ -442,16 +442,16 @@ match stmt with
 
 and ty_item item =
 match item with
-| Var(decl,init_opt,offset) ->
+| Var(decl,init_opt) ->
   let init_opt = match init_opt with
-  | Some init -> Some(ty_init (snd decl) init)
+  | Some init -> Some(ty_init (snd_ decl) init)
   | None -> None in 
-  Var(decl,init_opt,offset)
-| Function(l,decl,stmt_opt,offset,stack_size) ->
+  Var(decl,init_opt)
+| Function(l,decl,stmt_opt,stack_size) ->
   let stmt_opt = match stmt_opt with
   | Some stmt -> Some (ty_stmt stmt)
   | None -> None in
-  Function(l,decl,stmt_opt,offset,stack_size)
+  Function(l,decl,stmt_opt,stack_size)
 | _ -> item
 
 and ty_def def =

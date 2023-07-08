@@ -7,6 +7,24 @@ let raise exn =
 *)
 let spr fmt s = (Printf.sprintf  fmt s)
 
+let fst_ (x,_,_) = x
+
+let snd_ (_,x,_) = x
+
+let trd_ (_,_,x) = x
+
+let rec assoc x l =
+match l with
+| (e,y,_)::_ when x=e -> y
+| (_,_,_)::ls -> assoc x ls
+| [] -> raise Not_found
+
+let rec mem_assoc x l =
+match l with
+| (e,_,_)::_ when x=e -> true
+| (_,_,_)::ls -> mem_assoc x ls
+| [] -> false
+
 type ty =
 | TFun of ty * decl list
 | TPtr of ty 
@@ -14,7 +32,10 @@ type ty =
 | TDeclSpec of ds list
 [@@deriving show]
 
-and decl = (string * ty)
+and decl = (string * ty * offset)
+[@@deriving show]
+
+and offset = int option
 [@@deriving show]
 
 and ds = 

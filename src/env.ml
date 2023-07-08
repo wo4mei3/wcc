@@ -38,8 +38,8 @@ let leave_scope () =
 let get_var name =
   let pred (_,item) =
   match item with
-  | Var((n,_),_,_) when n = name -> true
-  | Function(_,(n,_),_,_,_) when n = name -> true
+  | Var((n,_,_),_) when n = name -> true
+  | Function(_,(n,_,_),_,_) when n = name -> true
   | _ -> false
   in
   let (id,_) = try 
@@ -64,7 +64,7 @@ let get_var name =
 let get_typedef name =
   let pred (_,item) =
   match item with
-  | Typedef(n,_) when n = name -> true
+  | Typedef(n,_,_) when n = name -> true
   | _ -> false
   in
   let (id,_) = try 
