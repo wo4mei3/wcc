@@ -2,6 +2,8 @@
     open Ast 
     open Env 
     open Ctype
+    open Middle
+    open Typing
     open Parser_helper
 
     type declarator =
@@ -608,7 +610,7 @@ expr:
 
 constant_expr:
 | conditional_expr
-  { 0 }
+  { eval (ty_expr $1) } 
 
 
 decl:

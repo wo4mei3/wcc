@@ -33,4 +33,4 @@ return 0;
 char c = '\n';
 unsigned i = 5;
 struct X x= {.x=0,};
-int *var[4] = "abc";
+int *var[4+5] = "abc";

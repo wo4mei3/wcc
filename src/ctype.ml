@@ -11,12 +11,18 @@ let fst_ (x,_,_) = x
 
 let snd_ (_,x,_) = x
 
-let trd_ (_,_,x) = x
+let thrd_ (_,_,x) = x
 
 let rec assoc x l =
 match l with
 | (e,y,_)::_ when x=e -> y
 | (_,_,_)::ls -> assoc x ls
+| [] -> raise Not_found
+
+let rec assoc3 x l =
+match l with
+| (e,_,z)::_ when x=e -> z
+| (_,_,_)::ls -> assoc3 x ls
 | [] -> raise Not_found
 
 let rec mem_assoc x l =
