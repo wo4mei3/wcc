@@ -174,3 +174,66 @@ and eval_double expr =
     | ECast(_,_,expr) ->
       eval_double expr
     | _ -> raise (MiddleError (spr "eval2 error: %s" (show_expr expr)))
+
+let rec has_flonum ty lo hi offset =
+  if offset < lo || hi <= offset then
+    true
+  else
+    match ty with
+    | _ when is_flonum ty -> true
+    | _ when is_struct ty || is_union ty ->
+        let decls = get_struct_id ty |> get_struct_members in
+        let flag = ref true in
+        List.iter 
+        (
+          function
+          | (_,ty,Some x) when !flag -> flag :=  has_flonum ty lo hi (offset + x)
+          | _ -> raise (MiddleError (spr "has_flonum error: %s" (show_ty ty)))
+        ) decls;
+        !flag
+    | _ -> false
+
+
+
+let rec middle_stmt stmt =
+match stmt with
+| SDef def -> SDef (middle_def def)
+| SStmts stmts -> SStmts (List.map middle_stmt stmts)
+| SWhile(expr,stmt,s1,s2) -> SWhile(expr,middle_stmt stmt,s1,s2)
+| SDoWhile(stmt,expr,s1,s2) -> SDoWhile(middle_stmt stmt,expr,s1,s2)
+| SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,stmt,s1,s2) ->
+  let def_opt = match def_opt with
+  | Some def -> Some (middle_def def)
+  | None -> None in
+  SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,middle_stmt stmt,s1,s2)
+| SIfElse(expr,stmt1,stmt2) -> SIfElse(expr,middle_stmt stmt1,middle_stmt stmt2)
+| SReturn expr_opt ->
+  SReturn expr_opt
+| SLabel(s,stmt) -> SLabel(s,middle_stmt stmt)
+| SGoto s -> SGoto s
+| SSwitch(expr,stmts,s) -> SSwitch(expr,List.map middle_stmt stmts,s)
+| SCase(expr,stmts) -> SCase(expr,List.map middle_stmt stmts)
+| SDefault stmts -> SDefault(List.map middle_stmt stmts)
+| SExpr expr -> SExpr expr
+
+
+and middle_item item =
+match item with
+| Var(decl,init_opt) ->
+  Var(decl,init_opt)
+| Function(l,decl,stmt_opt,stack_size) ->
+  let stmt_opt = match stmt_opt with
+  | Some stmt -> Some (middle_stmt stmt)
+  | None -> None in
+  Function(l,decl,stmt_opt,stack_size)
+| _ -> item
+
+and middle_def def =
+let (i,item) = def in
+(i,middle_item item)
+
+and middle_program program =
+match program with
+| Program l -> Program(List.map middle_def l)
+
+let middle_pass program = middle_program program

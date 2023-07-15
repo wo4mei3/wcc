@@ -801,6 +801,7 @@ leave_declarator:
 direct_declarator:
 | enter_declarator ID leave_declarator { DeclIdent $2 }
 | LPAREN declarator RPAREN { $2 }
+
 | direct_declarator LBRACKET constant_expr RBRACKET { DeclArr($1, $3) }
 | direct_declarator lp parameter_type_list rp { DeclFun($1,$3) }
 
