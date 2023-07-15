@@ -197,15 +197,13 @@ let rec has_flonum ty lo hi offset =
         !flag
     | _ -> false
 
-let assign_params_offsets defl =
+let assign_params_offsets' decls =
   let gp = ref 0 in
   let fp = ref 0 in
-  let aux top def =
+  let aux top decl =
     let top = align_to top 8 in
-    match !def with
-    | (i,Param decl) -> 
-      let ty = snd_ decl in
-      begin
+    let ty = snd_ !decl in
+    begin
       match ty with
       | _ when (is_struct ty || is_union ty) && sizeof ty <= 16 ->
         let fp1 = has_flonum ty 0 8 0 in
@@ -219,7 +217,7 @@ let assign_params_offsets defl =
         end
         else
         begin
-          def := (i,Param (fst_ decl,ty,Some top));
+          decl :=  (fst_ !decl,ty,Some top);
           top + sizeof ty
         end
       | _ when is_flonum ty ->
@@ -230,7 +228,7 @@ let assign_params_offsets defl =
         end
         else
         begin
-          def := (i,Param (fst_ decl,ty,Some top));
+          decl := (fst_ !decl,ty,Some top);
           top + sizeof ty
         end
       | _ ->
@@ -241,15 +239,29 @@ let assign_params_offsets defl =
         end
         else
         begin
-          def := (i,Param (fst_ decl,ty,Some top));
+          decl := (fst_ !decl,ty,Some top);
           top + sizeof ty
         end
-      end
-    | _ -> top
+    end
   in
-  let defl = List.map (fun x-> ref x) defl in
-  ignore (List.fold_left aux 16 defl);
-  List.map (fun x-> !x) defl
+  let decls = List.map (fun x-> ref x) decls in
+  ignore (List.fold_left aux 16 decls);
+  List.map (fun x-> !x) decls
+
+let assign_params_offsets item =
+let aux decl =
+match decl with
+| (n,TFun(ret,decls),offset)-> 
+  (n,TFun(ret,assign_params_offsets' decls),offset)
+| _ -> decl
+in
+match item with
+| Var(decl,init) -> Var(aux decl,init)
+| Struct(n,Some decls) -> Struct(n,Some (List.map aux decls))
+| Union(n,Some decls) -> Union(n,Some (List.map aux decls))
+| Typedef decl -> Typedef(aux decl)
+| Function(l,decl,stmts,sz) -> Function(l,aux decl,stmts,sz)
+| _ -> item
 
 let rec middle_stmt stmt =
 match stmt with
@@ -273,15 +285,16 @@ match stmt with
 | SExpr expr -> SExpr expr
 
 and middle_item item =
+let item = assign_params_offsets item in
 match item with
 | Var(decl,init_opt) ->
   Var(decl,init_opt)
 | Function(l,decl,stmt_opt,stack_size) ->
   let stmt_opt = match stmt_opt with
   | Some stmt -> Some (middle_stmt stmt)
-  | None -> None in
-  let l' = assign_params_offsets l in
-  Function(l',decl,stmt_opt,stack_size)
+  | None -> None
+  in
+  Function(l,decl,stmt_opt,stack_size)
 | _ -> item
 
 and middle_def def =

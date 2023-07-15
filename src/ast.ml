@@ -32,7 +32,6 @@ type unary =
 
 type item =
 | Var of decl * init option
-| Param of decl
 | Struct of string * decl list option
 | Union of string * decl list option
 | Enum of string * (string * int) list option
@@ -129,7 +128,6 @@ and get_def_from_def_list id l =
 and get_def_from_def id def =
   match def with
   | (i, Var(_,_)) when id = i -> Some def
-  | (i, Param(_)) when id = i -> Some def
   | (i, Struct(_,Some _)) when id = i -> Some def
   | (i, Union(_,Some _)) when id = i -> Some def
   | (i, Enum(_,Some _)) when id = i -> Some def

@@ -343,10 +343,6 @@
       else
         make_var (name,ty,offset) init_opt
 
-    let get_params = function
-    | TFun(_,dl) -> List.map (fun d-> (gen_id () ,Param (d))) dl
-    | _ -> raise (ParserError "not a function declarator given")
-
     let def_buf:def list ref = ref []
 
     let flush_stack () = 
@@ -1031,7 +1027,7 @@ function_def:
     let decl = $1 in
     let def2_list = get_params_buf () in
     let def_list =
-    [(gen_id (),Function(def2_list@get_params (snd_ decl),decl,Some $2,None))] in
+    [(gen_id (),Function(def2_list,decl,Some $2,None))] in
     List.iter add_def def_list
   }
 %%
