@@ -1,5 +1,6 @@
 open Ctype
 open Ast
+open Typing
 
 exception MiddleError of string
 
@@ -192,6 +193,18 @@ let rec has_flonum ty lo hi offset =
         ) decls;
         !flag
     | _ -> false
+
+let assign_mems_offsets ty =
+  let mems = get_struct_id ty |> get_struct_members in
+  let aux offset decl =
+    let ty = snd_ !decl in
+    decl := (fst_ !decl, snd_ !decl, Some offset);
+    aligned ty offset + sizeof ty
+  in
+  let mems = List.map (fun x-> ref x) mems
+  in
+  ignore (List.fold_left aux 0  mems);
+  List.map (fun x-> !x) mems
 
 
 
