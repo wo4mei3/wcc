@@ -143,8 +143,11 @@ let rec alignof ty =
   end
 
 and aligned ty n =
-  let a = alignof ty in
-  (n + a - 1) / a * a
+  let align = alignof ty in
+  align_to align n
+
+and align_to align n =
+  (n + align - 1) / align * align
 
 and sizeof ty = 
   if is_typedef ty then
