@@ -144,9 +144,9 @@ let rec alignof ty =
 
 and aligned ty n =
   let align = alignof ty in
-  align_to align n
+  align_to n align
 
-and align_to align n =
+and align_to n align =
   (n + align - 1) / align * align
 
 and sizeof ty = 
@@ -259,6 +259,16 @@ let usual_arith_conv lhs rhs =
   let ty = get_common_type lty rty in
   (ty,ECast(Some ty,ty,lhs), ECast(Some ty,ty,rhs))
 
+let assign_mems_offsets mems =
+  let aux offset decl =
+    let ty = snd_ !decl in
+    decl := (fst_ !decl, snd_ !decl, Some offset);
+    aligned ty offset + sizeof ty
+  in
+  let mems = List.map (fun x-> ref x) mems
+  in
+  ignore (List.fold_left aux 0 mems);
+  List.map (fun x-> Printf.printf "%s" (show_decl !x);!x) mems
 
 let rec ty_expr expr =
 match expr with
@@ -455,6 +465,7 @@ match item with
   | Some stmt -> Some (ty_stmt stmt)
   | None -> None in
   Function(l,decl,stmt_opt,stack_size)
+| Struct(n,Some decl) -> Struct(n,Some (assign_mems_offsets decl))
 | _ -> item
 
 and ty_def def =

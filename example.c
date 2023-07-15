@@ -7,7 +7,7 @@ struct X;
 
 extern int printf(const char *, ...);
 
-extern int a(int(**[0])());
+extern int a(int(**[0])(),long,long,long,long,long,long,long,long,long){}
 
 int main () {
     struct X b = func((struct X){.x=0});

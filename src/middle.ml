@@ -4,6 +4,9 @@ open Typing
 
 exception MiddleError of string
 
+let gp_max = 6
+let fp_max = 8
+
 let raise exn =
   match exn with
   (*| MiddleError msg -> Printf.printf "%s\n" msg;raise exn*)
@@ -189,24 +192,64 @@ let rec has_flonum ty lo hi offset =
         (
           function
           | (_,ty,Some x) when !flag -> flag :=  has_flonum ty lo hi (offset + x)
-          | _ -> raise (MiddleError (spr "has_flonum error: %s" (show_ty ty)))
+          | _ as decl -> raise (MiddleError (spr "has_flonum error: %s" (show_decl decl)))
         ) decls;
         !flag
     | _ -> false
 
-let assign_mems_offsets ty =
-  let mems = get_struct_id ty |> get_struct_members in
-  let aux offset decl =
-    let ty = snd_ !decl in
-    decl := (fst_ !decl, snd_ !decl, Some offset);
-    aligned ty offset + sizeof ty
+let assign_params_offsets defl =
+  let gp = ref 0 in
+  let fp = ref 0 in
+  let aux top def =
+    let top = align_to top 8 in
+    match !def with
+    | (i,Param decl) -> 
+      let ty = snd_ decl in
+      begin
+      match ty with
+      | _ when (is_struct ty || is_union ty) && sizeof ty <= 16 ->
+        let fp1 = has_flonum ty 0 8 0 in
+        let fp2 = has_flonum ty 8 16 8 in
+        if !fp + (bool_to_int fp1) + (bool_to_int fp2) < fp_max
+        && !gp + (bool_to_int (not fp1)) + (bool_to_int (not fp2)) < gp_max then
+        begin
+          fp := !fp + (bool_to_int fp1) + (bool_to_int fp2);
+          gp := !gp + (bool_to_int (not fp1)) + (bool_to_int (not fp2));
+          top
+        end
+        else
+        begin
+          def := (i,Param (fst_ decl,ty,Some top));
+          top + sizeof ty
+        end
+      | _ when is_flonum ty ->
+        if !fp < fp_max then
+        begin
+          fp := !fp + 1;
+          top
+        end
+        else
+        begin
+          def := (i,Param (fst_ decl,ty,Some top));
+          top + sizeof ty
+        end
+      | _ ->
+        if !gp < gp_max then
+        begin
+          gp := !gp + 1;
+          top
+        end
+        else
+        begin
+          def := (i,Param (fst_ decl,ty,Some top));
+          top + sizeof ty
+        end
+      end
+    | _ -> top
   in
-  let mems = List.map (fun x-> ref x) mems
-  in
-  ignore (List.fold_left aux 0  mems);
-  List.map (fun x-> !x) mems
-
-
+  let defl = List.map (fun x-> ref x) defl in
+  ignore (List.fold_left aux 16 defl);
+  List.map (fun x-> !x) defl
 
 let rec middle_stmt stmt =
 match stmt with
@@ -229,7 +272,6 @@ match stmt with
 | SDefault stmts -> SDefault(List.map middle_stmt stmts)
 | SExpr expr -> SExpr expr
 
-
 and middle_item item =
 match item with
 | Var(decl,init_opt) ->
@@ -238,15 +280,17 @@ match item with
   let stmt_opt = match stmt_opt with
   | Some stmt -> Some (middle_stmt stmt)
   | None -> None in
-  Function(l,decl,stmt_opt,stack_size)
+  let l' = assign_params_offsets l in
+  Function(l',decl,stmt_opt,stack_size)
 | _ -> item
 
 and middle_def def =
 let (i,item) = def in
 (i,middle_item item)
 
+
 and middle_program program =
 match program with
 | Program l -> Program(List.map middle_def l)
 
-let middle_pass program = middle_program program
+let pass program = middle_program program

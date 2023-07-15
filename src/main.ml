@@ -28,7 +28,8 @@ let () =
   begin
   try
     Ast.program := Parser.translation_unit (conv Lexer.token) filebuf;
-    Ast.program := Typing.typing !Ast.program
+    Ast.program := Typing.typing !Ast.program;
+    Ast.program := Middle.pass !Ast.program
   with
   | Dune__exe__Parser_helper.ParserError _
   | Dune__exe__Parser_helper.NotImpl _
