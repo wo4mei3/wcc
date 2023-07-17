@@ -263,38 +263,59 @@ match item with
 | Function(l,decl,stmts,sz) -> Function(l,aux decl,stmts,sz)
 | _ -> item
 
-let rec middle_stmt stmt =
-match stmt with
-| SDef def -> SDef (middle_def def)
-| SStmts stmts -> SStmts (List.map middle_stmt stmts)
-| SWhile(expr,stmt,s1,s2) -> SWhile(expr,middle_stmt stmt,s1,s2)
-| SDoWhile(stmt,expr,s1,s2) -> SDoWhile(middle_stmt stmt,expr,s1,s2)
-| SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,stmt,s1,s2) ->
-  let def_opt = match def_opt with
-  | Some def -> Some (middle_def def)
-  | None -> None in
-  SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,middle_stmt stmt,s1,s2)
-| SIfElse(expr,stmt1,stmt2) -> SIfElse(expr,middle_stmt stmt1,middle_stmt stmt2)
-| SReturn expr_opt ->
-  SReturn expr_opt
-| SLabel(s,stmt) -> SLabel(s,middle_stmt stmt)
-| SGoto s -> SGoto s
-| SSwitch(expr,stmts,s) -> SSwitch(expr,List.map middle_stmt stmts,s)
-| SCase(expr,stmts) -> SCase(expr,List.map middle_stmt stmts)
-| SDefault stmts -> SDefault(List.map middle_stmt stmts)
-| SExpr expr -> SExpr expr
+let rec assign_lvars_offsets stmt =
+  let bottom = ref 0 in
+  let aux = function
+  | (i,Var((name,ty,None),init_opt)) ->
+    let align = 
+      match ty with
+      | TArr _ when sizeof ty >= 16 ->
+        16
+      | _ -> alignof ty
+    in
+    bottom := !bottom + sizeof ty;
+    bottom := align_to !bottom align;
+    (i,Var((name,ty,Some (-(!bottom))),init_opt))
+  | _ as def -> def
+  in
+  let rec assign_lvars_offsets' stmt =
+  match stmt with
+  | SDef def -> SDef (aux def)
+  | SStmts stmts -> SStmts (List.map assign_lvars_offsets' stmts)
+  | SWhile(expr,stmt,s1,s2) -> SWhile(expr,assign_lvars_offsets' stmt,s1,s2)
+  | SDoWhile(stmt,expr,s1,s2) -> SDoWhile(assign_lvars_offsets' stmt,expr,s1,s2)
+  | SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,stmt,s1,s2) ->
+    let def_opt = match def_opt with
+    | Some def -> Some (aux def)
+    | None -> None in
+    SFor(def_opt,expr_opt1,expr_opt2,expr_opt3,assign_lvars_offsets' stmt,s1,s2)
+  | SIfElse(expr,stmt1,stmt2) -> SIfElse(expr,assign_lvars_offsets' stmt1,assign_lvars_offsets' stmt2)
+  | SReturn expr_opt ->
+    SReturn expr_opt
+  | SLabel(s,stmt) -> SLabel(s,assign_lvars_offsets' stmt)
+  | SGoto s -> SGoto s
+  | SSwitch(expr,stmts,s) -> SSwitch(expr,List.map assign_lvars_offsets' stmts,s)
+  | SCase(expr,stmts) -> SCase(expr,List.map assign_lvars_offsets' stmts)
+  | SDefault stmts -> SDefault(List.map assign_lvars_offsets' stmts)
+  | SExpr expr -> SExpr expr
+  in
+  (assign_lvars_offsets' stmt,!bottom)
 
 and middle_item item =
 let item = assign_params_offsets item in
 match item with
 | Var(decl,init_opt) ->
   Var(decl,init_opt)
-| Function(l,decl,stmt_opt,stack_size) ->
+| Function(l,decl,stmt_opt,_) ->
+  let size = ref 0 in
   let stmt_opt = match stmt_opt with
-  | Some stmt -> Some (middle_stmt stmt)
+  | Some stmt -> 
+      let (stmt, sz) = assign_lvars_offsets stmt in
+      size := sz;
+      Some stmt
   | None -> None
   in
-  Function(l,decl,stmt_opt,stack_size)
+  Function(l,decl,stmt_opt,Some !size)
 | _ -> item
 
 and middle_def def =

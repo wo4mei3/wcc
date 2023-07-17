@@ -34,4 +34,4 @@ char c = '\n';
 unsigned i = 5;
 struct X x= {.x=0,};
 int *var[4+5] = "abc";
-int b(int(**[0])(),long,long,long,long,long,long,long,long,long){}
+int b(int(**[0])(),long,long,long,long,long,long,long,long,long);
